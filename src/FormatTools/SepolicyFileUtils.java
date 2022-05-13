@@ -5,7 +5,7 @@ package FormatTools;
  */
 public interface SepolicyFileUtils {
     /**
-     * 格式化每一行
+     * 格式化文件
      *
      * @param inPutPath  输入文件路径
      * @param outPutPath 输出文件路径
@@ -19,4 +19,11 @@ public interface SepolicyFileUtils {
      * @param outPutPath 输出文件路径
      */
     void sortLines(String inPutPath, String outPutPath);
+
+    /**
+     * 格式化每一行
+     * @param inPutPath  输入文件路径
+     * @param outPutPath 输出文件路径
+     */
+    void formatAllLine(String inPutPath,String outPutPath);
 }
