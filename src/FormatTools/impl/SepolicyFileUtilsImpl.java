@@ -16,9 +16,10 @@ public class SepolicyFileUtilsImpl extends SepolicyLineUtilsImpl implements Sepo
      * @param outPutPath 输出文件路径
      */
     @Override
-    public void formatFile(String inPutPath, String outPutPath) {
+    public void autoFormatFile(String inPutPath, String outPutPath) {
 
-        String tmpPath = outPutPath + "/tmp";
+        String tmpPath = "tmp";
+
         formatAllLine(inPutPath, tmpPath);
         sortLines(tmpPath, outPutPath);
         new File(tmpPath).delete();
@@ -46,14 +47,14 @@ public class SepolicyFileUtilsImpl extends SepolicyLineUtilsImpl implements Sepo
         try {
             bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inPutPath)));
         } catch (FileNotFoundException e) {
-            System.out.println("输入文件未找到");
+            System.out.println("sort:" + "输入文件" + inPutPath + "未找到");
             return;
         }
 
         try {
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outPutPath, false)));
         } catch (FileNotFoundException e) {
-            System.out.println("输出文件打不开");
+            System.out.println("sort:" + "输出文件打不开");
             return;
         }
 
@@ -104,14 +105,14 @@ public class SepolicyFileUtilsImpl extends SepolicyLineUtilsImpl implements Sepo
         try {
             bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inPutPath)));
         } catch (FileNotFoundException e) {
-            System.out.println("输入文件未找到");
+            System.out.println("formatALLLine:" + "输入文件" + inPutPath + "未找到");
             return;
         }
 
         try {
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outPutPath, false)));
         } catch (FileNotFoundException e) {
-            System.out.println("输出文件打不开");
+            System.out.println("formatALLLine:" + "输出文件打不开");
             return;
         }
 
@@ -141,6 +142,6 @@ public class SepolicyFileUtilsImpl extends SepolicyLineUtilsImpl implements Sepo
     }
 
     public static void main(String[] args) {
-        new SepolicyFileUtilsImpl().formatFile("in.te","out.te");
+        new SepolicyFileUtilsImpl().autoFormatFile("in.te", "out.te");
     }
 }

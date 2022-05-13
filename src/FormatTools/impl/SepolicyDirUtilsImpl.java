@@ -39,6 +39,7 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
     /**
      * 格式化整个文件夹下的te文件
      * 列出文件列表，再格式化
+     *
      * @param inPutDir  存有te文件的文件夹路径
      * @param outPutDir 输出文件夹路径
      */
@@ -50,8 +51,19 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
             return;
         }
 
-        for (String file : teFileList) {
-            formatFile(inPutDir + "/" + file, outPutDir + "/" + file);
+        File outPutFd = new File(outPutDir);
+
+        if (!outPutFd.exists() && outPutFd.mkdirs()) {
+            for (String file : teFileList) {
+                autoFormatFile(inPutDir + "/" + file, outPutDir + "/" + file);
+            }
+        } else {
+            System.out.println("输出文件夹" + outPutDir + "已存在");
+            return;
         }
+    }
+
+    public static void main(String[] args) {
+        new SepolicyDirUtilsImpl().formatFiles("sepolicy", "output");
     }
 }

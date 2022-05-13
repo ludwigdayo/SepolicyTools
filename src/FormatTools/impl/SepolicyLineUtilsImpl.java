@@ -10,9 +10,9 @@ public class SepolicyLineUtilsImpl extends LineUtilsImpl implements SepolicyLine
      * @return 类型
      */
     private static int getLineType(String source) {
+        if (source.startsWith("#")) return NOTES;
         if (source.contains(";")) return OPERATE;
         if (source.contains("(") && source.contains(")") && !source.contains(";")) return FUNCTION;
-        if (source.startsWith("#")) return NOTES;
         return OTHER;
     }
 
@@ -79,7 +79,7 @@ public class SepolicyLineUtilsImpl extends LineUtilsImpl implements SepolicyLine
         } else if (lineType == OPERATE) {
             source = formatOperator(source);
         } else if (lineType == NOTES) {
-            source = formatNotes(source);
+            source = ""; // 注释不要
         }
 
         return source;

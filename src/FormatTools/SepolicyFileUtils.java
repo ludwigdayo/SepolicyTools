@@ -3,14 +3,7 @@ package FormatTools;
 /**
  * 对一个te文件的操作
  */
-public interface SepolicyFileUtils {
-    /**
-     * 格式化文件
-     *
-     * @param inPutPath  输入文件路径
-     * @param outPutPath 输出文件路径
-     */
-    void formatFile(String inPutPath, String outPutPath);
+public interface SepolicyFileUtils extends SepolicyLineUtils {
 
     /**
      * 对行的排序
@@ -26,4 +19,13 @@ public interface SepolicyFileUtils {
      * @param outPutPath 输出文件路径
      */
     void formatAllLine(String inPutPath,String outPutPath);
+
+    /**
+     * 自动格式化文件
+     *
+     * @param inPutPath  输入文件路径
+     * @param outPutPath 输出文件路径
+     */
+    void autoFormatFile(String inPutPath, String outPutPath);
+
 }

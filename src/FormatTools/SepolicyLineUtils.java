@@ -4,6 +4,7 @@ package FormatTools;
  * 对sepolicy行的操作
  */
 public interface SepolicyLineUtils {
+
     //描述某行的类型
     int FUNCTION = 0;
     int OPERATE = 1;
