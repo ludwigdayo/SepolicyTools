@@ -1,0 +1,19 @@
+# ==============================================
+# Policy File of /system/binmemsicd Executable File 
+
+
+# ==============================================
+# Type Declaration
+# ==============================================
+
+type memsicd_exec , exec_type, file_type;
+type memsicd ,domain;
+
+# ==============================================
+# MTK Policy Rule
+# ==============================================
+
+init_daemon_domain(memsicd)
+
+allow memsicd msensor_device:chr_file { read write open ioctl };
+allow memsicd gsensor_device:chr_file { read write open };
