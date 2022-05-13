@@ -5,11 +5,12 @@ import FormatTools.SepolicyLineUtils;
 public class SepolicyLineUtilsImpl extends LineUtilsImpl implements SepolicyLineUtils {
     /**
      * 获取某行的类型
+     *
      * @param source 源
      * @return 类型
      */
     private static int getLineType(String source) {
-        if (source.contains("allow") && source.contains(";")) return OPERATE;
+        if (source.contains(";")) return OPERATE;
         if (source.contains("(") && source.contains(")") && !source.contains(";")) return FUNCTION;
         if (source.startsWith("#")) return NOTES;
         return OTHER;
@@ -39,6 +40,16 @@ public class SepolicyLineUtilsImpl extends LineUtilsImpl implements SepolicyLine
     private String formatOperator(String source) {
         source = formatSymbol(source, ',', LEFT, DELETE);
         source = formatSymbol(source, ',', RIGHT, ADD);
+
+        if (source.contains("{")) {
+            source = formatSymbol(source, '{', LEFT, ADD);
+            source = formatSymbol(source, '{', RIGHT, ADD);
+        }
+
+        if (source.contains("}")) {
+            source = formatSymbol(source, '}', LEFT, ADD);
+            source = formatSymbol(source, '}', RIGHT, DELETE);
+        }
         return source;
     }
 
