@@ -4,15 +4,17 @@ package FormatTools;
  * 对sepolicy行的操作
  */
 public interface SepolicyLineUtils {
-    int LEFT = 0;
-    int RIGHT = 1;
+    //描述某行的类型
+    int FUNCTION = 0;
+    int OPERATE = 1;
+    int OTHER = 2;
+    int NOTES = 3;
 
     /**
-     * 在字符串某字符的左或右放置一个空格
+     * 格式化一行
+     *
      * @param source 源字符串
-     * @param symbol 某字符
-     * @param location 空格位置
-     * @return 修改后的新字符串
+     * @return 结果
      */
-    String formatSymbol(String source, char symbol, int location);
+    String formatLine(String source);
 }
