@@ -1,7 +1,7 @@
 package ContextFileTools;
 
 
-public interface fileContextsFormat {
+public interface FileContextsFormat {
     /**
      * 获得file_contexts文件中文件路径列表
      *

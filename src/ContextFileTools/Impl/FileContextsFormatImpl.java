@@ -1,6 +1,7 @@
 package ContextFileTools.Impl;
 
-import ContextFileTools.fileContextsFormat;
+import ContextFileTools.FileContextsFormat;
+import Gui.SepolicyToolsGUI;
 import Utils.AdbUtils;
 import Utils.Impl.AdbUtilsImpl;
 import Utils.Impl.LineUtilsImpl;
@@ -16,12 +17,12 @@ import java.util.Comparator;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
-public class fileContextsFormatImpl implements fileContextsFormat {
+public class FileContextsFormatImpl implements FileContextsFormat {
     LineUtils lineUtils = new LineUtilsImpl();
 
     private final StreamHelper streamHelper = new StreamHelperImpl();
 
-    Logger logger = Logger.getLogger(fileContextsFormatImpl.class.getName());
+    Logger logger = Logger.getLogger(FileContextsFormatImpl.class.getName());
 
     /**
      * 把文件读取到字符串数组
@@ -128,7 +129,7 @@ public class fileContextsFormatImpl implements fileContextsFormat {
         for (String line : pathList) {
 
             if (!isRemain(line) && !adbUtils.isExisted(line)) {
-                System.out.println(line);
+                SepolicyToolsGUI.log("忽略" + line);
                 continue; // 如果不是要特殊处理的且又不存在就不复制
             }
 
@@ -146,13 +147,17 @@ public class fileContextsFormatImpl implements fileContextsFormat {
 
     @Override
     public void autoFormatFileContexts(String inPutPath, String outPutPath) {
-        BufferedWriter bufferWriter = streamHelper.getBufferWriter(outPutPath, false);
+        BufferedWriter bufferWriter = null;
         String[] text = null;
 
         text = fileToString(inPutPath);
+        SepolicyToolsGUI.log("清除无用行...");
         text = cleanNotExistedLine(text);
+        SepolicyToolsGUI.log("整理所有行...");
         text = formatAllLine(text);
 
+        SepolicyToolsGUI.log("写入文件...");
+        bufferWriter = streamHelper.getBufferWriter(outPutPath, false);
         try {
             for (String line : text) {
                 bufferWriter.write(line);
@@ -170,6 +175,6 @@ public class fileContextsFormatImpl implements fileContextsFormat {
     }
 
     public static void main(String[] args) {
-        new fileContextsFormatImpl().autoFormatFileContexts("file_contexts", "out.txt");
+        new FileContextsFormatImpl().autoFormatFileContexts("file_contexts", "out.txt");
     }
 }

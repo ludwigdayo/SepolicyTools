@@ -1,14 +1,12 @@
 package Utils.Impl;
 
+import Gui.SepolicyToolsGUI;
 import Utils.AdbUtils;
 
 import java.io.BufferedReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,14 +17,12 @@ public class AdbUtilsImpl implements AdbUtils {
 
     private static String allFileList = null;
 
-    private static Logger logger = Logger.getLogger(AdbUtilsImpl.class.getName());
-
     /**
      * 获取系统类型
      */
     private static int getSystemType() {
         String property = System.getProperty("os.name");
-        logger.log(Level.INFO, "系统类型" + property);
+        SepolicyToolsGUI.log("系统类型" + property);
         if (property.contains("Windows")) {
             return WINDOWS;
         } else if (property.contains("Linux")) {
@@ -91,9 +87,9 @@ public class AdbUtilsImpl implements AdbUtils {
      */
     public String getAllFileList() {
         if (allFileList == null) {
-            logger.log(Level.INFO, "正在获取文件列表(至少需要几分钟时间)...");
+            SepolicyToolsGUI.log("正在获取文件列表(至少需要几分钟时间)...");
             String[] shell = shell("ls -R");
-            logger.log(Level.INFO, "正在处理结果");
+            SepolicyToolsGUI.log("正在处理结果");
             StringBuilder result = new StringBuilder();
 
             // 把“ls -R”得到的结果数组转成一个字符串 并给每一个文件加上完整路径

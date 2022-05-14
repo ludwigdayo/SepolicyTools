@@ -30,7 +30,7 @@ public class SepolicyFileUtilsImpl extends SepolicyLineUtilsImpl implements Sepo
 
         StreamHelperImpl streamHelper = new StreamHelperImpl();
         BufferedReader bufferedReader = streamHelper.getBufferReader(inPutPath);
-        BufferedWriter bufferedWriter = streamHelper.getBufferWriter(outPutPath, false);
+        BufferedWriter bufferedWriter = null;
 
         try {
             String line = null;
@@ -46,6 +46,7 @@ public class SepolicyFileUtilsImpl extends SepolicyLineUtilsImpl implements Sepo
 
         formatAllLine(strings); // 格式化行
 
+        bufferedWriter = streamHelper.getBufferWriter(outPutPath, false); // 打开输出文件并清空
         try {
             for (String line : strings) {
                 bufferedWriter.write(line);
