@@ -2,8 +2,11 @@ package GeneralFilesTools.Impl;
 
 
 import GeneralFilesTools.SepolicyFileUtils;
+import Utils.Impl.StreamHelperImpl;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.TreeSet;
 
@@ -25,20 +28,9 @@ public class SepolicyFileUtilsImpl extends SepolicyLineUtilsImpl implements Sepo
             }
         }); // 存放全部行，将自动排序
 
-        BufferedReader bufferedReader = null;
-        BufferedWriter bufferedWriter = null;
-
-        try {
-            bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(inPutPath)));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outPutPath, false)));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        StreamHelperImpl streamHelper = new StreamHelperImpl();
+        BufferedReader bufferedReader = streamHelper.getBufferReader(inPutPath);
+        BufferedWriter bufferedWriter = streamHelper.getBufferWriter(outPutPath, false);
 
         try {
             String line = null;
@@ -63,18 +55,7 @@ public class SepolicyFileUtilsImpl extends SepolicyLineUtilsImpl implements Sepo
             e.printStackTrace();
         }
 
-        try {
-            bufferedReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            bufferedWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        streamHelper.closeIO(bufferedReader, bufferedWriter);
     }
 
     /**
