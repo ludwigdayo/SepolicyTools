@@ -1,4 +1,4 @@
-package FormatTools;
+package Utils;
 
 /**
  * adb工具

@@ -1,4 +1,4 @@
-package FormatTools;
+package GeneralFilesTools;
 
 /**
  * 对sepolicy行的操作

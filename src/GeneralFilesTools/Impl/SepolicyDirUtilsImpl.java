@@ -1,6 +1,6 @@
-package FormatTools.impl;
+package GeneralFilesTools.Impl;
 
-import FormatTools.SepolicyDirUtils;
+import GeneralFilesTools.SepolicyDirUtils;
 
 import java.io.File;
 import java.util.ArrayList;

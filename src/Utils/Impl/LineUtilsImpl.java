@@ -1,6 +1,6 @@
-package FormatTools.impl;
+package Utils.Impl;
 
-import FormatTools.LineUtils;
+import Utils.LineUtils;
 
 public class LineUtilsImpl implements LineUtils {
 

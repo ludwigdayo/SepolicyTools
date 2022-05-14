@@ -1,6 +1,7 @@
-package FormatTools.impl;
+package GeneralFilesTools.Impl;
 
-import FormatTools.SepolicyLineUtils;
+import GeneralFilesTools.SepolicyLineUtils;
+import Utils.Impl.LineUtilsImpl;
 
 public class SepolicyLineUtilsImpl extends LineUtilsImpl implements SepolicyLineUtils {
     /**

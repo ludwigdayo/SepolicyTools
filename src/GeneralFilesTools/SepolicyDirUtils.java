@@ -1,9 +1,9 @@
-package FormatTools;
+package GeneralFilesTools;
 
 /**
  * 对sepolicy文件夹的操作
  */
-public interface SepolicyDirUtils extends SepolicyFileUtils {
+public interface SepolicyDirUtils {
     /**
      * 格式化dir下TE文件
      *

@@ -1,6 +1,6 @@
-package FormatTools.impl;
+package Utils.Impl;
 
-import FormatTools.AdbUtils;
+import Utils.AdbUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
