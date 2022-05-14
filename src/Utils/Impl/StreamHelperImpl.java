@@ -45,4 +45,22 @@ public class StreamHelperImpl implements StreamHelper {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void close(BufferedReader bufferedReader) {
+        try {
+            if (bufferedReader != null) bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void close(BufferedWriter bufferedWriter) {
+        try {
+            if (bufferedWriter != null) bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

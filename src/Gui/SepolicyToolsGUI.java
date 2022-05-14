@@ -56,7 +56,7 @@ public class SepolicyToolsGUI extends JFrame {
         while ((logStringBuilder.indexOf("\r\n", line)) != -1) line++;
 
         textArea.setText(logStringBuilder.toString());
-        
+
         if (line > 27 * 10) logStringBuilder.delete(0, logStringBuilder.length());
     }
 

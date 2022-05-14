@@ -13,4 +13,8 @@ public interface StreamHelper {
     BufferedWriter getBufferWriter(String path,boolean append);
 
     void closeIO(BufferedReader bufferedReader, BufferedWriter bufferedWriter);
+
+    void close(BufferedReader bufferedReader);
+
+    void close(BufferedWriter bufferedWriter);
 }
