@@ -48,19 +48,25 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
     @Override
     public void formatFiles(String inPutDir, String outPutDir) {
         List<String> teFileList = getTEFileList(inPutDir);
+
         if (teFileList == null) {
-            SepolicyToolsGUI.log("未找到TE文件在" + inPutDir);
+            SepolicyToolsGUI.log("打开" + inPutDir + "失败");
             return;
         }
+
+        SepolicyToolsGUI.log("在" + inPutDir + "共找到" + teFileList.size() + "个te文件");
 
         File outPutFd = new File(outPutDir);
 
         if (!outPutFd.exists()) {
+            SepolicyToolsGUI.log("创建文件夹" + outPutFd);
             outPutFd.mkdirs();
         }
 
         for (String file : teFileList) {
+            SepolicyToolsGUI.log("格式化" + inPutDir + "/" + file);
             autoFormatFile(inPutDir + "/" + file, outPutDir + "/" + file);
+            SepolicyToolsGUI.log("格式化" + inPutDir + "/" + file + "完成");
         }
     }
 

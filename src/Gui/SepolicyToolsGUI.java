@@ -131,7 +131,12 @@ public class SepolicyToolsGUI extends JFrame {
         formatTEFilesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (!new File(sourceFile.getPath()).exists()) {
+                    SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+                }
+                SepolicyToolsGUI.log("开始");
                 sepolicyDirUtils.formatFiles(sourceFile.getAbsolutePath(), sourceFile.getAbsolutePath());
+                SepolicyToolsGUI.log("完成！！！");
             }
         });
 
@@ -144,7 +149,8 @@ public class SepolicyToolsGUI extends JFrame {
                 String fileContextsPath = sourceFile.getPath() + "/file_contexts";
                 File file = new File(fileContextsPath);
                 if (!file.exists()) {
-                    SepolicyToolsGUI.log("file_contexts文件不存在");
+                    SepolicyToolsGUI.log(fileContextsPath + "文件不存在");
+                    SepolicyToolsGUI.log("未执行任何操作");
                 } else {
                     SepolicyToolsGUI.log("处理文件" + file.getPath());
                     fileContextsFormat.autoFormatFileContexts(file.getAbsolutePath(), file.getAbsolutePath());

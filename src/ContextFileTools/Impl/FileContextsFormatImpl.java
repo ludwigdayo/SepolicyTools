@@ -108,6 +108,7 @@ public class FileContextsFormatImpl implements FileContextsFormat {
 
         for (String line : content) {
             if (line.startsWith("#")) continue;
+            if (line.isEmpty()) continue;
 
             line = line.replace("\t", " ");
             line = lineUtils.deleteDuplicateSpace(line);
@@ -151,8 +152,10 @@ public class FileContextsFormatImpl implements FileContextsFormat {
         String[] text = null;
 
         text = fileToString(inPutPath);
+
         SepolicyToolsGUI.log("清除无用行...");
         text = cleanNotExistedLine(text);
+
         SepolicyToolsGUI.log("整理所有行...");
         text = formatAllLine(text);
 

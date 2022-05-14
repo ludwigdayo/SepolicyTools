@@ -1,30 +1,9 @@
-# ==============================================
-# MTK Policy Rule
-# ============
-
-# for early-migration, set as permissive
-# permissive ueventd;
-
-# add for sysfs:leds; pls check it on L official policy
-allow ueventd sysfs:file setattr;
-
-#add for gmo+512M project
-allow ueventd platform_app:fd use;
-allow ueventd platform_app_tmpfs:file write;
-
-#add for sysfs:scp
-allow ueventd sysfs_scp:file { write open };
-
-# Nougat
-allow ueventd device:chr_file { relabelfrom };
-allow ueventd fm_device:chr_file { relabelto };
-
-# aka.jiang add for fingerprint ET3XX 20160308
-#allow ueventd etsd_data_file:chr_file { create setattr read write ioctl open };
-
-# wmtwifi
 allow ueventd wmtWifi_device:chr_file { create setattr read write ioctl open relabelto };
-
-# /sys/devices/virtual/BOOT/BOOT/boot/boot_mode
+allow ueventd sysfs_scp:file { write open };
 allow ueventd sysfs_boot_mode_file:file { relabelto getattr };
+allow ueventd sysfs:file setattr;
+allow ueventd platform_app_tmpfs:file write;
+allow ueventd platform_app:fd use;
+allow ueventd fm_device:chr_file { relabelto };
+allow ueventd device:chr_file { relabelfrom };
 

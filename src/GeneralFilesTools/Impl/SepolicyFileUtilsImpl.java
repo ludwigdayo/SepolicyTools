@@ -2,6 +2,7 @@ package GeneralFilesTools.Impl;
 
 
 import GeneralFilesTools.SepolicyFileUtils;
+import Gui.SepolicyToolsGUI;
 import Utils.Impl.StreamHelperImpl;
 
 import java.io.BufferedReader;
@@ -44,7 +45,9 @@ public class SepolicyFileUtilsImpl extends SepolicyLineUtilsImpl implements Sepo
         String[] strings = new String[treeSet.size()]; // 结果
         treeSet.toArray(strings); // 取出
 
+        SepolicyToolsGUI.log("格式化行...");
         formatAllLine(strings); // 格式化行
+        SepolicyToolsGUI.log("行格式化完成");
 
         bufferedWriter = streamHelper.getBufferWriter(outPutPath, false); // 打开输出文件并清空
         try {
