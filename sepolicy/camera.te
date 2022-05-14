@@ -1,0 +1,11 @@
+type camera_isp_device, dev_type;
+type camera_fdvt_device, dev_type;
+allow platform_app camera_isp_device:chr_file rw_file_perms;
+allow meta_tst camera_isp_device:chr_file { read write ioctl open };
+allow mediaserver camera_isp_device:chr_file { read write ioctl open };
+allow mediaserver camera_fdvt_device:chr_file { read write ioctl open };
+allow factory camera_isp_device:chr_file { read write ioctl open };
+allow debuggerd camera_isp_device:chr_file r_file_perms;
+allow cameraserver camera_isp_device:chr_file { read write open ioctl };
+allow cameraserver camera_fdvt_device:chr_file { read write open ioctl };
+allow atci_service camera_isp_device:chr_file { read write ioctl open };

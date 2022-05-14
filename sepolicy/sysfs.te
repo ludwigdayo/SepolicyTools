@@ -1,0 +1,8 @@
+type sysfs_ccci_version, file_type, data_file_type;
+allow sysfs_ccci_version sysfs:filesystem { associate };
+allow mtkrild sysfs_ccci_version:file { open read getattr };
+allow md_monitor sysfs_ccci_version:file { read open getattr };
+allow gsm0710muxd sysfs_ccci_version:file { open read getattr };
+allow ccci_mdinit sysfs_ccci_version:file { read open getattr };
+allow ccci_fsd sysfs_ccci_version:file { open read getattr };
+allow audioserver sysfs_ccci_version:file { open read getattr };

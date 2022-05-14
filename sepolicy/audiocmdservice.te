@@ -1,0 +1,2 @@
+type audiocmdservice_atci_exec, exec_type, file_type;
+allow shell audiocmdservice_atci_exec:file rx_file_perms;

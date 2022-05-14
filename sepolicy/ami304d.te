@@ -1,4 +1,2 @@
 type ami304d_exec, exec_type, file_type;
-type ami304d, domain;
-init_daemon_domain(ami304d)
-
+allow shell ami304d_exec:file rx_file_perms;

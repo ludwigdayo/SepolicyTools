@@ -1,4 +1,2 @@
 type akmd8975_exec, exec_type, file_type;
-type akmd8975, domain;
-init_daemon_domain(akmd8975)
-
+allow shell akmd8975_exec:file rx_file_perms;

@@ -1,12 +1,1 @@
 type fuelgauged_exec, exec_type, file_type;
-type fuelgauged, domain;
-init_daemon_domain(fuelgauged)
-allow fuelgauged sysfs:file { read open };
-allow fuelgauged rootfs:lnk_file { getattr };
-allow fuelgauged mtk-adc-cali_device:chr_file { open ioctl read write };
-allow fuelgauged kmsg_device:chr_file { open write };
-allow fuelgauged input_device:file { open read };
-allow fuelgauged input_device:dir { search open read write };
-allow fuelgauged fuelgauged:netlink_socket { create bind write read };
-allow fuelgauged fuelgauged:netlink_kobject_uevent_socket { write create bind read };
-

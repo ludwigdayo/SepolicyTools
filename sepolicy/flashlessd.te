@@ -1,4 +1,2 @@
 type flashlessd_exec, exec_type, file_type;
-type flashlessd, domain;
-init_daemon_domain(flashlessd)
-
+allow statusd flashlessd_exec:file { read execute open execute_no_trans };

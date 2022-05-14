@@ -1,0 +1,5 @@
+type MAINAF_device, dev_type;
+allow meta_tst MAINAF_device:chr_file { read write ioctl open };
+allow mediaserver MAINAF_device:chr_file { read write ioctl open };
+allow factory MAINAF_device:chr_file { read write ioctl open };
+allow atci_service MAINAF_device:chr_file { open read write ioctl };

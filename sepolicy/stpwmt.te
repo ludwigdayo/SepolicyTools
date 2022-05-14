@@ -1,0 +1,5 @@
+type stpwmt_device, dev_type;
+allow wmt_loader stpwmt_device:chr_file { read write ioctl open };
+allow stp_dump3 stpwmt_device:chr_file { read write ioctl open };
+allow mtk_6620_launcher stpwmt_device:chr_file { read write ioctl open };
+allow BGW stpwmt_device:chr_file { read write open };

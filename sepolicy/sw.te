@@ -1,0 +1,6 @@
+type sw_sync_device, dev_type;
+allow system_server sw_sync_device:chr_file { read write getattr open ioctl };
+allow system_app sw_sync_device:chr_file { read write getattr open };
+allow surfaceflinger sw_sync_device:chr_file { read write open ioctl };
+allow mediaserver sw_sync_device:chr_file rw_file_perms;
+allow appdomain sw_sync_device:chr_file { read write getattr open ioctl };

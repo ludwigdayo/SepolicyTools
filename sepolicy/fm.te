@@ -1,0 +1,7 @@
+type fm_device, dev_type;
+allow ueventd fm_device:chr_file { relabelto };
+allow system_app fm_device:chr_file rw_file_perms;
+allow platform_app fm_device:chr_file rw_file_perms;
+allow meta_tst fm_device:chr_file { read write ioctl open };
+allow mediaserver fm_device:chr_file { read write ioctl open };
+allow factory fm_device:chr_file { read write ioctl open };

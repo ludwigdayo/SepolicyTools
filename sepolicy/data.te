@@ -1,0 +1,9 @@
+type data_tmpfs_log_file, file_type, data_file_type;
+allow vold data_tmpfs_log_file:file { write setattr getattr relabelto create unlink open read };
+allow vold data_tmpfs_log_file:dir { setattr getattr read create write rmdir relabelto remove_name open add_name search };
+allow mobile_log_d data_tmpfs_log_file:file create_file_perms;
+allow mobile_log_d data_tmpfs_log_file:dir create_dir_perms;
+allow debuggerd data_tmpfs_log_file:file create_file_perms;
+allow debuggerd data_tmpfs_log_file:dir create_dir_perms;
+allow atcp data_tmpfs_log_file:file create_file_perms;
+allow atcp data_tmpfs_log_file:dir create_dir_perms;

@@ -1,0 +1,17 @@
+type stpgps_device, dev_type;
+type agps_device, dev_type;
+allow viarild gps_device:chr_file rw_file_perms;
+allow system_server gps_data_file:file create_file_perms;
+allow system_server gps_data_file:dir rw_dir_perms;
+allow mtkrildmd2 gps_device:chr_file rw_file_perms;
+allow mtkrild gps_device:chr_file rw_file_perms;
+allow mtk_agpsd agps_device:chr_file rw_file_perms;
+allow mnld gps_device:chr_file rw_file_perms;
+allow mnld gps_data_file:file create_file_perms;
+allow mnld gps_data_file:dir rw_dir_perms;
+allow meta_tst gps_device:chr_file { read write open };
+allow meta_tst gps_data_file:file create_file_perms;
+allow meta_tst gps_data_file:dir rw_dir_perms;
+allow factory gps_device:chr_file { read write open };
+allow factory gps_data_file:dir { read search };
+allow atcp gps_device:chr_file rw_file_perms;

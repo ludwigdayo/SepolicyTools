@@ -1,0 +1,13 @@
+type agpsd_socket, file_type;
+type agpsd_data_file, file_type, data_file_type;
+allow wifi2agps agpsd_data_file:sock_file write;
+allow wifi2agps agpsd_data_file:dir search;
+allow system_server agpsd_data_file:dir search;
+allow mtk_agpsd agpsd_data_file:sock_file create_file_perms;
+allow mtk_agpsd agpsd_data_file:file create_file_perms;
+allow mtk_agpsd agpsd_data_file:dir create_dir_perms;
+allow mnld agpsd_data_file:sock_file create_file_perms;
+allow mnld agpsd_data_file:dir create_dir_perms;
+allow meta_tst agpsd_data_file:sock_file write;
+allow meta_tst agpsd_data_file:dir search;
+allow factory agpsd_data_file:dir search;

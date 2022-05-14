@@ -1,0 +1,4 @@
+type dontpanic_data_file, file_type, data_file_type;
+allow system_server dontpanic_data_file:dir search;
+allow system_app dontpanic_data_file:dir getattr;
+allow dumpstate dontpanic_data_file:dir search;

@@ -1,0 +1,5 @@
+type event_input_device, dev_type;
+allow yamaha537fusiond event_input_device:dir { read open search };
+allow yamaha537fusiond event_input_device:chr_file { read open ioctl write };
+allow system_server event_input_device:dir { read write open remove_name search getattr };
+allow system_server event_input_device:chr_file { read write getattr open ioctl };

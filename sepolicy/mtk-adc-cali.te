@@ -1,0 +1,4 @@
+type mtk-adc-cali_device, dev_type;
+allow nvram_daemon mtk-adc-cali_device:chr_file { read write ioctl open };
+allow nvram_agent_binder mtk-adc-cali_device:chr_file { read write ioctl open };
+allow fuelgauged mtk-adc-cali_device:chr_file { open ioctl read write };

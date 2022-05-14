@@ -1,0 +1,9 @@
+type fon_image_data_file, file_type, data_file_type;
+allow vold fon_image_data_file:file { read write };
+allow vold fon_image_data_file:file open;
+allow vold fon_image_data_file:file getattr;
+allow vold fon_image_data_file:dir search;
+allow vdc fon_image_data_file:file { read write open };
+allow vdc fon_image_data_file:file create;
+allow vdc fon_image_data_file:dir { search write add_name };
+allow kernel fon_image_data_file:file read;

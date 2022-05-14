@@ -1,0 +1,2 @@
+type lost_found_data_file, file_type, data_file_type;
+allow system_app lost_found_data_file:dir getattr;

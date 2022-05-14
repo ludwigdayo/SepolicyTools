@@ -1,0 +1,4 @@
+type sec_device, dev_type;
+allow sbchk sec_device:chr_file { read ioctl open };
+allow recovery sec_device:chr_file { read ioctl open };
+allow mediaserver sec_device:chr_file { read open ioctl };

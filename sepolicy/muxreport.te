@@ -1,16 +1,3 @@
 type muxreport_exec, exec_type, file_type;
-type muxreport, domain;
-init_daemon_domain(muxreport)
-allow muxreport sysfs:file { read open };
-allow muxreport self:capability dac_override;
-allow muxreport rootfs:lnk_file { getattr };
-allow muxreport ril_mux_report_case_prop:property_service set;
-allow muxreport ril_mux_report_case_prop:file { read open getattr };
-allow muxreport property_socket:sock_file write;
-allow muxreport persist_ril_prop:file { read open getattr };
-allow muxreport init:unix_stream_socket connectto;
-allow muxreport emd_device:chr_file { read write open };
-allow muxreport eemcs_device:chr_file { read write ioctl open };
-allow muxreport devpts:chr_file { read write getattr ioctl };
-allow muxreport ccci_device:chr_file { read write ioctl open };
-
+allow shell muxreport_exec:file rx_file_perms;
+allow md_ctrl muxreport_exec:file { read execute open execute_no_trans };

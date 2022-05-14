@@ -1,12 +1,1 @@
-allow ppp system_prop:property_service set; 
-allow ppp shell_exec:file { read execute open execute_no_trans };
-allow ppp self:packet_socket { write ioctl setopt read bind create };
-allow ppp self:capability { setuid net_raw setgid dac_override };
-allow ppp property_socket:sock_file write;
-allow ppp pppoe_ppp0_prop:property_service set;
-allow ppp ppp_exec:file execute_no_trans;
-allow ppp net_radio_prop:property_service set;
-allow ppp mtp:file read;
-allow ppp init:unix_stream_socket connectto;
-allow ppp devpts:chr_file { read write ioctl open setattr };
-
+type ppp_data_file, file_type, data_file_type;

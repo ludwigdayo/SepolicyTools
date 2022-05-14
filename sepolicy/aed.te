@@ -1,0 +1,3 @@
+type aed_device, dev_type;
+allow dmlog aed_device:chr_file read;
+allow debuggerd aed_device:chr_file { read write ioctl open };

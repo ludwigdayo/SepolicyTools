@@ -1,0 +1,5 @@
+type c2k_file, file_type, data_file_type;
+allow statusd c2k_file:file create_file_perms;
+allow statusd c2k_file:dir create_dir_perms;
+allow ccci_fsd c2k_file:file create_file_perms;
+allow ccci_fsd c2k_file:dir create_dir_perms;

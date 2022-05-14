@@ -1,0 +1,4 @@
+type touch_device, dev_type;
+allow system_server touch_device:chr_file { read ioctl open };
+allow system_server touch_device:chr_file write;
+allow system_app touch_device:chr_file { read ioctl open };

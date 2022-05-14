@@ -1,0 +1,6 @@
+type stpbt_device, dev_type;
+allow radio stpbt_device:chr_file { read write open };
+allow mnld stpbt_device:chr_file { read write };
+allow meta_tst stpbt_device:chr_file { read write open };
+allow factory stpbt_device:chr_file { read write open };
+allow bluetooth stpbt_device:chr_file rw_file_perms;

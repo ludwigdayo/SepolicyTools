@@ -1,0 +1,5 @@
+type zram0_device, dev_type;
+allow vold zram0_device:blk_file getattr;
+allow tiny_swapon zram0_device:blk_file { getattr read write open ioctl };
+allow tiny_mkswap zram0_device:blk_file { getattr read write open ioctl };
+allow enableswap zram0_device:blk_file { read write getattr open ioctl };

@@ -3,6 +3,7 @@ package Gui;
 import ContextFileTools.Impl.FileContextsFormatImpl;
 import GeneralFilesTools.Impl.SepolicyDirUtilsImpl;
 import GeneralFilesTools.SepolicyDirUtils;
+import Utils.Impl.FilePathUtilsImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +35,7 @@ public class SepolicyToolsGUI extends JFrame {
     private static JTextArea textArea = null;
     private JButton formatTEFilesButton = null;
     private JButton formatFileContextsButton = null;
+    private JButton reWriteTEFilesButton = null;
     private JPanel centerPanel = null;
     private JPanel southPanel = null;
     private JButton autoRun = null;
@@ -55,7 +57,9 @@ public class SepolicyToolsGUI extends JFrame {
         int line = 0;
         while ((logStringBuilder.indexOf("\r\n", line)) != -1) line++;
 
-        textArea.setText(logStringBuilder.toString());
+        if (textArea != null) {
+            textArea.setText(logStringBuilder.toString());
+        }
 
         if (line > 27 * 10) logStringBuilder.delete(0, logStringBuilder.length());
     }
@@ -143,10 +147,27 @@ public class SepolicyToolsGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (!new File(sourceFile.getPath()).exists()) {
                     SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+                } else {
+                    SepolicyToolsGUI.log("TE文件格式化开始");
+                    sepolicyDirUtils.formatFiles(sourceFile.getAbsolutePath(), sourceFile.getAbsolutePath());
+                    SepolicyToolsGUI.log("完成！！！");
                 }
-                SepolicyToolsGUI.log("开始");
-                sepolicyDirUtils.formatFiles(sourceFile.getAbsolutePath(), sourceFile.getAbsolutePath());
-                SepolicyToolsGUI.log("完成！！！");
+            }
+        });
+
+        reWriteTEFilesButton = new JButton("清理并重命名TE文件");
+        reWriteTEFilesButton.setBackground(themeColor);
+        reWriteTEFilesButton.setFont(buttonFont);
+        reWriteTEFilesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!new File(sourceFile.getPath()).exists()) {
+                    SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+                } else {
+                    SepolicyToolsGUI.log("重写开始");
+                    sepolicyDirUtils.reWriteTeFiles(sourceFile.getPath(), sourceFile.getPath(), new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts"));
+                    SepolicyToolsGUI.log("完成");
+                }
             }
         });
 
@@ -156,7 +177,7 @@ public class SepolicyToolsGUI extends JFrame {
         formatFileContextsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String fileContextsPath = sourceFile.getPath() + "/file_contexts";
+                String fileContextsPath = new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts");
                 File file = new File(fileContextsPath);
                 if (!file.exists()) {
                     SepolicyToolsGUI.log(fileContextsPath + "文件不存在");
@@ -177,6 +198,7 @@ public class SepolicyToolsGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 formatFileContextsButton.doClick();
+                reWriteTEFilesButton.doClick();
                 formatTEFilesButton.doClick();
             }
         });
@@ -188,6 +210,7 @@ public class SepolicyToolsGUI extends JFrame {
         southPanel.setLayout(gridLayout);
         southPanel.add(formatTEFilesButton);
         southPanel.add(formatFileContextsButton);
+        southPanel.add(reWriteTEFilesButton);
         southPanel.add(autoRun);
         contentPane.add(southPanel, BorderLayout.SOUTH);
 

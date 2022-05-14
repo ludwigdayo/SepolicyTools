@@ -1,0 +1,109 @@
+type_transition goodixfingerprintd system_data_file: { dir file goodixfingerprintd_data_file;
+type_transition MPED system_data_file:sock_file MPED_socket "mtk_mpe_server";
+file_type_auto_trans(volte_stack, system_data_file, ims_ipsec_data_file)
+file_type_auto_trans(thermal_manager, system_data_file, thermal_manager_data_file)
+file_type_auto_trans(surfaceflinger, system_data_file, sf_bqdump_data_file);
+file_type_auto_trans(stp_dump3,system_data_file,stp_dump_data_file)
+file_type_auto_trans(st480, system_data_file, msensor_data_file)
+file_type_auto_trans(mxg2320d, system_data_file, msensor_data_file)
+file_type_auto_trans(mtkFlpDaemon, system_data_file, mtkFlpDaemon_data_file);
+file_type_auto_trans(mnld, system_data_file, mnld_data_file);
+file_type_auto_trans(md_monitor, system_data_file, md_monitor_data_file)
+file_type_auto_trans(ipod, system_data_file, ipoh_data_file)
+file_type_auto_trans(goodixfingerprintd, system_data_file, goodixfingerprintd_data_file)
+file_type_auto_trans(geomagneticd, system_data_file, msensor_data_file)
+file_type_auto_trans(factory, system_data_file, factory_data_file)
+file_type_auto_trans(enableswap, system_data_file, enableswap_data_file)
+file_type_auto_trans(bmm056d, system_data_file, msensor_data_file)
+file_type_auto_trans(bmm050d, system_data_file, msensor_data_file)
+file_type_auto_trans(autokd, system_data_file, autokd_data_file)
+file_type_auto_trans(atci_service, system_data_file, atci_data_file)
+file_type_auto_trans(akmd8963, system_data_file, msensor_data_file)
+file_type_auto_trans(akmd09912, system_data_file, msensor_data_file)
+file_type_auto_trans(akmd09911, system_data_file, msensor_data_file)
+file_type_auto_trans(adbd, system_data_file, adbd_data_file)
+file_type_auto_trans(MPED, system_data_file, MPED_data_file);
+allow yamaha537fusiond system_data_file:file { open read getattr };
+allow yamaha537fusiond system_data_file:dir { write remove_name add_name };
+allow xlog system_data_file:dir { relabelfrom create_dir_perms };
+allow vtservice system_data_file:dir { write open read getattr setattr };
+allow volte_stack system_data_file:dir { write remove_name add_name };
+allow vold system_data_file:lnk_file { create unlink };
+allow vold system_data_file:file open;
+allow vold system_data_file:dir { relabelfrom relabelto setattr };
+allow viarild system_data_file:file r_file_perms;
+allow viarild system_data_file:dir r_dir_perms;
+allow uncrypt system_data_file:file { open read };
+allow tunman system_data_file:file { open read };
+allow thermal_manager system_data_file:dir write;
+allow thermal_manager system_data_file:dir add_name;
+allow statusd system_data_file:sock_file { write create setattr };
+allow statusd system_data_file:dir { write add_name };
+allow st480 system_data_file:dir { write add_name create setattr };
+allow st480 system_data_file:dir remove_name;
+allow ril-3gddaemon system_data_file:file r_file_perms;
+allow ril-3gddaemon system_data_file:dir r_dir_perms;
+allow pppd_via system_data_file:file open;
+allow nvram_daemon system_data_file:file { read open getattr };
+allow nvram_daemon system_data_file:dir { create write add_name };
+allow nvram_agent_binder system_data_file:file { open };
+allow nvram_agent_binder system_data_file:dir { create write add_name };
+allow mxg2320d system_data_file:dir { create setattr };
+allow mtkrildmd2 system_data_file:file r_file_perms;
+allow mtkrildmd2 system_data_file:dir r_dir_perms;
+allow mtkrild system_data_file:file r_file_perms;
+allow mtkrild system_data_file:dir r_dir_perms;
+allow mtkmal system_data_file:dir { read write open add_name remove_name };
+allow mtkFlpDaemon system_data_file:sock_file { unlink write read };
+allow mtkFlpDaemon system_data_file:dir remove_name;
+allow mobile_log_d system_data_file:dir { relabelfrom create_dir_perms };
+allow mnld system_data_file:sock_file create_file_perms;
+allow mnld system_data_file:file { open read };
+allow mnld system_data_file:dir rw_dir_perms;
+allow mnld system_data_file:dir create_dir_perms;
+allow meta_tst system_data_file:sock_file { write create setattr };
+allow meta_tst system_data_file:sock_file unlink;
+allow meta_tst system_data_file:dir { write remove_name add_name };
+allow meta_tst system_data_file:dir create;
+allow mediaserver system_data_file:file open;
+allow mediaserver system_data_file:dir write;
+allow mdlogger system_data_file:dir { write create open add_name relabelfrom };
+allow md_monitor system_data_file:file { read open };
+allow md_monitor system_data_file:fifo_file { create read write setattr open };
+allow md_monitor system_data_file:dir { write add_name create };
+allow md_monitor system_data_file:dir relabelto;
+allow istd8303 system_data_file:dir { write add_name create setattr };
+allow ipod system_data_file:dir { open read write add_name create remove_name };
+allow installd system_data_file:file open;
+allow goodixfingerprintd system_data_file:file { open };
+allow goodixfingerprintd system_data_file:dir { write open read add_name create };
+allow goodix system_data_file:file { open };
+allow goodix system_data_file:dir { write open read add_name create };
+allow geomagneticd system_data_file:dir { write remove_name add_name };
+allow factory system_data_file:sock_file { write create unlink setattr };
+allow factory system_data_file:dir { write remove_name add_name };
+allow factory system_data_file:dir { write add_name };
+allow enableswap system_data_file:dir { write add_name };
+allow emdlogger system_data_file:dir { write create open add_name relabelfrom };
+allow em_svr system_data_file:file open;
+allow em_svr system_data_file:dir { write remove_name add_name relabelfrom create open };
+allow eemcs_mdinit system_data_file:dir { write create add_name };
+allow disableswap system_data_file:dir { write };
+allow cmddumper system_data_file:dir { write create open add_name relabelfrom relabelto };
+allow br_app_data_service system_data_file:dir write;
+allow br_app_data_service system_data_file:dir remove_name;
+allow bmm056d system_data_file:dir { create setattr };
+allow bmm050d system_data_file:dir { create setattr };
+allow autokd system_data_file:dir { read write open add_name remove_name };
+allow atcp system_data_file:file r_file_perms;
+allow atcp system_data_file:dir { write create open add_name relabelfrom };
+allow atcp system_data_file:dir { relabelfrom create_dir_perms };
+allow atcp system_data_file:dir r_dir_perms;
+allow atci_service system_data_file:dir { write remove_name add_name };
+allow akmd8963 system_data_file:dir { create setattr };
+allow akmd09912 system_data_file:dir { create setattr };
+allow akmd09911 system_data_file:dir { create setattr };
+allow aee_core_forwarder system_data_file:dir { write relabelfrom create add_name };
+allow adbd system_data_file:dir { write remove_name add_name };
+allow MPED system_data_file:sock_file { unlink write };
+allow MPED system_data_file:dir remove_name;

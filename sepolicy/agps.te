@@ -1,0 +1,2 @@
+type agps_device, dev_type;
+allow mtk_agpsd agps_device:chr_file rw_file_perms;

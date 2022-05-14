@@ -1,0 +1,5 @@
+type ttyMT_device, dev_type;
+allow statusd ttyMT_device:chr_file { read write ioctl open };
+allow meta_tst ttyMT_device:chr_file { read write ioctl open };
+allow factory ttyMT_device:chr_file { read write open ioctl };
+allow eemcs_mdinit ttyMT_device:chr_file { read write ioctl open };

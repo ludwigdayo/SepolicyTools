@@ -1,0 +1,9 @@
+type md_monitor_file, file_type, data_file_type;
+type md_monitor_exec, exec_type, file_type;
+type md_ctrl_exec, exec_type, file_type;
+allow untrusted_app md_monitor_file:file { read open getattr };
+allow untrusted_app md_monitor_file:dir { read open getattr search };
+allow md_monitor md_monitor_file:file { read open getattr };
+allow md_monitor md_monitor_file:file { open read };
+allow md_monitor md_monitor_file:dir { search };
+allow md_monitor md_monitor_file:dir { read open getattr };

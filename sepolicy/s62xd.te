@@ -1,6 +1,2 @@
 type s62xd_exec, exec_type, file_type;
-type s62xd, domain;
-init_daemon_domain(s62xd)
-allow s62xd msensor_device:chr_file { open ioctl read write };
-allow s62xd gsensor_device:chr_file { open ioctl read write };
-
+allow shell s62xd_exec:file rx_file_perms;

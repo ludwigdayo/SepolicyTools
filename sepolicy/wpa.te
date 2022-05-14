@@ -1,7 +1,3 @@
-allow wpa wifi_data_file:sock_file { create setattr unlink };
-allow wpa rild_oem_socket:sock_file write;
-allow wpa rild_oem_md2_socket:sock_file write;
-allow wpa platform_app_tmpfs:file write;
-allow wpa platform_app:fd use;
-allow wpa mtkrild:unix_stream_socket connectto;
-
+type wpa_wlan0_socket, file_type;
+type wpa_supplicant_data_file, file_type, data_file_type;
+allow system_server wpa_wlan0_socket:sock_file write;

@@ -1,17 +1,2 @@
 type pq_exec, exec_type, file_type;
-type pq, domain;
-init_daemon_domain(pq)
-binder_use(pq)
-binder_service(pq)
-binder_call(pq, binderservicedomain)
-allow pq system_prop:property_service set;
-allow pq rootfs:lnk_file { getattr };
-allow pq property_socket:sock_file write;
-allow pq proc:file { read open ioctl };
-allow pq pq_service:service_manager { find };
-allow pq pq_service:service_manager add;
-allow pq permission_service:service_manager { find };
-allow pq init:unix_stream_socket connectto;
-allow pq graphics_device:dir search;
-allow pq graphics_device:chr_file { read write open ioctl };
-
+allow shell pq_exec:file rx_file_perms;

@@ -22,6 +22,10 @@ public class StreamHelperImpl implements StreamHelper {
     public BufferedWriter getBufferWriter(String path, boolean append) {
 
         BufferedWriter bufferedWriter = null;
+
+        // 创建文件夹
+        new File(new File(path).getParent()).mkdirs();
+
         try {
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append)));
         } catch (FileNotFoundException e) {

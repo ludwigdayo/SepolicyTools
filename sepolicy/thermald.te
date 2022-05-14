@@ -1,10 +1,2 @@
 type thermald_exec, exec_type, file_type;
-type thermald, domain;
-init_daemon_domain(thermald)
-binder_use(thermald)
-allow thermald system_server:binder call;
-allow thermald rootfs:lnk_file { getattr };
-allow thermald proc_thermal:file { read getattr open write };
-allow thermald proc_thermal:dir search;
-allow thermald activity_service:service_manager find;
-
+allow shell thermald_exec:file rx_file_perms;

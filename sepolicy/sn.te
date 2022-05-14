@@ -1,18 +1,2 @@
 type sn_exec, exec_type, file_type;
-type sn, domain;
-init_daemon_domain(sn)
-allow sn tmpfs:dir { read search };
-allow sn system_prop:property_service set;
-allow sn sysfs:file { read write open };
-allow sn storage_file:lnk_file read;
-allow sn self:capability { dac_read_search dac_override };
-allow sn sdcard_internal:dir search;
-allow sn rootfs:lnk_file { getattr };
-allow sn property_socket:sock_file write;
-allow sn nvram_device:blk_file { read write open };
-allow sn nvram_data_file:file r_file_perms;
-allow sn mnt_user_file:lnk_file read;
-allow sn mnt_user_file:dir search;
-allow sn init:unix_stream_socket { connectto };
-allow sn fuse:file { read getattr open };
-
+allow shell sn_exec:file rx_file_perms;

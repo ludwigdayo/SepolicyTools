@@ -1,13 +1,12 @@
 type akmd8963_exec, exec_type, file_type;
-type akmd8963, domain;
-init_daemon_domain(akmd8963)
-file_type_auto_trans(akmd8963, system_data_file, msensor_data_file)
-allow akmd8963 system_data_file:dir { create setattr };
-allow akmd8963 msensor_device:chr_file { open ioctl read write };
-allow akmd8963 msensor_data_file:file { open write read create setattr };
-allow akmd8963 input_device:file { open read };
-allow akmd8963 input_device:dir { search open read write };
-allow akmd8963 gsensor_device:chr_file { open ioctl read write };
+type akmd8963_access_file2, file_type, data_file_type;
+type akmd8963_access_file1, file_type, data_file_type;
+allow shell akmd8963_exec:file rx_file_perms;
+allow mxg2320d akmd8963_access_file2:file { open read write };
+allow mxg2320d akmd8963_access_file1:file { open read write };
 allow akmd8963 akmd8963_access_file2:file { open read write };
 allow akmd8963 akmd8963_access_file1:file { open read write };
-
+allow akmd09912 akmd8963_access_file2:file { open read write };
+allow akmd09912 akmd8963_access_file1:file { open read write };
+allow akmd09911 akmd8963_access_file2:file { open read write };
+allow akmd09911 akmd8963_access_file1:file { open read write getattr setattr };

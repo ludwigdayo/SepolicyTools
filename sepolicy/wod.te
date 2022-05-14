@@ -1,0 +1,10 @@
+type wod_ipsec_conf_file, file_type, data_file_type;
+type wod_apn_conf_file, file_type, data_file_type;
+allow ipsec wod_ipsec_conf_file:file { write read ioctl open getattr create append unlink };
+allow ipsec wod_ipsec_conf_file:dir { write read open search remove_name add_name };
+allow ipsec wod_apn_conf_file:file { write read ioctl open getattr };
+allow ipsec wod_apn_conf_file:dir { write read open search remove_name add_name create };
+allow epdg_wod wod_ipsec_conf_file:file { write create unlink open getattr };
+allow epdg_wod wod_ipsec_conf_file:dir { write read open add_name remove_name search };
+allow epdg_wod wod_apn_conf_file:file { write create unlink open getattr };
+allow epdg_wod wod_apn_conf_file:dir { write read open add_name remove_name search };

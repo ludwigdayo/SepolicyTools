@@ -1,6 +1,7 @@
 package Utils.Impl;
 
 import Gui.SepolicyToolsGUI;
+import Utils.AboutSystem;
 import Utils.AdbUtils;
 
 import java.io.BufferedReader;
@@ -11,39 +12,60 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AdbUtilsImpl implements AdbUtils {
-    private final static int WINDOWS = 0;
-    private final static int LINUX = 1;
-    private final static int OTHER = 2;
-
     private static String allFileList = null;
 
     /**
-     * 获取系统类型
+     * 获得当前已经连接的设备数量
+     *
+     * @return 设备数量
      */
-    private static int getSystemType() {
-        String property = System.getProperty("os.name");
-        SepolicyToolsGUI.log("系统类型" + property);
-        if (property.contains("Windows")) {
-            return WINDOWS;
-        } else if (property.contains("Linux")) {
-            return LINUX;
-        } else {
-            return OTHER;
+    int getConnectedDeviceNum() {
+        int count = 0;
+
+        String adb = getADB();
+        Process exec = null;
+        BufferedReader bufferedReader = null;
+        try {
+            exec = Runtime.getRuntime().exec(getADB() + " devices");
+            bufferedReader = new BufferedReader(new InputStreamReader(exec.getInputStream()));
+
+            // 丢掉错误输出
+            while (exec.getErrorStream().available() > 0) {
+                exec.getErrorStream().read();
+            }
+
+            // 统计数量
+            String buffer;
+            while ((buffer = bufferedReader.readLine()) != null) {
+                if (!buffer.isEmpty()) count++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+
+        return count - 1;
     }
 
     /**
      * 根据系统类型 确定adb工具的路径~
      */
     private static String getADB() {
-        int systemType = getSystemType();
+        int systemType = new AboutSystemImpl().getSystemType();
 
         String adbPath = null;
         switch (systemType) {
-            case WINDOWS:
+            case AboutSystem.WINDOWS:
                 adbPath = "platform-tools/windows/adb.exe";
                 break;
-            case LINUX:
+            case AboutSystem.LINUX:
                 adbPath = "platform-tools/linux/adb";
                 break;
         }
@@ -55,9 +77,10 @@ public class AdbUtilsImpl implements AdbUtils {
      */
     public String[] shell(String command) {
         Process exec = null;
+        BufferedReader bufferedReader = null;
         try {
             exec = Runtime.getRuntime().exec(getADB() + " shell " + command);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(exec.getInputStream()));
+            bufferedReader = new BufferedReader(new InputStreamReader(exec.getInputStream()));
 
             ArrayList<String> arrayList = new ArrayList<>();
             String buffer = null;
@@ -75,6 +98,14 @@ public class AdbUtilsImpl implements AdbUtils {
             return strings;
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return null;
@@ -83,10 +114,22 @@ public class AdbUtilsImpl implements AdbUtils {
     /**
      * 通过adb获取全部文件列表
      *
-     * @return
+     * @return 结果
      */
     public String getAllFileList() {
         if (allFileList == null) {
+            // 检查设备数量
+            int num = getConnectedDeviceNum();
+            if (num == 0) {
+                SepolicyToolsGUI.log("当前设备数量 " + num + " 请连接设备");
+                return null;
+            }
+
+            if (num > 1) {
+                SepolicyToolsGUI.log("当前设备数量 " + num + " 请减少设备");
+                return null;
+            }
+
             SepolicyToolsGUI.log("正在获取文件列表(至少需要几分钟时间)...");
             String[] shell = shell("ls -R");
             SepolicyToolsGUI.log("正在处理结果");
@@ -123,6 +166,9 @@ public class AdbUtilsImpl implements AdbUtils {
     public boolean isExisted(String path) {
         String allFileList = getAllFileList();
 
+        // 得不到列表默认存在
+        if (allFileList == null) return true;
+
         Pattern pattern = Pattern.compile(path);
         Matcher matcher = pattern.matcher(allFileList);
         return matcher.find();
@@ -133,8 +179,9 @@ public class AdbUtilsImpl implements AdbUtils {
      * 需要连接手机
      */
     public static void main(String[] args) {
-        System.out.println(new AdbUtilsImpl().isExisted("/system")); // true
-        System.out.println(new AdbUtilsImpl().isExisted("/succerseng")); // false
+//        System.out.println(new AdbUtilsImpl().isExisted("/system")); // true
+//        System.out.println(new AdbUtilsImpl().isExisted("/succerseng")); // false
+//        System.out.println(new AdbUtilsImpl().getConnectedDeviceNum());
     }
 
 }

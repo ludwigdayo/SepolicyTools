@@ -1,0 +1,4 @@
+type RT_Monitor_device, dev_type;
+allow system_server RT_Monitor_device:chr_file { read ioctl open };
+allow surfaceflinger RT_Monitor_device:chr_file { read ioctl open };
+allow debuggerd RT_Monitor_device:chr_file { read ioctl open };

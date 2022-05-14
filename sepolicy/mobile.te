@@ -1,0 +1,2 @@
+type mobile_log_d_exec, exec_type, file_type;
+allow shell mobile_log_d_exec:file rx_file_perms;

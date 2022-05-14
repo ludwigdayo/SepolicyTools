@@ -1,0 +1,9 @@
+type wmtWifi_device, dev_type;
+allow ueventd wmtWifi_device:chr_file { create setattr read write ioctl open relabelto };
+allow system_server wmtWifi_device:chr_file { write open };
+allow netd wmtWifi_device:chr_file { write open };
+allow meta_tst wmtWifi_device:chr_file { write open };
+allow lannetmngrd wmtWifi_device:chr_file { write open };
+allow factory wmtWifi_device:chr_file { write open };
+allow atcp wmtWifi_device:chr_file { write open };
+allow atcid wmtWifi_device:chr_file { write open };

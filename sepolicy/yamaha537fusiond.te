@@ -1,12 +1,2 @@
 type yamaha537fusiond_exec, exec_type, file_type;
-type yamaha537fusiond, domain;
-init_daemon_domain(yamaha537fusiond)
-allow yamaha537fusiond system_data_file:file { open read getattr };
-allow yamaha537fusiond system_data_file:dir { write remove_name add_name };
-allow yamaha537fusiond sysfs:file { create write open read getattr setattr link unlink };
-allow yamaha537fusiond sysfs:dir { read open search read };
-allow yamaha537fusiond gsensor_device:chr_file { read open ioctl write };
-allow yamaha537fusiond event_input_device:dir { read open search };
-allow yamaha537fusiond event_input_device:chr_file { read open ioctl write };
-allow init input_device:chr_file { read open write ioctl };
-
+allow init yamaha537fusiond_exec:file { getattr open read execute };

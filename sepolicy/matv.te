@@ -1,5 +1,2 @@
 type matv_exec, exec_type, file_type;
-type matv, domain;
-init_daemon_domain(matv)
-binder_use(matv)
-
+allow shell matv_exec:file rx_file_perms;

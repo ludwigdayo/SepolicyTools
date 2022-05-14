@@ -1,0 +1,6 @@
+allow pppd_via dnsproxyd_socket:sock_file write;
+allow pppd_dt dnsproxyd_socket:sock_file write;
+allow netdiag dnsproxyd_socket:sock_file write;
+allow ipsec dnsproxyd_socket:sock_file write;
+allow epdg_wod dnsproxyd_socket:sock_file write;
+allow atcp dnsproxyd_socket:sock_file write;

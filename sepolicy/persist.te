@@ -1,0 +1,8 @@
+type persist_data_file, file_type, data_file_type;
+allow vold persist_data_file:dir { read getattr open ioctl };
+allow meta_tst persist_data_file:file { read write create open getattr setattr };
+allow meta_tst persist_data_file:dir { create setattr write add_name search };
+allow mediaserver persist_data_file:file { read write create open getattr };
+allow mediaserver persist_data_file:dir { create write add_name search };
+allow drmserver persist_data_file:file { read getattr open };
+allow drmserver persist_data_file:dir search;

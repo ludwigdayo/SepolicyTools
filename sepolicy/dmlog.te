@@ -1,14 +1,3 @@
 type dmlog_exec, exec_type, file_type;
-type dmlog, domain;
-init_daemon_domain(dmlog)
-allow dmlog sysfs:file write;
-allow dmlog mmcblk0_block_device:blk_file { read write };
-allow dmlog fuse:file { write getattr };
-allow dmlog expdb_device:chr_file { read write };
-allow dmlog expdb_block_device:blk_file { read write };
-allow dmlog debuggerd:unix_stream_socket { read write };
-allow dmlog debuggerd:fd use;
-allow dmlog aee_exp_data_file:file write;
-allow dmlog aee_exp_data_file:file getattr;
-allow dmlog aed_device:chr_file read;
-
+domain_auto_trans(debuggerd, dmlog_exec, dmlog)
+allow shell dmlog_exec:file rx_file_perms;

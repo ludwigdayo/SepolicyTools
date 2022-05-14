@@ -1,0 +1,2 @@
+type mtgpio_device, dev_type;
+allow radio mtgpio_device:chr_file { read ioctl open };

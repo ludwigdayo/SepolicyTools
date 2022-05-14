@@ -1,0 +1,2 @@
+type ppl_agent_exec, exec_type, file_type;
+allow shell ppl_agent_exec:file rx_file_perms;

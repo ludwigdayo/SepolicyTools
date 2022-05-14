@@ -2,9 +2,11 @@ package GeneralFilesTools.Impl;
 
 import GeneralFilesTools.SepolicyDirUtils;
 import Gui.SepolicyToolsGUI;
+import Utils.Impl.FilePathUtilsImpl;
 import Utils.Impl.StreamHelperImpl;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -17,13 +19,13 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
      * @param files 文件列表
      * @return 合并的文件内容
      */
-    private String[] readAllLineFromFiles(String[] files) {
+    private String[] readAllLineFromFiles(String inputDir, String[] files) {
         ArrayList<String> arrayList = new ArrayList<>();
         StreamHelperImpl streamHelper = new StreamHelperImpl();
         String[] result = null;
 
         for (String file : files) {
-            BufferedReader bufferReader = streamHelper.getBufferReader(file);
+            BufferedReader bufferReader = streamHelper.getBufferReader(new FilePathUtilsImpl().catPath(inputDir, file));
             try {
                 String line;
                 while ((line = bufferReader.readLine()) != null) {
@@ -48,10 +50,13 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
      * @return 结果
      */
     private String[] getLabelFromFile_contexts(String file_contexts) {
+
         StreamHelperImpl streamHelper = new StreamHelperImpl();
         BufferedReader bufferReader = streamHelper.getBufferReader(file_contexts);
         TreeSet<String> resultSet = new TreeSet<>();
         String[] result = null;
+
+        if (bufferReader == null) return null;
 
         String line = null;
         try {
@@ -76,7 +81,7 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
 
 
     /**
-     * 得到dir下TE文件的名字
+     * 得到dir下TE文件的相对路径
      *
      * @return 列表
      */
@@ -133,9 +138,9 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
         }
 
         for (String file : tEFileList) {
-            SepolicyToolsGUI.log("格式化" + inPutDir + "/" + file);
-            autoFormatFile(inPutDir + "/" + file, outPutDir + "/" + file);
-            SepolicyToolsGUI.log("格式化" + inPutDir + "/" + file + "完成");
+            SepolicyToolsGUI.log("格式化" + file);
+            autoFormatFile(new FilePathUtilsImpl().catPath(inPutDir, file), new FilePathUtilsImpl().catPath(outPutDir, file));
+            SepolicyToolsGUI.log("格式化" + file + "完成");
         }
     }
 
@@ -143,20 +148,18 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
      * 将重新创建te文件
      *
      * @param inPutDir      sepolicy文件夹
-     * @param outPutDir
+     * @param outPutDir     输出文件夹
      * @param file_contexts 描述文件
      */
     @Override
     public void reWriteTeFiles(String inPutDir, String outPutDir, String file_contexts) {
-        // 放全部结果
-        HashSet<Map<String, ArrayList<String>>> resultSet = null;
-        String[] result = null;
+        StreamHelperImpl streamHelper = new StreamHelperImpl();
 
         // 存储一个标签对应的所有语句
-        Map<String, ArrayList<String>> labelMap = null;
+        Map<String, TreeSet<String>> labelMap = new HashMap<>();
 
         // 存储语句
-        ArrayList<String> labelLines = null;
+        TreeSet<String> labelLines = null;
 
         // 得到te文件列表
         String[] teFileList = getTEFileList(inPutDir);
@@ -166,32 +169,74 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
         }
 
         // 得到标签
+        if (!new File(file_contexts).exists()) {
+            SepolicyToolsGUI.log("没有找到file_contexts文件在" + file_contexts);
+            return;
+        }
         String[] labelFromFile_contexts = getLabelFromFile_contexts(file_contexts);
+        if (labelFromFile_contexts == null) {
+            SepolicyToolsGUI.log("file_contexts文件为空" + file_contexts);
+            return;
+        }
 
         // 得到文件内容
-        String[] allContents = readAllLineFromFiles(teFileList);
+        String[] allContents = readAllLineFromFiles(inPutDir, teFileList);
+
+        // 输入与输出的是同一个文件夹就删除旧te文件
+        if (inPutDir.equals(outPutDir)) {
+            for (String file : teFileList) {
+                new File(file).delete();
+            }
+        }
 
         // 关联标签与包含此标签的行
-        for (String lable : labelFromFile_contexts) {
-            labelMap = new HashMap<>();
-            labelLines = new ArrayList<>();
+        for (String label : labelFromFile_contexts) {
+            labelLines = new TreeSet<>();
             for (String line : allContents) {
-                if (line.contains(lable)) {
+                if (line.contains(label)) {
                     labelLines.add(line);
                 }
             }
 
             // 将 aaa_bbbb_cccccc 中的aaa作为标签，如果没有_就整个作为标签
-            if (lable.contains("_")) {
-                labelMap.put(lable.substring(0, lable.indexOf("_")), labelLines);
-            } else {
-                labelMap.put(lable, labelLines);
+            if (label.contains("_")) label = label.substring(0, label.indexOf("_"));
+
+            // 如果key已存在则要添加上已添加的数据，再放回map
+            if (labelMap.containsKey(label)) {
+                TreeSet<String> oldData = labelMap.get(label);
+                labelLines.addAll(oldData);
+            }
+
+            labelMap.put(label, labelLines);
+        }
+
+        // 写入新文件
+        for (String lable : labelMap.keySet()) {
+            String path = new FilePathUtilsImpl().catPath(new File(outPutDir).getPath(), lable) + ".te";
+            BufferedWriter bufferWriter = streamHelper.getBufferWriter(path, false);
+
+            TreeSet<String> data = labelMap.get(lable);
+            try {
+                for (String next : data) {
+                    bufferWriter.write(next);
+                    bufferWriter.newLine();
+                }
+            } catch (IOException e) {
+                SepolicyToolsGUI.log("写入文件失败" + path);
+            }
+
+            streamHelper.close(bufferWriter);
+
+            // 删除空文件
+            File newFile = new File(path);
+            if (newFile.length() == 0) {
+                newFile.delete();
             }
         }
     }
 
     public static void main(String[] args) {
-        new SepolicyDirUtilsImpl().formatFiles("sepolicy", "output");
+        new SepolicyDirUtilsImpl().reWriteTeFiles("sepolicy", "sepolicy", "sepolicy/file_contexts");
     }
 
 }

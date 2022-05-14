@@ -1,16 +1,19 @@
+type thermal_manager_exec, exec_type, file_type;
+type thermal_manager_data_file, file_type, data_file_type;
 type thermal_exec, exec_type, file_type;
-type thermal, domain;
-init_daemon_domain(thermal)
-allow thermal viarild:unix_stream_socket connectto;
-allow thermal statusd:unix_stream_socket connectto;
-allow thermal self:udp_socket ioctl; 
-allow thermal self:udp_socket create;
-allow thermal rpc_socket:sock_file write;
-allow thermal rootfs:lnk_file { getattr };
-allow thermal rild_oem_socket:sock_file write;
-allow thermal proc_thermal:file { read write open };
-allow thermal proc_thermal:dir search;
-allow thermal netd_socket:sock_file write;
-allow thermal netd:unix_stream_socket connectto;
-allow thermal mtkrild:unix_stream_socket connectto;
-
+file_type_auto_trans(thermal_manager, system_data_file, thermal_manager_data_file)
+allow thermalloadalgod thermal_manager_data_file:file { open write read create setattr };
+allow thermalloadalgod thermal_manager_data_file:dir { write add_name create setattr };
+allow thermal_manager thermal_manager_data_file:file { create open read write setattr lock };
+allow thermal_manager thermal_manager_data_file:dir { search getattr open read write setattr add_name };
+allow system_app thermal_manager_exec:file { read execute open execute_no_trans };
+allow system_app thermal_manager_data_file:file { open setattr lock };
+allow system_app thermal_manager_data_file:file { open getattr read write create };
+allow system_app thermal_manager_data_file:dir { search getattr open read write setattr add_name };
+allow shell thermal_manager_exec:file rx_file_perms;
+allow shell thermal_exec:file rx_file_perms;
+allow mediaserver thermal_manager_exec:file { getattr execute read open };
+allow mediaserver thermal_manager_data_file:file { open setattr write lock read create getattr };
+allow mediaserver thermal_manager_data_file:file setattr;
+allow mediaserver thermal_manager_data_file:dir { search getattr open read write setattr add_name };
+allow em_svr thermal_manager_exec:file { getattr execute read open execute_no_trans };

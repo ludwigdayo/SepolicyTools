@@ -1,0 +1,4 @@
+allow meta_tst rtc_device:chr_file { read ioctl open };
+allow kpoc_charger rtc_device:chr_file { open read write };
+allow ipod rtc_device:chr_file { open read write ioctl };
+allow factory rtc_device:chr_file { read write ioctl open };

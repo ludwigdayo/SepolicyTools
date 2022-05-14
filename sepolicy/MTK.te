@@ -1,0 +1,10 @@
+type mtk_sched_device, dev_type;
+type mtk_kpd_device, dev_type;
+type mtk_agpsd_exec, exec_type, file_type;
+type mtk_6620_launcher_exec, exec_type, file_type;
+allow shell mtk_agpsd_exec:file rx_file_perms;
+allow shell mtk_6620_launcher_exec:file rx_file_perms;
+allow platform_app mtk_kpd_device:chr_file rw_file_perms;
+allow mediaserver mtk_sched_device:chr_file { read write ioctl open };
+allow factory mtk_kpd_device:chr_file { read ioctl open };
+allow cameraserver mtk_sched_device:chr_file { read write open ioctl };
