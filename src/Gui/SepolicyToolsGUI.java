@@ -15,68 +15,26 @@ import java.io.File;
  * 图形界面
  */
 public class SepolicyToolsGUI extends JFrame {
+    private static final StringBuilder logStringBuilder = new StringBuilder();
+    private static JTextArea textArea = null;
     private final SepolicyDirUtils sepolicyDirUtils = new SepolicyDirUtilsImpl();
     private final FileContextsFormatImpl fileContextsFormat = new FileContextsFormatImpl();
-
     private final Font globalFont = new Font(null, Font.BOLD, 30);
     private final Font textFont = new Font(null, Font.BOLD, 20);
     private final Font buttonFont = new Font(null, Font.BOLD, 15);
     private final Color themeColor = new Color(195, 233, 242);
-
     private File sourceFile = new File(".");
-
-    private static StringBuilder logStringBuilder = new StringBuilder();
-
     private Container contentPane = null;
     private JLabel sourceDirLabel = null;
     private JTextField sourceDirString = null;
     private JButton selectDirButton = null;
     private JPanel selectSourcePanel = null;
-    private static JTextArea textArea = null;
     private JButton formatTEFilesButton = null;
     private JButton formatFileContextsButton = null;
     private JButton reWriteTEFilesButton = null;
     private JPanel centerPanel = null;
     private JPanel southPanel = null;
     private JButton autoRun = null;
-
-    /**
-     * 界面日志输出
-     * 带有高级自动清除功能（才不是不会用滚动面板
-     */
-    public static void log(String log) {
-        while (log.length() > 75) {
-            logStringBuilder.append(log.substring(0, 75));
-            logStringBuilder.append("\r\n");
-            log = log.substring(75, log.length());
-        }
-
-        logStringBuilder.append(log);
-        logStringBuilder.append("\r\n");
-
-        int line = 0;
-        while ((logStringBuilder.indexOf("\r\n", line)) != -1) line++;
-
-        if (textArea != null) {
-            textArea.setText(logStringBuilder.toString());
-        }
-
-        if (line > 27 * 10) logStringBuilder.delete(0, logStringBuilder.length());
-    }
-
-    /**
-     * 文件选择弹窗
-     */
-    private File selectDirDialog() {
-        JFileChooser jFileChooser = new JFileChooser(".");
-        jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int returnValue = jFileChooser.showOpenDialog(null);
-
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            return jFileChooser.getSelectedFile();
-        }
-        return null;
-    }
 
     /**
      * 界面
@@ -128,7 +86,6 @@ public class SepolicyToolsGUI extends JFrame {
 
         contentPane.add(selectSourcePanel, BorderLayout.NORTH);
 
-
         textArea = new JTextArea();
         textArea.setColumns(57);
         textArea.setRows(50);
@@ -145,13 +102,7 @@ public class SepolicyToolsGUI extends JFrame {
         formatTEFilesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!new File(sourceFile.getPath()).exists()) {
-                    SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
-                } else {
-                    SepolicyToolsGUI.log("TE文件格式化开始");
-                    sepolicyDirUtils.formatFiles(sourceFile.getAbsolutePath(), sourceFile.getAbsolutePath());
-                    SepolicyToolsGUI.log("完成！！！");
-                }
+                formatTEFilesFunction();
             }
         });
 
@@ -161,13 +112,7 @@ public class SepolicyToolsGUI extends JFrame {
         reWriteTEFilesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!new File(sourceFile.getPath()).exists()) {
-                    SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
-                } else {
-                    SepolicyToolsGUI.log("重写开始");
-                    sepolicyDirUtils.reWriteTeFiles(sourceFile.getPath(), sourceFile.getPath(), new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts"));
-                    SepolicyToolsGUI.log("完成");
-                }
+                reWriteTEFilesFunction();
             }
         });
 
@@ -177,17 +122,7 @@ public class SepolicyToolsGUI extends JFrame {
         formatFileContextsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String fileContextsPath = new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts");
-                File file = new File(fileContextsPath);
-                if (!file.exists()) {
-                    SepolicyToolsGUI.log(fileContextsPath + "文件不存在");
-                    SepolicyToolsGUI.log("未执行任何操作");
-                } else {
-                    SepolicyToolsGUI.log("处理文件" + file.getPath());
-                    fileContextsFormat.autoFormatFileContexts(file.getAbsolutePath(), file.getAbsolutePath());
-                    SepolicyToolsGUI.log("新文件" + file.getPath());
-                    SepolicyToolsGUI.log("完成");
-                }
+                formatFileContextsFunction();
             }
         });
 
@@ -197,13 +132,14 @@ public class SepolicyToolsGUI extends JFrame {
         autoRun.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                formatFileContextsButton.doClick();
-                reWriteTEFilesButton.doClick();
-                formatTEFilesButton.doClick();
+                formatFileContextsFunction();
+                reWriteTEFilesFunction();
+                formatTEFilesFunction();
             }
         });
 
         southPanel = new JPanel();
+
         GridLayout gridLayout = new GridLayout(1, 10);
         gridLayout.setVgap(15);
         gridLayout.setHgap(15);
@@ -220,6 +156,88 @@ public class SepolicyToolsGUI extends JFrame {
         setBounds(200, 100, 1000, 618);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    /**
+     * 界面日志输出
+     * 带有高级自动清除功能（才不是不会用滚动面板
+     */
+    public static void log(String log) {
+        while (log.length() > 75) {
+            logStringBuilder.append(log, 0, 75);
+            logStringBuilder.append("\r\n");
+            log = log.substring(75);
+        }
+
+        logStringBuilder.append(log);
+        logStringBuilder.append("\r\n");
+
+        int line = 0;
+        while ((logStringBuilder.indexOf("\r\n", line)) != -1) line++;
+
+        if (textArea != null) {
+            textArea.setText(logStringBuilder.toString());
+        }
+
+        if (line > 27 * 10) logStringBuilder.delete(0, logStringBuilder.length());
+    }
+
+    /**
+     * 格式化file_contexts文件
+     */
+    private void formatFileContextsFunction() {
+        String fileContextsPath = new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts");
+        File file = new File(fileContextsPath);
+        if (!file.exists()) {
+            SepolicyToolsGUI.log(fileContextsPath + "文件不存在");
+            SepolicyToolsGUI.log("未执行任何操作");
+        } else {
+            SepolicyToolsGUI.log("处理文件" + file.getPath());
+            fileContextsFormat.autoFormatFileContexts(file.getAbsolutePath(), file.getAbsolutePath());
+            SepolicyToolsGUI.log("新文件" + file.getPath());
+            SepolicyToolsGUI.log("完成");
+        }
+    }
+
+    /**
+     * 重写te文件
+     */
+    private void reWriteTEFilesFunction() {
+
+        if (!new File(sourceFile.getPath()).exists()) {
+            SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+        } else {
+            SepolicyToolsGUI.log("重写开始");
+            sepolicyDirUtils.reWriteTeFiles(sourceFile.getPath(), sourceFile.getPath(), new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts"));
+            SepolicyToolsGUI.log("完成");
+        }
+    }
+
+    /**
+     * 格式化te文件
+     */
+    private void formatTEFilesFunction() {
+        if (!new File(sourceFile.getPath()).exists()) {
+            SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+        } else {
+            SepolicyToolsGUI.log("TE文件格式化开始");
+            sepolicyDirUtils.formatFiles(sourceFile.getAbsolutePath(), sourceFile.getAbsolutePath());
+            SepolicyToolsGUI.log("完成！！！");
+        }
+    }
+
+    /**
+     * 文件选择弹窗
+     */
+    private File selectDirDialog() {
+        JFileChooser jFileChooser = new JFileChooser(".");
+        jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int returnValue = jFileChooser.showOpenDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            return jFileChooser.getSelectedFile();
+        }
+        return null;
     }
 
     public static void main(String[] args) {
