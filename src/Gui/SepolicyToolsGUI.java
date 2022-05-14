@@ -34,18 +34,19 @@ public class SepolicyToolsGUI extends JFrame {
     private static JTextArea textArea = null;
     private JButton formatTEFilesButton = null;
     private JButton formatFileContextsButton = null;
-    private JPanel leftPanel = null;
-    private JPanel rightPanel = null;
+    private JPanel centerPanel = null;
+    private JPanel southPanel = null;
+    private JButton autoRun = null;
 
     /**
      * 界面日志输出
-     *  带有高级自动清除功能（才不是不会用滚动面板
+     * 带有高级自动清除功能（才不是不会用滚动面板
      */
     public static void log(String log) {
-        while (log.length() > 50) {
-            logStringBuilder.append(log.substring(0, 50));
+        while (log.length() > 75) {
+            logStringBuilder.append(log.substring(0, 75));
             logStringBuilder.append("\r\n");
-            log = log.substring(50, log.length());
+            log = log.substring(75, log.length());
         }
 
         logStringBuilder.append(log);
@@ -55,8 +56,8 @@ public class SepolicyToolsGUI extends JFrame {
         while ((logStringBuilder.indexOf("\r\n", line)) != -1) line++;
 
         textArea.setText(logStringBuilder.toString());
-        System.out.println(line);
-        if (line > 350) logStringBuilder.delete(0, logStringBuilder.length());
+        
+        if (line > 27 * 10) logStringBuilder.delete(0, logStringBuilder.length());
     }
 
     /**
@@ -123,11 +124,16 @@ public class SepolicyToolsGUI extends JFrame {
 
         contentPane.add(selectSourcePanel, BorderLayout.NORTH);
 
+
         textArea = new JTextArea();
-        textArea.setColumns(35);
-        textArea.setRows(20);
+        textArea.setColumns(57);
+        textArea.setRows(50);
         textArea.setFont(textFont);
         textArea.setEditable(false);
+
+        centerPanel = new JPanel();
+        centerPanel.add(textArea);
+        contentPane.add(centerPanel, BorderLayout.CENTER);
 
         formatTEFilesButton = new JButton("格式化TE文件");
         formatTEFilesButton.setFont(buttonFont);
@@ -164,18 +170,26 @@ public class SepolicyToolsGUI extends JFrame {
             }
         });
 
-        leftPanel = new JPanel();
-        leftPanel.add(textArea);
-        contentPane.add(leftPanel, BorderLayout.WEST);
+        autoRun = new JButton("自动运行");
+        autoRun.setBackground(themeColor);
+        autoRun.setFont(buttonFont);
+        autoRun.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                formatFileContextsButton.doClick();
+                formatTEFilesButton.doClick();
+            }
+        });
 
-        rightPanel = new JPanel();
-        GridLayout gridLayout = new GridLayout(10, 1);
+        southPanel = new JPanel();
+        GridLayout gridLayout = new GridLayout(1, 10);
         gridLayout.setVgap(15);
-        rightPanel.setLayout(gridLayout);
-        rightPanel.add(formatTEFilesButton);
-        rightPanel.add(formatFileContextsButton);
-        contentPane.add(rightPanel, BorderLayout.EAST);
-
+        gridLayout.setHgap(15);
+        southPanel.setLayout(gridLayout);
+        southPanel.add(formatTEFilesButton);
+        southPanel.add(formatFileContextsButton);
+        southPanel.add(autoRun);
+        contentPane.add(southPanel, BorderLayout.SOUTH);
 
         setTitle("Sepolicy工具");
         setResizable(false);
