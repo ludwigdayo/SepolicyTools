@@ -39,6 +39,7 @@ public class SepolicyToolsGUI extends JFrame {
 
     /**
      * 界面日志输出
+     *  带有高级自动清除功能（才不是不会用滚动面板
      */
     public static void log(String log) {
         while (log.length() > 50) {
@@ -50,8 +51,12 @@ public class SepolicyToolsGUI extends JFrame {
         logStringBuilder.append(log);
         logStringBuilder.append("\r\n");
 
+        int line = 0;
+        while ((logStringBuilder.indexOf("\r\n", line)) != -1) line++;
+
         textArea.setText(logStringBuilder.toString());
-        if (logStringBuilder.length() > 250) logStringBuilder.delete(0, logStringBuilder.length());
+        System.out.println(line);
+        if (line > 350) logStringBuilder.delete(0, logStringBuilder.length());
     }
 
     /**
@@ -111,11 +116,10 @@ public class SepolicyToolsGUI extends JFrame {
             }
         });
 
-
         selectSourcePanel = new JPanel();
-        selectSourcePanel.add(sourceDirLabel);
-        selectSourcePanel.add(sourceDirString);
-        selectSourcePanel.add(selectDirButton);
+        selectSourcePanel.add(sourceDirLabel, BorderLayout.WEST);
+        selectSourcePanel.add(sourceDirString, BorderLayout.CENTER);
+        selectSourcePanel.add(selectDirButton, BorderLayout.EAST);
 
         contentPane.add(selectSourcePanel, BorderLayout.NORTH);
 
@@ -165,6 +169,9 @@ public class SepolicyToolsGUI extends JFrame {
         contentPane.add(leftPanel, BorderLayout.WEST);
 
         rightPanel = new JPanel();
+        GridLayout gridLayout = new GridLayout(10, 1);
+        gridLayout.setVgap(15);
+        rightPanel.setLayout(gridLayout);
         rightPanel.add(formatTEFilesButton);
         rightPanel.add(formatFileContextsButton);
         contentPane.add(rightPanel, BorderLayout.EAST);
