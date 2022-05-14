@@ -1,6 +1,5 @@
 package ContextFileTools;
 
-import Utils.AdbUtils;
 
 public interface fileContextsFormat {
     /**

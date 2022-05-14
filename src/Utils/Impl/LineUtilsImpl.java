@@ -6,6 +6,8 @@ public class LineUtilsImpl implements LineUtils {
 
     @Override
     public String deleteDuplicateSpace(String s) {
+        if (s.isEmpty()) return s;
+
         char[] chars = s.toCharArray();
         char[] chars_output = new char[chars.length];
 

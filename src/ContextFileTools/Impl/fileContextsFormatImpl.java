@@ -3,18 +3,25 @@ package ContextFileTools.Impl;
 import ContextFileTools.fileContextsFormat;
 import Utils.AdbUtils;
 import Utils.Impl.AdbUtilsImpl;
+import Utils.Impl.LineUtilsImpl;
 import Utils.Impl.StreamHelperImpl;
+import Utils.LineUtils;
 import Utils.StreamHelper;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 public class fileContextsFormatImpl implements fileContextsFormat {
+    LineUtils lineUtils = new LineUtilsImpl();
 
-    private StreamHelper streamHelper = new StreamHelperImpl();
+    private final StreamHelper streamHelper = new StreamHelperImpl();
+
+    Logger logger = Logger.getLogger(fileContextsFormatImpl.class.getName());
 
     /**
      * 把文件读取到字符串数组
@@ -57,14 +64,58 @@ public class fileContextsFormatImpl implements fileContextsFormat {
         return false;
     }
 
+    /**
+     * 截取路径
+     * 根据路径后的空格判断
+     * 忽略注释
+     *
+     * @param content file_contexts文件内容
+     * @return 结果
+     */
     @Override
     public String[] getPathList(String[] content) {
-        return new String[0];
+        ArrayList<String> arrayList = new ArrayList<>();
+        String[] results;
+
+        for (String line : content) {
+            if (line.startsWith("#")) {
+                continue;
+            }
+
+            if (!line.contains(" ") || !line.contains("/")) {
+                continue;
+            }
+
+            line = line.substring(0, line.indexOf(" "));
+            arrayList.add(line);
+        }
+
+        results = new String[arrayList.size()];
+        arrayList.toArray(results);
+        return results;
     }
 
     @Override
     public String[] formatAllLine(String[] content) {
-        return new String[0];
+        String[] results;
+        TreeSet<String> treeSet = new TreeSet<>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o2.compareTo(o1);
+            }
+        });
+
+        for (String line : content) {
+            if (line.startsWith("#")) continue;
+
+            line = line.replace("\t", " ");
+            line = lineUtils.deleteDuplicateSpace(line);
+            treeSet.add(line);
+        }
+
+        results = new String[treeSet.size()];
+        treeSet.toArray(results);
+        return results;
     }
 
     @Override
@@ -75,11 +126,17 @@ public class fileContextsFormatImpl implements fileContextsFormat {
         String[] result = null;
 
         for (String line : pathList) {
-            if (!isRemain(line)) {
-                boolean existed = adbUtils.isExisted(line);
-                if (!existed) continue; // 如果不是要特殊处理的且又不存在就不复制
+
+            if (!isRemain(line) && !adbUtils.isExisted(line)) {
+                System.out.println(line);
+                continue; // 如果不是要特殊处理的且又不存在就不复制
             }
-            strings.add(line);
+
+            for (String reallyLine : content) {
+                if (reallyLine.contains(line)) {
+                    strings.add(reallyLine);
+                }
+            }
         }
 
         result = new String[strings.size()];
@@ -110,5 +167,9 @@ public class fileContextsFormatImpl implements fileContextsFormat {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        new fileContextsFormatImpl().autoFormatFileContexts("file_contexts", "out.txt");
     }
 }
