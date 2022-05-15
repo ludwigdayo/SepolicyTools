@@ -1,6 +1,0 @@
-type mt6605_device, dev_type;
-allow radio mt6605_device:chr_file { read write ioctl open getattr };
-allow nfc mt6605_device:chr_file { read write getattr open ioctl };
-allow meta_tst mt6605_device:chr_file { read write open ioctl getattr };
-allow factory mt6605_device:chr_file { read write ioctl open getattr };
-allow atci_service mt6605_device:chr_file { read write ioctl open getattr };

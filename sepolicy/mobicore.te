@@ -1,55 +1,37 @@
-type mobicore_user_device, dev_type;
-type mobicore_lib_file, file_type, data_file_type, exec_type;
-type mobicore_data_file, file_type, data_file_type;
+##
+# Trustonic TEE (mobicore) daemon
+#
+
+# ==============================================
+# Type Declaration
+# ==============================================
+type mobicore, domain, domain_deprecated;
+type mobicore_exec, exec_type, file_type;
 type mobicore_admin_device, dev_type;
-r_dir_file(goodixfingerprintd, mobicore_data_file)
-allow vold mobicore_user_device:chr_file { read write ioctl open };
-allow system_server mobicore_data_file:dir r_dir_perms;
-allow surfaceflinger mobicore_user_device:chr_file { read write ioctl open };
-allow surfaceflinger mobicore_data_file:file { read getattr open };
-allow surfaceflinger mobicore_data_file:dir search;
-allow recovery mobicore_data_file:dir { read open };
-allow rda mobicore_user_device:chr_file rw_file_perms;
-allow rda mobicore_data_file:file r_file_perms;
-allow rda mobicore_data_file:dir search;
-allow mobicore mobicore_user_device:chr_file rw_file_perms;
-allow mobicore mobicore_data_file:file rw_file_perms;
-allow mobicore mobicore_data_file:file create_file_perms;
-allow mobicore mobicore_data_file:dir { rw_dir_perms rename reparent };
-allow mobicore mobicore_data_file:dir create;
+type mobicore_user_device, dev_type;
+type mobicore_tui_device, dev_type;
+type mobicore_data_file, file_type, data_file_type;
+
+# ==============================================
+# Type Declaration for secmem
+# ==============================================
+type proc_secmem, fs_type;
+# genfscon proc /secmem0 u:object_r:proc_secmem:s0;
+
+# ==============================================
+# MTK Policy Rule
+# ==============================================
+# permissive mobicore;
+init_daemon_domain(mobicore)
+allow mobicore self:capability { dac_override };
 allow mobicore mobicore_admin_device:chr_file rw_file_perms;
-allow meta_tst mobicore_user_device:chr_file { read write open ioctl };
-allow meta_tst mobicore_data_file:file { getattr read open lock };
-allow meta_tst mobicore_data_file:file getattr;
-allow meta_tst mobicore_data_file:dir search;
-allow mediaserver mobicore_user_device:chr_file { read write open ioctl };
-allow mediaserver mobicore_data_file:file { getattr read open lock };
-allow mediaserver mobicore_data_file:file getattr;
-allow mediaserver mobicore_data_file:dir search;
-allow keystore mobicore_user_device:chr_file { read write open ioctl };
-allow keystore mobicore_lib_file:file { open read getattr };
-allow installd mobicore_data_file:dir { r_file_perms write remove_name rmdir };
-allow init mobicore_user_device:chr_file { ioctl write };
-allow init mobicore_lib_file:file { read open getattr };
-allow init mobicore_admin_device:chr_file { write };
-allow init mobicore_admin_device:chr_file ioctl;
-allow goodixfingerprintd mobicore_user_device:chr_file { open read ioctl write };
-allow goodixfingerprintd mobicore_lib_file:file { read open getattr };
-allow goodixfingerprintd mobicore_data_file:file create_file_perms;
-allow goodixfingerprintd mobicore_data_file:dir ra_dir_perms;
-allow goodixfingerprintd mobicore_data_file:dir create_dir_perms;
-allow goodixfingerprintd mobicore_data_file:chr_file { rw_file_perms setattr };
-allow goodixfingerprintd mobicore_data_file:chr_file { open read ioctl write };
-allow goodix mobicore_user_device:chr_file { open read ioctl write };
-allow goodix mobicore_data_file:file create_file_perms;
-allow goodix mobicore_data_file:dir ra_dir_perms;
-allow goodix mobicore_data_file:dir create_dir_perms;
-allow goodix mobicore_data_file:chr_file { rw_file_perms setattr };
-allow goodix mobicore_data_file:chr_file { open read ioctl write };
-allow gatekeeperd mobicore_user_device:chr_file { read write ioctl open };
-allow gatekeeperd mobicore_lib_file:file { read open getattr };
-allow fingerprintd mobicore_lib_file:file { read open getattr };
-allow drmserver mobicore_user_device:chr_file { read write ioctl open };
-allow drmserver mobicore_data_file:file { read getattr open lock };
-allow drmserver mobicore_data_file:dir search;
-allow bootanim mobicore_lib_file:file { read open getattr };
+allow mobicore mobicore_user_device:chr_file rw_file_perms;
+allow mobicore mobicore_data_file:dir { rw_dir_perms rename reparent };
+allow mobicore mobicore_data_file:file create_file_perms;
+allow mobicore self:netlink_socket create_socket_perms;
+allow mobicore apk_data_file:dir write;
+allow mobicore mobicore_data_file:dir create;
+allow mobicore mobicore_data_file:file rw_file_perms;
+allow mobicore property_socket:sock_file { create getattr open read write append ioctl lock link unlink };
+allow mobicore init:unix_stream_socket { connectto };
+allow mobicore mcDriverDaemon_exec:file { entrypoint };

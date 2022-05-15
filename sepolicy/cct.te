@@ -1,7 +1,0 @@
-type cct_data_file, file_type, data_file_type;
-allow meta_tst cct_data_file:file { setattr read create write getattr unlink open append };
-allow meta_tst cct_data_file:dir { write read open add_name remove_name search create getattr setattr };
-allow factory cct_data_file:file { create_file_perms };
-allow factory cct_data_file:dir { create_dir_perms };
-allow atci_service cct_data_file:file { setattr read create write getattr unlink open append };
-allow atci_service cct_data_file:dir { write read open add_name remove_name search create getattr setattr };

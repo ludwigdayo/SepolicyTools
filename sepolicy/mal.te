@@ -1,9 +1,0 @@
-type mal_mfi_socket, file_type;
-type mal_data_file, file_type, data_file_type;
-allow volte_imsm_md mal_mfi_socket:sock_file write;
-allow radio mal_mfi_socket:sock_file write;
-allow mtkrild mal_mfi_socket:sock_file write;
-allow mtkmal mal_mfi_socket:sock_file write;
-allow mtkmal mal_data_file:file create_file_perms;
-allow mtkmal mal_data_file:dir create_dir_perms;
-allow atcp mal_mfi_socket:sock_file write;

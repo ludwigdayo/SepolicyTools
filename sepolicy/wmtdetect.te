@@ -1,3 +1,0 @@
-type wmtdetect_device, dev_type;
-allow wmt_loader wmtdetect_device:chr_file { read write ioctl open };
-allow stp_dump3 wmtdetect_device:chr_file { read write ioctl open };

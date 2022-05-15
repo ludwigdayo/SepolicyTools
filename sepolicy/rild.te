@@ -1,9 +1,5 @@
-type rild_mal_socket, file_type;
-type rild_imsm_socket, file_type;
-allow volte_imsm_md rild_mal_socket:sock_file write;
-allow volte_imsm_md rild_imsm_socket:sock_file write;
-allow radio rild_mal_socket:sock_file write;
-allow radio rild_imsm_socket:sock_file write;
-allow mtkmal rild_mal_socket:sock_file write;
-allow atcp rild_mal_socket:sock_file write;
-allow atcp rild_imsm_socket:sock_file write;
+# ==============================================
+# MTK Policy Rule
+# ============
+
+

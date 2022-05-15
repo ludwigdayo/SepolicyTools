@@ -1,4 +1,0 @@
-type spm_loader_exec, exec_type, file_type;
-type spm_device, dev_type;
-allow spm_loader spm_device:chr_file { read open };
-allow shell spm_loader_exec:file rx_file_perms;

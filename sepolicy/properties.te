@@ -1,1 +1,0 @@
-allow mtk_agpsd properties_device:file getattr;

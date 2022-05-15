@@ -1,3 +1,0 @@
-type volte_ua_exec, exec_type, file_type;
-type volte_stack_exec, exec_type, file_type;
-type volte_imcb_exec, exec_type, file_type;

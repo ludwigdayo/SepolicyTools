@@ -1,2 +1,0 @@
-type em_svr_exec, exec_type, file_type;
-allow shell em_svr_exec:file rx_file_perms;

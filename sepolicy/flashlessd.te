@@ -1,2 +1,10 @@
+# ==============================================
+# Policy File of /system/bin/flashlessd Executable File 
+
 type flashlessd_exec, exec_type, file_type;
-allow statusd flashlessd_exec:file { read execute open execute_no_trans };
+type flashlessd, domain;
+
+
+# permissive flashlessd;
+
+init_daemon_domain(flashlessd)

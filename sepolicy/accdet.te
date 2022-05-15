@@ -1,2 +1,0 @@
-type accdet_device, dev_type;
-allow factory accdet_device:chr_file { read ioctl open };

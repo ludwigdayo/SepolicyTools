@@ -1,2 +1,0 @@
-type wmt_loader_exec, exec_type, file_type;
-allow shell wmt_loader_exec:file rx_file_perms;

@@ -1,4 +1,1 @@
-allow untrusted_app oemfs:blk_file { getattr read open };
 allow oemfs tmpfs:filesystem { associate };
-allow init oemfs:dir { mounton };
-allow init oemfs:blk_file { read open getattr ioctl };

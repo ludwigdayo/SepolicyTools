@@ -1,1 +1,0 @@
-allow guiext-server ion_device:chr_file { open read write ioctl };

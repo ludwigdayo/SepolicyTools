@@ -1,5 +1,0 @@
-type radvd_data_file, file_type, data_file_type;
-allow netd radvd_data_file:file { read write create open unlink };
-allow netd radvd_data_file:dir { read write search add_name remove_name };
-allow lannetmngrd radvd_data_file:file { read write create open unlink };
-allow lannetmngrd radvd_data_file:dir { read write search add_name remove_name };

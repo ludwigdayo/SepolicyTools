@@ -1,8 +1,0 @@
-allow pvrsrvctl gpu_device:chr_file rw_file_perms;
-allow program_binary gpu_device:chr_file { open read write ioctl };
-allow program_binary gpu_device:chr_file getattr;
-allow ipod gpu_device:chr_file { read write open ioctl };
-allow guiext-server gpu_device:chr_file { open read write ioctl };
-allow debuggerd gpu_device:chr_file rw_file_perms;
-allow atcp gpu_device:chr_file { read write open ioctl getattr };
-allow atci_service gpu_device:chr_file { read write open ioctl getattr };

@@ -1,9 +1,0 @@
-type als_ps_device, dev_type;
-allow radio als_ps_device:chr_file { read open ioctl };
-allow platform_app als_ps_device:chr_file { read open ioctl };
-allow nvram_daemon als_ps_device:chr_file { read ioctl open };
-allow nvram_agent_binder als_ps_device:chr_file { read ioctl open };
-allow meta_tst als_ps_device:chr_file { read ioctl open };
-allow init als_ps_device:chr_file ioctl;
-allow factory als_ps_device:chr_file { read ioctl open };
-allow em_svr als_ps_device:chr_file { read ioctl open };

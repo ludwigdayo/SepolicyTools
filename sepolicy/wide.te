@@ -1,9 +1,0 @@
-type wide_dhcpv6_data_file, file_type, data_file_type;
-allow system_server wide_dhcpv6_data_file:file { read getattr open };
-allow system_server wide_dhcpv6_data_file:dir search;
-allow netd wide_dhcpv6_data_file:file { read write create open getattr unlink };
-allow netd wide_dhcpv6_data_file:dir { read search write add_name remove_name };
-allow lannetmngrd wide_dhcpv6_data_file:file { read write create open getattr unlink };
-allow lannetmngrd wide_dhcpv6_data_file:dir { read search write add_name remove_name };
-allow dhcp6c wide_dhcpv6_data_file:file { read write create open getattr };
-allow dhcp6c wide_dhcpv6_data_file:dir { write search add_name };

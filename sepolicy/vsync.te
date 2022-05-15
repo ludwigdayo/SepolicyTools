@@ -1,4 +1,0 @@
-type vsync_offset_level, file_type, data_file_type;
-allow vsync_offset_level debugfs:filesystem { associate };
-allow ged_srv vsync_offset_level:file { open write read getattr };
-allow gas_srv vsync_offset_level:file { open read write };

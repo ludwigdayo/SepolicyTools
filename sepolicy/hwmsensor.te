@@ -1,2 +1,0 @@
-type hwmsensor_device, dev_type;
-allow system_server hwmsensor_device:chr_file { read ioctl open };

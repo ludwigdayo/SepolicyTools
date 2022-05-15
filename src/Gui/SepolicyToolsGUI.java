@@ -9,9 +9,16 @@ import Utils.Impl.FilePathUtilsImpl;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * 图形界面
@@ -44,7 +51,7 @@ public class SepolicyToolsGUI extends JFrame {
      * 界面
      */
     public SepolicyToolsGUI() {
-        contentPane = getContentPane();
+        contentPane = new JPanel();
 
         sourceDirLabel = new JLabel("工作路径:");
         sourceDirLabel.setFont(textFont);
@@ -60,7 +67,7 @@ public class SepolicyToolsGUI extends JFrame {
                     SepolicyToolsGUI.log("切换文件路径" + sourceFile.getAbsolutePath());
                 }
 
-                sourceDirString.setText(sourceFile.getAbsolutePath());
+                updatedSourceDir();
             }
         });
         sourceDirString.setFont(textFont);
@@ -78,7 +85,7 @@ public class SepolicyToolsGUI extends JFrame {
                 } else {
                     sourceFile = file;
                     SepolicyToolsGUI.log("工作目录切换到" + file.getPath());
-                    sourceDirString.setText(sourceFile.getAbsolutePath());
+                    updatedSourceDir();
                 }
             }
         });
@@ -92,7 +99,7 @@ public class SepolicyToolsGUI extends JFrame {
 
         textArea = new JTextArea();
         textArea.setColumns(57);
-        textArea.setRows(50);
+        textArea.setRows(18);
         textArea.setFont(textFont);
         textArea.setEditable(false);
 
@@ -165,6 +172,35 @@ public class SepolicyToolsGUI extends JFrame {
         southPanel.add(formatAllContextsFileButton);
         southPanel.add(autoRun);
         contentPane.add(southPanel, BorderLayout.SOUTH);
+        setContentPane(contentPane);
+
+        new DropTarget(textArea, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetAdapter() {
+            @Override
+            public void drop(DropTargetDropEvent dtde) {
+
+                if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                    dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                    try {
+                        @SuppressWarnings("unchecked") java.util.List<File> list = (java.util.List<File>) dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+
+                        for (File file : list) {
+                            if (file.isDirectory()) {
+                                if (!file.getPath().equals(sourceFile.getPath())) log("切换工作目录");
+                                sourceFile = file;
+                                updatedSourceDir();
+                                break;
+                            }
+                        }
+                    } catch (UnsupportedFlavorException | IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    dtde.dropComplete(true);
+                } else {
+                    dtde.rejectDrop();
+                }
+            }
+        });
 
         setTitle("Sepolicy工具");
         setResizable(false);
@@ -172,6 +208,13 @@ public class SepolicyToolsGUI extends JFrame {
         setBounds(200, 100, 1000, 618);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    /**
+     * 更新路径显示
+     */
+    private void updatedSourceDir() {
+        sourceDirString.setText(sourceFile.getAbsolutePath());
     }
 
     /**

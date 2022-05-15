@@ -1,2 +1,0 @@
-type pmic_ftm_device, dev_type;
-allow factory pmic_ftm_device:chr_file { read write ioctl open };

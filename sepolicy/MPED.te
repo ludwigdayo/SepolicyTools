@@ -1,6 +1,0 @@
-type_transition MPED system_data_file:sock_file MPED_socket "mtk_mpe_server";
-type MPED_socket, file_type;
-type MPED_exec, exec_type, file_type;
-allow factory MPED_exec:file { read execute open execute_no_trans };
-allow MPED MPED_socket:sock_file { create getattr open read write append ioctl lock link unlink };
-allow MPED MPED_socket:sock_file setattr;

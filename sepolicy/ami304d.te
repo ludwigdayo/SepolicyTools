@@ -1,2 +1,16 @@
-type ami304d_exec, exec_type, file_type;
-allow shell ami304d_exec:file rx_file_perms;
+# ==============================================
+# Policy File of /system/binami304d Executable File 
+
+
+# ==============================================
+# Type Declaration
+# ==============================================
+
+type ami304d_exec , exec_type, file_type;
+type ami304d ,domain;
+
+# ==============================================
+# MTK Policy Rule
+# ==============================================
+
+init_daemon_domain(ami304d)

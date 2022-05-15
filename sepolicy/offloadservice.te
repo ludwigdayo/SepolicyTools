@@ -1,2 +1,0 @@
-type offloadservice_device, dev_type;
-allow mediaserver offloadservice_device:chr_file { read write ioctl open };
