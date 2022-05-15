@@ -4,6 +4,13 @@ import Utils.LineUtils;
 
 public class LineUtilsImpl implements LineUtils {
 
+    public static void main(String[] args) {
+        System.out.println(new LineUtilsImpl().formatSymbol("asdjfljdl (asdf)", '(', LEFT, DELETE));
+        System.out.println(new LineUtilsImpl().formatSymbol("asdjfljdl (asdf)", '(', LEFT, ADD));
+        System.out.println(new LineUtilsImpl().formatSymbol("asdjfljdl (asdf)", '(', LEFT, ADD));
+        System.out.println(new LineUtilsImpl().formatSymbol("asdffffffff)", ')', RIGHT, DELETE));
+    }
+
     @Override
     public String deleteDuplicateSpace(String s) {
         if (s.isEmpty()) return s;
@@ -34,7 +41,6 @@ public class LineUtilsImpl implements LineUtils {
 
         return substring;
     }
-
 
     /**
      * 统计一共有几个symbol
@@ -187,12 +193,5 @@ public class LineUtilsImpl implements LineUtils {
         }
 
         return deleteDuplicateSpace(source); // 去除多余重复的空格
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new LineUtilsImpl().formatSymbol("asdjfljdl (asdf)", '(', LEFT, DELETE));
-        System.out.println(new LineUtilsImpl().formatSymbol("asdjfljdl (asdf)", '(', LEFT, ADD));
-        System.out.println(new LineUtilsImpl().formatSymbol("asdjfljdl (asdf)", '(', LEFT, ADD));
-        System.out.println(new LineUtilsImpl().formatSymbol("asdffffffff)", ')', RIGHT, DELETE));
     }
 }

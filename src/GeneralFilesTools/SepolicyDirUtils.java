@@ -16,8 +16,8 @@ public interface SepolicyDirUtils {
      * 整理te文件
      * 根据file_contexts的标签清理te
      *
-     * @param inPutDir sepolicy文件夹
+     * @param inPutDir      sepolicy文件夹
      * @param file_contexts 描述文件
      */
-    void reWriteTeFiles(String inPutDir,String outPutDir, String file_contexts);
+    void reWriteTeFiles(String inPutDir, String outPutDir, String file_contexts);
 }

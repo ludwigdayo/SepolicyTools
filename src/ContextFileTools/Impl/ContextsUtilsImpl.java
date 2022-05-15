@@ -123,6 +123,7 @@ public class ContextsUtilsImpl implements ContextsUtils {
 
     /**
      * 得到dir下以*_contexts命名的文件名列表
+     * 除了file_contexts
      *
      * @param dir 文件夹
      * @return 结果
@@ -138,7 +139,7 @@ public class ContextsUtilsImpl implements ContextsUtils {
 
         File[] files = d.listFiles();
         for (File file : files) {
-            if (file.getName().endsWith("_contexts")) {
+            if (file.getName().endsWith("_contexts") && !file.getName().equals("file_contexts")) {
                 resultList.add(file.getName());
             }
         }

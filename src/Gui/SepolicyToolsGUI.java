@@ -1,5 +1,7 @@
 package Gui;
 
+import ContextFileTools.ContextsUtils;
+import ContextFileTools.Impl.ContextsUtilsImpl;
 import ContextFileTools.Impl.FileContextsFormatImpl;
 import GeneralFilesTools.Impl.SepolicyDirUtilsImpl;
 import GeneralFilesTools.SepolicyDirUtils;
@@ -19,6 +21,7 @@ public class SepolicyToolsGUI extends JFrame {
     private static JTextArea textArea = null;
     private final SepolicyDirUtils sepolicyDirUtils = new SepolicyDirUtilsImpl();
     private final FileContextsFormatImpl fileContextsFormat = new FileContextsFormatImpl();
+    private final ContextsUtils contextsUtils = new ContextsUtilsImpl();
     private final Font globalFont = new Font(null, Font.BOLD, 30);
     private final Font textFont = new Font(null, Font.BOLD, 20);
     private final Font buttonFont = new Font(null, Font.BOLD, 15);
@@ -32,6 +35,7 @@ public class SepolicyToolsGUI extends JFrame {
     private JButton formatTEFilesButton = null;
     private JButton formatFileContextsButton = null;
     private JButton reWriteTEFilesButton = null;
+    private JButton formatAllContextsFileButton = null;
     private JPanel centerPanel = null;
     private JPanel southPanel = null;
     private JButton autoRun = null;
@@ -116,13 +120,23 @@ public class SepolicyToolsGUI extends JFrame {
             }
         });
 
-        formatFileContextsButton = new JButton("处理file_contexts文件");
+        formatFileContextsButton = new JButton("处理file_contexts");
         formatFileContextsButton.setFont(buttonFont);
         formatFileContextsButton.setBackground(themeColor);
         formatFileContextsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 formatFileContextsFunction();
+            }
+        });
+
+        formatAllContextsFileButton = new JButton("格式化Context");
+        formatAllContextsFileButton.setFont(buttonFont);
+        formatAllContextsFileButton.setBackground(themeColor);
+        formatAllContextsFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                formatAllContextsFileFunction();
             }
         });
 
@@ -133,6 +147,7 @@ public class SepolicyToolsGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 formatFileContextsFunction();
+                formatAllContextsFileFunction();
                 reWriteTEFilesFunction();
                 formatTEFilesFunction();
             }
@@ -147,6 +162,7 @@ public class SepolicyToolsGUI extends JFrame {
         southPanel.add(formatTEFilesButton);
         southPanel.add(formatFileContextsButton);
         southPanel.add(reWriteTEFilesButton);
+        southPanel.add(formatAllContextsFileButton);
         southPanel.add(autoRun);
         contentPane.add(southPanel, BorderLayout.SOUTH);
 
@@ -182,6 +198,10 @@ public class SepolicyToolsGUI extends JFrame {
         if (line > 27 * 10) logStringBuilder.delete(0, logStringBuilder.length());
     }
 
+    public static void main(String[] args) {
+        new SepolicyToolsGUI();
+    }
+
     /**
      * 格式化file_contexts文件
      */
@@ -195,6 +215,22 @@ public class SepolicyToolsGUI extends JFrame {
             SepolicyToolsGUI.log("处理文件" + file.getPath());
             fileContextsFormat.autoFormatFileContexts(file.getAbsolutePath(), file.getAbsolutePath());
             SepolicyToolsGUI.log("新文件" + file.getPath());
+            SepolicyToolsGUI.log("完成");
+        }
+    }
+
+    /**
+     * 格式化所有Context文件
+     */
+    private void formatAllContextsFileFunction() {
+        File dir = new File(sourceFile.getPath());
+        if (!dir.exists()) {
+            SepolicyToolsGUI.log(sourceFile.getPath() + "文件不存在");
+            SepolicyToolsGUI.log("未执行任何操作");
+        } else {
+            SepolicyToolsGUI.log("处理文件" + dir.getPath());
+            contextsUtils.autoFormatAllContext(dir.getAbsolutePath());
+            SepolicyToolsGUI.log("新文件" + dir.getPath());
             SepolicyToolsGUI.log("完成");
         }
     }
@@ -238,9 +274,5 @@ public class SepolicyToolsGUI extends JFrame {
             return jFileChooser.getSelectedFile();
         }
         return null;
-    }
-
-    public static void main(String[] args) {
-        new SepolicyToolsGUI();
     }
 }

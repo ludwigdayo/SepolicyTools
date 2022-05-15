@@ -12,18 +12,19 @@ import java.io.BufferedWriter;
 import java.util.ArrayList;
 
 public class FileContextsFormatImpl implements FileContextsFormat {
+    private final StreamHelper streamHelper = new StreamHelperImpl();
     Logger logger = new LoggerImpl();
 
-    private final StreamHelper streamHelper = new StreamHelperImpl();
+    public static void main(String[] args) {
+        new FileContextsFormatImpl().autoFormatFileContexts("file_contexts", "out.txt");
+    }
 
     /**
      * 判断是不是要特殊保留的路径
      */
     private boolean isRemain(String line) {
         if (line.startsWith("/proc")) return true;
-        if (line.startsWith("/data")) return true;
-
-        return false;
+        return line.startsWith("/data");
     }
 
     /**
@@ -98,9 +99,5 @@ public class FileContextsFormatImpl implements FileContextsFormat {
 
         logger.println("写入文件...");
         streamHelper.writeToFile(text, outPutPath);
-    }
-
-    public static void main(String[] args) {
-        new FileContextsFormatImpl().autoFormatFileContexts("file_contexts", "out.txt");
     }
 }

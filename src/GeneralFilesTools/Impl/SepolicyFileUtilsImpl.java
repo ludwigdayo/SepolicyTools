@@ -13,6 +13,10 @@ import java.util.TreeSet;
 
 public class SepolicyFileUtilsImpl extends SepolicyLineUtilsImpl implements SepolicyFileUtils {
 
+    public static void main(String[] args) {
+        new SepolicyFileUtilsImpl().autoFormatFile("in.te", "out.te");
+    }
+
     /**
      * 格式化一个文件
      * 利用treeSet的特性给文件的行排序
@@ -61,9 +65,5 @@ public class SepolicyFileUtilsImpl extends SepolicyLineUtilsImpl implements Sepo
         for (int i = 0; i < content.length; i++) {
             content[i] = formatLine(content[i]);
         }
-    }
-
-    public static void main(String[] args) {
-        new SepolicyFileUtilsImpl().autoFormatFile("in.te", "out.te");
     }
 }

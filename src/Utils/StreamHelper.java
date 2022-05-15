@@ -10,7 +10,7 @@ public interface StreamHelper {
 
     BufferedReader getBufferReader(String path);
 
-    BufferedWriter getBufferWriter(String path,boolean append);
+    BufferedWriter getBufferWriter(String path, boolean append);
 
     void closeIO(BufferedReader bufferedReader, BufferedWriter bufferedWriter);
 
@@ -20,8 +20,9 @@ public interface StreamHelper {
 
     /**
      * 将content写到文件file
+     *
      * @param content 内容
-     * @param file 文件完整路径
+     * @param file    文件完整路径
      */
-    void writeToFile(String[] content,String file);
+    void writeToFile(String[] content, String file);
 }

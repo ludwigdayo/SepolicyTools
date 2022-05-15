@@ -1,6 +1,5 @@
 package Utils.Impl;
 
-import Gui.SepolicyToolsGUI;
 import Utils.AboutSystem;
 
 public class AboutSystemImpl implements AboutSystem {

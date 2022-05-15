@@ -17,6 +17,34 @@ public class AdbUtilsImpl implements AdbUtils {
     Logger logger = new LoggerImpl();
 
     /**
+     * 根据系统类型 确定adb工具的路径~
+     */
+    private static String getADB() {
+        int systemType = new AboutSystemImpl().getSystemType();
+
+        String adbPath = null;
+        switch (systemType) {
+            case AboutSystem.WINDOWS:
+                adbPath = "platform-tools/windows/adb.exe";
+                break;
+            case AboutSystem.LINUX:
+                adbPath = "platform-tools/linux/adb";
+                break;
+        }
+        return adbPath;
+    }
+
+    /**
+     * 测试
+     * 需要连接手机
+     */
+    public static void main(String[] args) {
+//        System.out.println(new AdbUtilsImpl().isExisted("/system")); // true
+//        System.out.println(new AdbUtilsImpl().isExisted("/succerseng")); // false
+//        System.out.println(new AdbUtilsImpl().getConnectedDeviceNum());
+    }
+
+    /**
      * 获得当前已经连接的设备数量
      *
      * @return 设备数量
@@ -54,24 +82,6 @@ public class AdbUtilsImpl implements AdbUtils {
         }
 
         return count - 1;
-    }
-
-    /**
-     * 根据系统类型 确定adb工具的路径~
-     */
-    private static String getADB() {
-        int systemType = new AboutSystemImpl().getSystemType();
-
-        String adbPath = null;
-        switch (systemType) {
-            case AboutSystem.WINDOWS:
-                adbPath = "platform-tools/windows/adb.exe";
-                break;
-            case AboutSystem.LINUX:
-                adbPath = "platform-tools/linux/adb";
-                break;
-        }
-        return adbPath;
     }
 
     /**
@@ -174,16 +184,6 @@ public class AdbUtilsImpl implements AdbUtils {
         Pattern pattern = Pattern.compile(path);
         Matcher matcher = pattern.matcher(allFileList);
         return matcher.find();
-    }
-
-    /**
-     * 测试
-     * 需要连接手机
-     */
-    public static void main(String[] args) {
-//        System.out.println(new AdbUtilsImpl().isExisted("/system")); // true
-//        System.out.println(new AdbUtilsImpl().isExisted("/succerseng")); // false
-//        System.out.println(new AdbUtilsImpl().getConnectedDeviceNum());
     }
 
 }

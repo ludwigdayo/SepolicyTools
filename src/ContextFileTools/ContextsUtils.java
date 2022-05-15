@@ -33,6 +33,7 @@ public interface ContextsUtils {
 
     /**
      * 格式化dir下所有context文件
+     * 除了file_contexts
      */
     void autoFormatAllContext(String dir);
 

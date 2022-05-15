@@ -14,6 +14,10 @@ import java.util.*;
 public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements SepolicyDirUtils {
     LoggerImpl logger = new LoggerImpl();
 
+    public static void main(String[] args) {
+        new SepolicyDirUtilsImpl().reWriteTeFiles("sepolicy", "sepolicy", "sepolicy/file_contexts");
+    }
+
     /**
      * 从多个文件中读取
      *
@@ -182,10 +186,6 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
                 newFile.delete();
             }
         }
-    }
-
-    public static void main(String[] args) {
-        new SepolicyDirUtilsImpl().reWriteTeFiles("sepolicy", "sepolicy", "sepolicy/file_contexts");
     }
 
 }
