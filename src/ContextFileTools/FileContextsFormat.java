@@ -2,6 +2,7 @@ package ContextFileTools;
 
 
 public interface FileContextsFormat {
+
     /**
      * 获得file_contexts文件中文件路径列表
      *
@@ -9,14 +10,6 @@ public interface FileContextsFormat {
      * @return 结果
      */
     String[] getPathList(String[] content);
-
-    /**
-     * 格式化file_contexts文件每一行
-     *
-     * @param content file_contexts文件内容
-     * @return 结果
-     */
-    String[] formatAllLine(String[] content);
 
     /**
      * 清理没有用的行

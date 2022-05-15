@@ -1,8 +1,9 @@
 package GeneralFilesTools.Impl;
 
+import ContextFileTools.Impl.ContextsUtilsImpl;
 import GeneralFilesTools.SepolicyDirUtils;
-import Gui.SepolicyToolsGUI;
 import Utils.Impl.FilePathUtilsImpl;
+import Utils.Impl.LoggerImpl;
 import Utils.Impl.StreamHelperImpl;
 
 import java.io.BufferedReader;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements SepolicyDirUtils {
+    LoggerImpl logger = new LoggerImpl();
 
     /**
      * 从多个文件中读取
@@ -42,43 +44,6 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
 
         return result;
     }
-
-    /**
-     * 从file_contexts获取标签
-     *
-     * @param file_contexts 描述文件
-     * @return 结果
-     */
-    private String[] getLabelFromFile_contexts(String file_contexts) {
-
-        StreamHelperImpl streamHelper = new StreamHelperImpl();
-        BufferedReader bufferReader = streamHelper.getBufferReader(file_contexts);
-        TreeSet<String> resultSet = new TreeSet<>();
-        String[] result = null;
-
-        if (bufferReader == null) return null;
-
-        String line = null;
-        try {
-            while ((line = bufferReader.readLine()) != null) {
-                if (line.startsWith("#") || !line.contains("u:object_r:")) continue;
-
-                int start = line.indexOf("u:object_r:") + "u:object_r:".length();
-                int end = line.lastIndexOf(":s0");
-
-                resultSet.add(line.substring(start, end));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        streamHelper.close(bufferReader);
-
-        result = new String[resultSet.size()];
-        resultSet.toArray(result);
-        return result;
-    }
-
 
     /**
      * 得到dir下TE文件的相对路径
@@ -124,23 +89,23 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
         String[] tEFileList = getTEFileList(inPutDir);
 
         if (tEFileList == null) {
-            SepolicyToolsGUI.log("打开" + inPutDir + "失败");
+            logger.println("打开" + inPutDir + "失败");
             return;
         }
 
-        SepolicyToolsGUI.log("在" + inPutDir + "共找到" + tEFileList.length + "个te文件");
+        logger.println("在" + inPutDir + "共找到" + tEFileList.length + "个te文件");
 
         File outPutFd = new File(outPutDir);
 
         if (!outPutFd.exists()) {
-            SepolicyToolsGUI.log("创建文件夹" + outPutFd);
+            logger.println("创建文件夹" + outPutFd);
             outPutFd.mkdirs();
         }
 
         for (String file : tEFileList) {
-            SepolicyToolsGUI.log("格式化" + file);
+            logger.println("格式化" + file);
             autoFormatFile(new FilePathUtilsImpl().catPath(inPutDir, file), new FilePathUtilsImpl().catPath(outPutDir, file));
-            SepolicyToolsGUI.log("格式化" + file + "完成");
+            logger.println("格式化" + file + "完成");
         }
     }
 
@@ -164,22 +129,14 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
         // 得到te文件列表
         String[] teFileList = getTEFileList(inPutDir);
         if (teFileList == null) {
-            SepolicyToolsGUI.log("没有找到任何te文件" + inPutDir);
+            logger.println("没有找到任何te文件" + inPutDir);
             return;
         }
 
         // 得到标签
-        if (!new File(file_contexts).exists()) {
-            SepolicyToolsGUI.log("没有找到file_contexts文件在" + file_contexts);
-            return;
-        }
-        String[] labelFromFile_contexts = getLabelFromFile_contexts(file_contexts);
-        if (labelFromFile_contexts == null) {
-            SepolicyToolsGUI.log("file_contexts文件为空" + file_contexts);
-            return;
-        }
+        String[] labelFromContexts = new ContextsUtilsImpl().getAllLabels(inPutDir);
 
-        // 得到文件内容
+        // 得到te文件内容
         String[] allContents = readAllLineFromFiles(inPutDir, teFileList);
 
         // 输入与输出的是同一个文件夹就删除旧te文件
@@ -190,7 +147,7 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
         }
 
         // 关联标签与包含此标签的行
-        for (String label : labelFromFile_contexts) {
+        for (String label : labelFromContexts) {
             labelLines = new TreeSet<>();
             for (String line : allContents) {
                 if (line.contains(label)) {
@@ -222,7 +179,7 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
                     bufferWriter.newLine();
                 }
             } catch (IOException e) {
-                SepolicyToolsGUI.log("写入文件失败" + path);
+                logger.println("写入文件失败" + path);
             }
 
             streamHelper.close(bufferWriter);

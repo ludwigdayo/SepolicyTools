@@ -4,56 +4,21 @@ import ContextFileTools.FileContextsFormat;
 import Gui.SepolicyToolsGUI;
 import Utils.AdbUtils;
 import Utils.Impl.AdbUtilsImpl;
-import Utils.Impl.LineUtilsImpl;
 import Utils.Impl.StreamHelperImpl;
-import Utils.LineUtils;
 import Utils.StreamHelper;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
 public class FileContextsFormatImpl implements FileContextsFormat {
-    LineUtils lineUtils = new LineUtilsImpl();
 
     private final StreamHelper streamHelper = new StreamHelperImpl();
 
     Logger logger = Logger.getLogger(FileContextsFormatImpl.class.getName());
-
-    /**
-     * 把文件读取到字符串数组
-     *
-     * @param inPutPath 输入文件路径
-     * @return 结果
-     */
-    private String[] fileToString(String inPutPath) {
-        BufferedReader bufferReader = streamHelper.getBufferReader(inPutPath);
-        TreeSet<String> treeSet = new TreeSet<>();
-
-        String line = null;
-        try {
-            while ((line = bufferReader.readLine()) != null) {
-                treeSet.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        String[] text = new String[treeSet.size()];
-        treeSet.toArray(text);
-
-        try {
-            bufferReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return text;
-    }
 
     /**
      * 判断是不是要特殊保留的路径
@@ -97,30 +62,6 @@ public class FileContextsFormatImpl implements FileContextsFormat {
     }
 
     @Override
-    public String[] formatAllLine(String[] content) {
-        String[] results;
-        TreeSet<String> treeSet = new TreeSet<>(new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o2.compareTo(o1);
-            }
-        });
-
-        for (String line : content) {
-            if (line.startsWith("#")) continue;
-            if (line.isEmpty()) continue;
-
-            line = line.replace("\t", " ");
-            line = lineUtils.deleteDuplicateSpace(line);
-            treeSet.add(line);
-        }
-
-        results = new String[treeSet.size()];
-        treeSet.toArray(results);
-        return results;
-    }
-
-    @Override
     public String[] cleanNotExistedLine(String[] content) {
         AdbUtils adbUtils = new AdbUtilsImpl();
         String[] pathList = getPathList(content);
@@ -151,13 +92,13 @@ public class FileContextsFormatImpl implements FileContextsFormat {
         BufferedWriter bufferWriter = null;
         String[] text = null;
 
-        text = fileToString(inPutPath);
+        text = new ContextsUtilsImpl().fileToString(inPutPath);
 
         SepolicyToolsGUI.log("清除无用行...");
         text = cleanNotExistedLine(text);
 
         SepolicyToolsGUI.log("整理所有行...");
-        text = formatAllLine(text);
+        text = new ContextsUtilsImpl().formatAllLine(text);
 
         SepolicyToolsGUI.log("写入文件...");
         bufferWriter = streamHelper.getBufferWriter(outPutPath, false);
