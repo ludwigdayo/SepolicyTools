@@ -1,5 +1,5 @@
-type mtk_agpsd, domain;
 type mtk_agpsd_exec, exec_type, file_type;
+type mtk_agpsd, domain;
 net_domain(mtk_agpsd)
 init_daemon_domain(mtk_agpsd)
 allow mtk_agpsd ttySDIO_device:chr_file create_file_perms;

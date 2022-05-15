@@ -1,5 +1,5 @@
-type thermal_manager, domain;
 type thermal_manager_exec, exec_type, file_type;
+type thermal_manager, domain;
 init_daemon_domain(thermal_manager)
 allow thermal_manager thermal_manager_data_file:file { create open read write setattr lock };
 allow thermal_manager thermal_manager_data_file:dir { search getattr open read write setattr add_name };

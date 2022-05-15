@@ -1,5 +1,5 @@
-type dm_agent_binder, domain;
 type dm_agent_binder_exec, exec_type, file_type;
+type dm_agent_binder, domain;
 init_daemon_domain(dm_agent_binder)
 binder_use(dm_agent_binder)
 binder_service(dm_agent_binder)

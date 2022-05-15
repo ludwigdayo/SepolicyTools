@@ -1,5 +1,5 @@
-type zpppd_gprs_exec, exec_type, file_type;
 type zpppd_gprs, domain;
+type zpppd_gprs_exec, exec_type, file_type;
 unix_socket_connect(zpppd_gprs, property, init)
 net_domain(zpppd_gprs)
 init_daemon_domain(zpppd_gprs)

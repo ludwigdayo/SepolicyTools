@@ -1,5 +1,5 @@
-type usbdongled_exec, exec_type, file_type;
 type usbdongled, domain;
+type usbdongled_exec, exec_type, file_type;
 unix_socket_connect(usbdongled, property, init)
 net_domain(usbdongled)
 init_daemon_domain(usbdongled)

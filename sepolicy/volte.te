@@ -1,5 +1,5 @@
-type mtk_volte_prop, property_type;
 type volte_prop, property_type;
+type mtk_volte_prop, property_type;
 allow volte_imsm_md volte_prop:property_service set;
 allow untrusted_app volte_prop:file { getattr open read };
 allow untrusted_app mtk_volte_prop:file { open read getattr };

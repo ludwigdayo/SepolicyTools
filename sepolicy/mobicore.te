@@ -1,10 +1,10 @@
-type proc_secmem, fs_type;
-type mobicore_data_file, file_type, data_file_type;
-type mobicore_tui_device, dev_type;
-type mobicore_user_device, dev_type;
-type mobicore_admin_device, dev_type;
-type mobicore_exec, exec_type, file_type;
 type mobicore, domain, domain_deprecated;
+type mobicore_exec, exec_type, file_type;
+type mobicore_admin_device, dev_type;
+type mobicore_user_device, dev_type;
+type mobicore_tui_device, dev_type;
+type mobicore_data_file, file_type, data_file_type;
+type proc_secmem, fs_type;
 init_daemon_domain(mobicore)
 allow mobicore self:netlink_socket create_socket_perms;
 allow mobicore self:capability { dac_override };

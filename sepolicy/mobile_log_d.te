@@ -1,5 +1,5 @@
-type mobile_log_d, domain;
 type mobile_log_d_exec, exec_type, file_type;
+type mobile_log_d, domain;
 init_daemon_domain(mobile_log_d)
 dontaudit mobile_log_d untrusted_app:fd use;
 dontaudit mobile_log_d isolated_app:fd use;

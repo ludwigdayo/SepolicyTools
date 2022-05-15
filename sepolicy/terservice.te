@@ -1,10 +1,6 @@
-type terservice, domain;
-type terservice_exec, exec_type, file_type;
-init_daemon_domain(terservice)
-binder_use(terservice)
-binder_service(terservice)
+type terservice_service, service_manager_type;
+type terservice_prop, property_type;
+allow untrusted_app terservice_prop:file { read open getattr };
 allow terservice terservice_service:service_manager add;
 allow terservice terservice_prop:property_service set;
-allow terservice rootfs:lnk_file { getattr };
-allow terservice persist_ril_prop:file { read open getattr };
-allow terservice ccci_device:chr_file { read write ioctl open };
+allow bootanim terservice_service:service_manager find;

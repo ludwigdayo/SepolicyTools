@@ -99,7 +99,7 @@ public class SepolicyToolsGUI extends JFrame {
 
         textArea = new JTextArea();
         textArea.setColumns(57);
-        textArea.setRows(18);
+        textArea.setRows(15);
         textArea.setFont(textFont);
         textArea.setEditable(false);
 
@@ -207,7 +207,6 @@ public class SepolicyToolsGUI extends JFrame {
         setFont(globalFont);
         setBounds(200, 100, 1000, 618);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        pack();
         setVisible(true);
     }
 

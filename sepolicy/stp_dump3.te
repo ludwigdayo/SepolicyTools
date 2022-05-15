@@ -1,5 +1,5 @@
-type stp_dump3, domain;
 type stp_dump3_exec, exec_type, file_type;
+type stp_dump3, domain;
 init_daemon_domain(stp_dump3)
 file_type_auto_trans(stp_dump3,system_data_file,stp_dump_data_file)
 allow stp_dump3 wmtdetect_device:chr_file { read write ioctl open };

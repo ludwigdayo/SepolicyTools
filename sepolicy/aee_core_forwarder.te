@@ -1,5 +1,5 @@
-type aee_core_forwarder, domain;
 type aee_core_forwarder_exec, exec_type, file_type;
+type aee_core_forwarder, domain;
 init_daemon_domain(aee_core_forwarder)
 allow aee_core_forwarder system_data_file:dir { write relabelfrom create add_name };
 allow aee_core_forwarder sysfs_wake_lock:file { read write open };

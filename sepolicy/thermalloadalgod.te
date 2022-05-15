@@ -1,5 +1,5 @@
-type thermalloadalgod_exec, exec_type, file_type;
 type thermalloadalgod, domain;
+type thermalloadalgod_exec, exec_type, file_type;
 init_daemon_domain(thermalloadalgod)
 file_type_auto_trans(thermal_manager, system_data_file, thermal_manager_data_file)
 allow thermalloadalgod thermalloadalgod:netlink_socket { create bind write read };

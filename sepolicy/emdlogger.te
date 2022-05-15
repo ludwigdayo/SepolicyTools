@@ -1,5 +1,5 @@
-type emdlogger, domain;
 type emdlogger_exec, exec_type, file_type;
+type emdlogger, domain;
 init_daemon_domain(emdlogger)
 binder_use(emdlogger)
 binder_service(emdlogger)

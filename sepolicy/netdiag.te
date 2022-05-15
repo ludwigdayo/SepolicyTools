@@ -1,5 +1,5 @@
-type netdiag, domain;
 type netdiag_exec, exec_type, file_type;
+type netdiag, domain;
 typeattribute netdiag mlstrustedsubject;
 init_daemon_domain(netdiag)
 binder_use(netdiag)

@@ -1,7 +1,4 @@
-unix_socket_connect(netdomain, dnsproxyd, netd)
-allow netdomain self:netlink_route_socket { create bind read nlmsg_read };
-allow netdomain self: { tcp_socket udp_socket *;
-allow netdomain port_type:udp_socket name_bind;
-allow netdomain port_type:tcp_socket name_connect;
-allow netdomain port_type:tcp_socket name_bind;
-allow netdomain node_type: { tcp_socket udp_socket node_bind;
+type net_cdma_mdmstat, property_type;
+allow untrusted_app net_cdma_mdmstat:file { open read getattr };
+allow statusd net_cdma_mdmstat:property_service set;
+allow ccci_mdinit net_cdma_mdmstat:property_service set;

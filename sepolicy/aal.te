@@ -1,11 +1,4 @@
-type aal, domain;
-type aal_exec, exec_type, file_type;
-init_daemon_domain(aal)
-binder_use(aal)
-binder_service(aal)
-binder_call(aal, binderservicedomain)
-allow aal permission_service:service_manager { find };
-allow aal graphics_device:dir search;
-allow aal graphics_device:chr_file { read open ioctl };
+type aal_service, service_manager_type;
+allow system_server aal_service:service_manager find;
+allow atci_service aal_service:service_manager { find };
 allow aal aal_service:service_manager add;
-allow aal aal_als_device:chr_file { read open ioctl };

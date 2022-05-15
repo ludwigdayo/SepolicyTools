@@ -1,5 +1,5 @@
-type volte_stack_exec, exec_type, file_type;
 type volte_stack, domain;
+type volte_stack_exec, exec_type, file_type;
 init_daemon_domain(volte_stack)
 file_type_auto_trans(volte_stack, system_data_file, ims_ipsec_data_file)
 allow volte_stack volte_stack_socket:sock_file write;

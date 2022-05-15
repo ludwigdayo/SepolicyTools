@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="SepolicyTools:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SepolicyTools_jar</output-path>
+    <root id="root">
+      <element id="archive" name="SepolicyTools.jar">
+        <element id="module-output" name="SepolicyTools" />
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/../META-INF/MANIFEST.MF" />
+          <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+        </element>
+      </element>
+      <element id="library" level="project" name="lib" />
+    </root>
+  </artifact>
+</component>

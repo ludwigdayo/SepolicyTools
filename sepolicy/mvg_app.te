@@ -1,3 +1,3 @@
-type mvg_app_exec, exec_type, file_type;
 type mvg_app, domain;
+type mvg_app_exec, exec_type, file_type;
 init_daemon_domain(mvg_app)

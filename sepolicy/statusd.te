@@ -1,5 +1,5 @@
-type statusd, domain;
 type statusd_exec, exec_type, file_type;
+type statusd, domain;
 init_daemon_domain(statusd)
 auditallow statusd system_radio_prop:property_service set;
 auditallow statusd net_radio_prop:property_service set;

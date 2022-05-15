@@ -1,5 +1,5 @@
-type atci_service, domain;
 type atci_service_exec, exec_type, file_type;
+type atci_service, domain;
 init_daemon_domain(atci_service)
 file_type_auto_trans(atci_service, system_data_file, atci_data_file)
 binder_use(atci_service)

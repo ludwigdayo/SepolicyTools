@@ -1,5 +1,5 @@
-type gsm0710muxdmd2, domain;
 type gsm0710muxdmd2_exec, exec_type, file_type;
+type gsm0710muxdmd2, domain;
 init_daemon_domain(gsm0710muxdmd2)
 allow gsm0710muxdmd2 self:capability setuid;
 allow gsm0710muxdmd2 self:capability fowner;

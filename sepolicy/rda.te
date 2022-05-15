@@ -1,5 +1,5 @@
-type rda_exec, exec_type, file_type;
 type rda, domain;
+type rda_exec, exec_type, file_type;
 userdebug_or_eng(`
 allow rda su_exec:file r_file_perms;
 ')

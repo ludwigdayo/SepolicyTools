@@ -1,3 +1,3 @@
-type emmc_rw_debug_exec, exec_type, file_type;
 type emmc_rw_debug, domain;
+type emmc_rw_debug_exec, exec_type, file_type;
 init_daemon_domain(emmc_rw_debug)

@@ -1,16 +1,11 @@
-type pq, domain;
-type pq_exec, exec_type, file_type;
-init_daemon_domain(pq)
-binder_use(pq)
-binder_service(pq)
-binder_call(pq, binderservicedomain)
-allow pq system_prop:property_service set;
-allow pq rootfs:lnk_file { getattr };
-allow pq property_socket:sock_file write;
-allow pq proc:file { read open ioctl };
+type pq_service, service_manager_type;
+allow vtservice pq_service:service_manager { find };
+allow untrusted_app pq_service:service_manager { find };
+allow surfaceflinger pq_service:service_manager { find };
 allow pq pq_service:service_manager { find };
 allow pq pq_service:service_manager add;
-allow pq permission_service:service_manager { find };
-allow pq init:unix_stream_socket connectto;
-allow pq graphics_device:dir search;
-allow pq graphics_device:chr_file { read write open ioctl };
+allow platform_app pq_service:service_manager { find };
+allow mediaserver pq_service:service_manager { find };
+allow mediacodec pq_service:service_manager { find };
+allow cameraserver pq_service:service_manager { find };
+allow atci_service pq_service:service_manager { find };
