@@ -1,5 +1,5 @@
-type slpd, domain;
 type slpd_exec, exec_type, file_type;
+type slpd, domain;
 net_domain(slpd)
 init_daemon_domain(slpd)
 allow slpd rootfs:lnk_file { getattr };

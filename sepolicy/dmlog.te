@@ -1,5 +1,5 @@
-type dmlog, domain;
 type dmlog_exec, exec_type, file_type;
+type dmlog, domain;
 init_daemon_domain(dmlog)
 allow dmlog sysfs:file write;
 allow dmlog mmcblk0_block_device:blk_file { read write };

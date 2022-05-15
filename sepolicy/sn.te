@@ -1,5 +1,5 @@
-type sn, domain;
 type sn_exec, exec_type, file_type;
+type sn, domain;
 init_daemon_domain(sn)
 allow sn tmpfs:dir { read search };
 allow sn system_prop:property_service set;

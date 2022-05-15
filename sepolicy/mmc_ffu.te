@@ -1,5 +1,5 @@
-type mmc_ffu_exec, exec_type, file_type;
 type mmc_ffu, domain;
+type mmc_ffu_exec, exec_type, file_type;
 init_daemon_domain(mmc_ffu)
 allow mmc_ffu mmcblk0_block_device:blk_file { read write ioctl open };
 allow mmc_ffu misc_sd_device:chr_file { read ioctl open };

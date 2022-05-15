@@ -1,5 +1,5 @@
-type msensord, domain;
 type msensord_exec, exec_type, file_type;
+type msensord, domain;
 unix_socket_connect(msensord, property, init)
 init_daemon_domain(msensord)
 allow msensord rootfs:lnk_file { getattr };

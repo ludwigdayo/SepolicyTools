@@ -1,5 +1,5 @@
-type md_ctrl_exec, exec_type, file_type;
 type md_ctrl, domain;
+type md_ctrl_exec, exec_type, file_type;
 init_daemon_domain(md_ctrl)
 allow md_ctrl vold_prop:property_service set;
 allow md_ctrl self:capability dac_override;

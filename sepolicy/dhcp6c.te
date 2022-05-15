@@ -1,5 +1,5 @@
-type dhcp6c, domain;
 type dhcp6c_exec, exec_type, file_type;
+type dhcp6c, domain;
 init_daemon_domain(dhcp6c)
 allow dhcp6c wide_dhcpv6_data_file:file { read write create open getattr };
 allow dhcp6c wide_dhcpv6_data_file:dir { write search add_name };

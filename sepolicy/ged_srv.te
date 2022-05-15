@@ -1,5 +1,5 @@
-type ged_srv_exec, exec_type, file_type;
 type ged_srv, domain;
+type ged_srv_exec, exec_type, file_type;
 init_daemon_domain(ged_srv)
 binder_use(init)
 binder_use(ged_srv)

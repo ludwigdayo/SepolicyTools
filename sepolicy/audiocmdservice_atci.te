@@ -1,5 +1,5 @@
-type audiocmdservice_atci, domain;
 type audiocmdservice_atci_exec, exec_type, file_type;
+type audiocmdservice_atci, domain;
 init_daemon_domain(audiocmdservice_atci)
 binder_use(audiocmdservice_atci)
 binder_call(audiocmdservice_atci, mediaserver)

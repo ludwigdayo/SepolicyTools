@@ -1,5 +1,5 @@
-type pppd_btdun_exec, exec_type, file_type;
 type pppd_btdun, domain;
+type pppd_btdun_exec, exec_type, file_type;
 init_daemon_domain(pppd_btdun)
 allow pppd_btdun tun_device:chr_file { read write ioctl open create };
 allow pppd_btdun self:udp_socket { read write ioctl create };

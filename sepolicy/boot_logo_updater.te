@@ -1,5 +1,5 @@
-type boot_logo_updater, domain;
 type boot_logo_updater_exec, exec_type, file_type;
+type boot_logo_updater, domain;
 init_daemon_domain(boot_logo_updater)
 allow boot_logo_updater system_prop:property_service set;
 allow boot_logo_updater sysfs:file write;

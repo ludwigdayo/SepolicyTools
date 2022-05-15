@@ -1,5 +1,5 @@
-type mpud6050, domain;
 type mpud6050_exec, exec_type, file_type;
+type mpud6050, domain;
 init_daemon_domain(mpud6050)
 allow mpud6050 gyroscope_mpud6050_use:file { open read };
 allow mpud6050 gyroscope_mpud6050_use:dir { open read search };

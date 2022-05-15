@@ -1,8 +1,8 @@
-type debug_mtklog_prop, property_type;
-type debug_mdlogger_prop, property_type;
-type debug_bq_dump_prop, property_type;
-type debug_mtk_aee_prop, property_type;
 type debug_netlog_prop, property_type;
+type debug_mtk_aee_prop, property_type;
+type debug_bq_dump_prop, property_type;
+type debug_mdlogger_prop, property_type;
+type debug_mtklog_prop, property_type;
 allow untrusted_app debug_netlog_prop:file { open read getattr };
 allow untrusted_app debug_mtklog_prop:file { read open getattr };
 allow untrusted_app debug_mtk_aee_prop:file { read open getattr };

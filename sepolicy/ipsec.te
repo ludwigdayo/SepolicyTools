@@ -1,8 +1,8 @@
-type ipsec, domain;
-type stroke_exec, exec_type, file_type;
-type ipsec_exec, exec_type, file_type;
-type charon_exec, exec_type, file_type;
 type starter_exec, exec_type, file_type;
+type charon_exec, exec_type, file_type;
+type ipsec_exec, exec_type, file_type;
+type stroke_exec, exec_type, file_type;
+type ipsec, domain;
 allow ipsec wod_ipsec_socket:sock_file write;
 allow ipsec wod_ipsec_conf_file:file { write read ioctl open getattr create append unlink };
 allow ipsec wod_ipsec_conf_file:dir { write read open search remove_name add_name };

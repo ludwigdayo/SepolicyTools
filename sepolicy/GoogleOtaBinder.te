@@ -1,5 +1,5 @@
-type GoogleOtaBinder, domain;
 type GoogleOtaBinder_exec, exec_type, file_type;
+type GoogleOtaBinder, domain;
 init_daemon_domain(GoogleOtaBinder)
 binder_use(GoogleOtaBinder)
 binder_service(GoogleOtaBinder)

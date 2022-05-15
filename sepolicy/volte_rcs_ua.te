@@ -1,6 +1,6 @@
-type rcs_ua_proxy_socket, file_type;
-type volte_rcs_ua_exec, exec_type, file_type;
 type volte_rcs_ua, domain;
+type volte_rcs_ua_exec, exec_type, file_type;
+type rcs_ua_proxy_socket, file_type;
 unix_socket_connect(volte_rcs_ua, volte_stack, volte_stack)
 init_daemon_domain(volte_rcs_ua)
 allow volte_rcs_ua volte_stack:unix_stream_socket connectto;

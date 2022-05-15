@@ -1,5 +1,5 @@
-type hotknot_native_service, service_manager_type;
 type hotknot_prop, property_type;
+type hotknot_native_service, service_manager_type;
 allow untrusted_app hotknot_prop:file { getattr open read };
 allow system_app hotknot_prop:property_service set;
 allow hotknot_native hotknot_prop:property_service set;

@@ -1,5 +1,5 @@
-type viarild, domain;
 type viarild_exec, exec_type, file_type;
+type viarild, domain;
 wakelock_use(viarild)
 unix_socket_connect(viarild, property, init)
 net_domain(viarild)

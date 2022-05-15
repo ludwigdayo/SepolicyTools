@@ -1,5 +1,5 @@
-type sbchk_exec, exec_type, file_type;
 type sbchk, domain;
+type sbchk_exec, exec_type, file_type;
 init_daemon_domain(sbchk)
 allow sbchk secro_block_device:blk_file rw_file_perms;
 allow sbchk seccfg_device:chr_file rw_file_perms;

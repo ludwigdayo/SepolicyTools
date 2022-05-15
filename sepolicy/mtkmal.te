@@ -1,5 +1,5 @@
-type mtkmal_exec, exec_type, file_type;
 type mtkmal, domain;
+type mtkmal_exec, exec_type, file_type;
 unix_socket_send(mtkmal, wpa, wpa)
 init_daemon_domain(mtkmal)
 allow wpa mtkmal:unix_stream_socket connectto;

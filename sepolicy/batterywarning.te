@@ -1,5 +1,5 @@
-type batterywarning, domain;
 type batterywarning_exec, exec_type, file_type;
+type batterywarning, domain;
 init_daemon_domain(batterywarning)
 binder_use(batterywarning)
 allow batterywarning system_server:binder call;

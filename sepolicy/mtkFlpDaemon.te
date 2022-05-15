@@ -1,5 +1,5 @@
-type mtkFlpDaemon_exec, exec_type, file_type;
 type mtkFlpDaemon, domain;
+type mtkFlpDaemon_exec, exec_type, file_type;
 net_domain(mtkFlpDaemon)
 init_daemon_domain(mtkFlpDaemon)
 file_type_auto_trans(mtkFlpDaemon, system_data_file, mtkFlpDaemon_data_file);

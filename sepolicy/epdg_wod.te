@@ -1,5 +1,5 @@
-type epdg_wod, domain;
 type epdg_wod_exec, exec_type, file_type;
+type epdg_wod, domain;
 init_daemon_domain(epdg_wod)
 domain_auto_trans(epdg_wod, stroke_exec, ipsec)
 domain_auto_trans(epdg_wod, starter_exec, ipsec)

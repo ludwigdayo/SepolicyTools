@@ -1,7 +1,7 @@
-type ril_mux_report_case_prop, property_type;
-type ril_active_md_prop, property_type;
-type ril_cdma_report_prop, property_type;
 type ril_volte_stack_rcsuaproxy_prop, property_type;
+type ril_cdma_report_prop, property_type;
+type ril_active_md_prop, property_type;
+type ril_mux_report_case_prop, property_type;
 allow viarild ril_mux_report_case_prop:property_service set;
 allow viarild ril_cdma_report_prop:property_service set;
 allow viarild ril_active_md_prop:property_service set;

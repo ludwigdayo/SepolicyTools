@@ -1,11 +1,11 @@
-type proc_slogger, fs_type;
-type proc_mtktz, fs_type;
-type proc_mrdump_rst, fs_type;
-type proc_icusb, fs_type;
-type proc_lk_env, fs_type;
-type proc_mtkcooler, fs_type;
-type proc_secmem, fs_type;
 type proc_thermal, fs_type;
+type proc_secmem, fs_type;
+type proc_mtkcooler, fs_type;
+type proc_lk_env, fs_type;
+type proc_icusb, fs_type;
+type proc_mrdump_rst, fs_type;
+type proc_mtktz, fs_type;
+type proc_slogger, fs_type;
 allow vold proc_mtktz:dir r_dir_perms;
 allow vold proc_mtkcooler:dir r_dir_perms;
 allow vold proc_lk_env:file { read write open ioctl };

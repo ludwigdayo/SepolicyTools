@@ -1,59 +1,6 @@
-type ipod, domain;
-type ipod_exec, exec_type, file_type;
-init_daemon_domain(ipod)
-file_type_auto_trans(ipod, system_data_file, ipoh_data_file)
-binder_use(ipod)
-binder_service(ipod)
-binder_call(ipod, system_server)
-binder_call(ipod, surfaceflinger)
-allow ipod userdata_block_device:blk_file rw_file_perms;
-allow ipod system_server:unix_stream_socket connectto;
-allow ipod system_prop:property_service set;
-allow ipod system_file:file execute_no_trans;
-allow ipod system_data_file:dir { open read write add_name create remove_name };
-allow ipod sysfs_wake_lock:file { read write open getattr };
-allow ipod sysfs:file { open read write getattr };
-allow ipod surfaceflinger_service:service_manager find;
-allow ipod shell_exec:file { read open execute_no_trans execute };
-allow ipod self:capability2 block_suspend;
-allow ipod self:capability { chown sys_admin };
-allow ipod self:capability sys_boot;
-allow ipod self:capability net_admin;
-allow ipod self:capability dac_override;
-allow ipod rtc_device:chr_file { open read write ioctl };
-allow ipod property_socket:sock_file write;
-allow ipod proc_sysrq:file { open write };
-allow ipod proc_lk_env:file { open read write };
-allow ipod proc_drop_caches:file { open write };
-allow ipod proc:file { open read write };
-allow ipod proc:dir { search getattr };
-allow ipod powerctl_prop:property_service set;
-allow ipod power_service:service_manager find;
-allow ipod para_block_device:blk_file rw_file_perms;
-allow ipod mtd_device:dir search;
-allow ipod mtd_device:chr_file { open read write };
-allow ipod mtd_device:blk_file { read write open };
-allow ipod mmcblk0_block_device:blk_file rw_file_perms;
-allow ipod misc_device:chr_file { open read write };
-allow ipod logo_device:chr_file { open read };
-allow ipod logo_block_device:blk_file { read open };
-allow ipod kmsg_device:chr_file { open write };
-allow ipod ipoh_data_file:file { create open write ioctl setattr };
+type ctl_ipod_prop, property_type;
+type ipod_prop, property_type;
+allow untrusted_app ipod_prop:file { open read getattr };
+allow system_server ctl_ipod_prop:property_service set;
 allow ipod ipod_prop:property_service set;
-allow ipod ipod:netlink_kobject_uevent_socket { create bind read setopt };
-allow ipod input_device:file { open read write ioctl };
-allow ipod input_device:dir { open read search };
-allow ipod input_device:chr_file { open read write ioctl };
-allow ipod init:unix_stream_socket connectto;
-allow ipod init:dir getattr;
-allow ipod gpu_device:chr_file { read write open ioctl };
-allow ipod debugfs:file { getattr };
 allow ipod ctl_ipod_prop:property_service set;
-allow ipod ctl_ipo_swap_prop:property_service set;
-allow ipod ctl_bootanim_prop:property_service set;
-allow ipod cache_file:file { create open write ioctl setattr };
-allow ipod cache_file:dir { open read write add_name create remove_name };
-allow ipod cache_block_device:blk_file rw_file_perms;
-allow ipod block_device:dir search;
-allow ipod audiohal_prop:property_service set;
-allow ipod alarm_device:chr_file write;

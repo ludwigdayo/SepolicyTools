@@ -1,5 +1,5 @@
-type nvram_daemon, domain;
 type nvram_daemon_exec, exec_type, file_type;
+type nvram_daemon, domain;
 init_daemon_domain(nvram_daemon)
 allow nvram_daemon toolbox_exec:file { r_file_perms execute execute_no_trans };
 allow nvram_daemon system_prop:property_service set;
