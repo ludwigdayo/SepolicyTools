@@ -1,8 +1,8 @@
 package Utils.Impl;
 
-import Gui.SepolicyToolsGUI;
 import Utils.AboutSystem;
 import Utils.AdbUtils;
+import Utils.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 
 public class AdbUtilsImpl implements AdbUtils {
     private static String allFileList = null;
+
+    Logger logger = new LoggerImpl();
 
     /**
      * 获得当前已经连接的设备数量
@@ -121,18 +123,18 @@ public class AdbUtilsImpl implements AdbUtils {
             // 检查设备数量
             int num = getConnectedDeviceNum();
             if (num == 0) {
-                SepolicyToolsGUI.log("当前设备数量 " + num + " 请连接设备");
+                logger.println("当前设备数量 " + num + " 请连接设备");
                 return null;
             }
 
             if (num > 1) {
-                SepolicyToolsGUI.log("当前设备数量 " + num + " 请减少设备");
+                logger.println("当前设备数量 " + num + " 请减少设备");
                 return null;
             }
 
-            SepolicyToolsGUI.log("正在获取文件列表(至少需要几分钟时间)...");
+            logger.println("正在获取文件列表(至少需要几分钟时间)...");
             String[] shell = shell("ls -R");
-            SepolicyToolsGUI.log("正在处理结果");
+            logger.println("正在处理结果");
             StringBuilder result = new StringBuilder();
 
             // 把“ls -R”得到的结果数组转成一个字符串 并给每一个文件加上完整路径

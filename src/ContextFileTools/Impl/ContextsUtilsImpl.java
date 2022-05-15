@@ -7,6 +7,7 @@ import Utils.Impl.LineUtilsImpl;
 import Utils.Impl.LoggerImpl;
 import Utils.Impl.StreamHelperImpl;
 import Utils.LineUtils;
+import Utils.Logger;
 import Utils.StreamHelper;
 
 import java.io.BufferedReader;
@@ -20,7 +21,7 @@ import java.util.TreeSet;
 public class ContextsUtilsImpl implements ContextsUtils {
 
     private final StreamHelper streamHelper = new StreamHelperImpl();
-    LoggerImpl logger = new LoggerImpl();
+    Logger logger = new LoggerImpl();
     LineUtils lineUtils = new LineUtilsImpl();
 
     /**
@@ -93,7 +94,35 @@ public class ContextsUtilsImpl implements ContextsUtils {
     }
 
     /**
-     * 得到dir下以*_contexts命名的文件名
+     * 得到dir下不以te或_contexts结尾文件列表
+     *
+     * @param dir 文件夹
+     * @return 结果
+     */
+    private String[] getOtherFileList(String dir) {
+        ArrayList<String> resultList = new ArrayList<>();
+        String[] result = null;
+
+        File d = new File(dir);
+        if (!d.isDirectory()) {
+            logger.println(dir + "不是文件夹");
+        }
+
+        File[] files = d.listFiles();
+        for (File file : files) {
+            if (!file.getName().endsWith(".te") && !file.getName().endsWith("_contexts")) {
+                resultList.add(file.getName());
+            }
+        }
+
+        result = new String[resultList.size()];
+        resultList.toArray(result);
+
+        return result;
+    }
+
+    /**
+     * 得到dir下以*_contexts命名的文件名列表
      *
      * @param dir 文件夹
      * @return 结果
@@ -131,14 +160,21 @@ public class ContextsUtilsImpl implements ContextsUtils {
         TreeSet<String> resultSet = new TreeSet<>();
         String[] result = null;
         String[] contextsFileList = null;
+        String[] otherFileList = null;
         FilePathUtils filePathUtils = new FilePathUtilsImpl();
 
-        // 得到文件列表
+        // 得到文件中的标签
         contextsFileList = getContextsFileList(dir);
-
         for (String file : contextsFileList) {
             String[] labelFromContexts = getLabelFromContexts(filePathUtils.catPath(dir, file));
             resultSet.addAll(Arrays.asList(labelFromContexts));
+        }
+
+        // 得到不规则文件中的标签
+        otherFileList = getOtherFileList(dir);
+        for (String file : otherFileList) {
+            String[] labelFromOtherFile = getLabelFromContexts(filePathUtils.catPath(dir, file));
+            resultSet.addAll(Arrays.asList(labelFromOtherFile));
         }
 
         result = new String[resultSet.size()];
@@ -156,7 +192,7 @@ public class ContextsUtilsImpl implements ContextsUtils {
         for (String file : contextsFileList) {
             String[] content = fileToString(filePathUtils.catPath(dir, file));
             content = formatAllLine(content);
-            streamHelper.writeToFile(content,filePathUtils.catPath(dir, file));
+            streamHelper.writeToFile(content, filePathUtils.catPath(dir, file));
         }
     }
 

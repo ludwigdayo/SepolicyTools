@@ -1,21 +1,20 @@
 package ContextFileTools.Impl;
 
 import ContextFileTools.FileContextsFormat;
-import Gui.SepolicyToolsGUI;
 import Utils.AdbUtils;
 import Utils.Impl.AdbUtilsImpl;
+import Utils.Impl.LoggerImpl;
 import Utils.Impl.StreamHelperImpl;
+import Utils.Logger;
 import Utils.StreamHelper;
 
 import java.io.BufferedWriter;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 public class FileContextsFormatImpl implements FileContextsFormat {
+    Logger logger = new LoggerImpl();
 
     private final StreamHelper streamHelper = new StreamHelperImpl();
-
-    Logger logger = Logger.getLogger(FileContextsFormatImpl.class.getName());
 
     /**
      * 判断是不是要特殊保留的路径
@@ -68,7 +67,7 @@ public class FileContextsFormatImpl implements FileContextsFormat {
         for (String line : pathList) {
 
             if (!isRemain(line) && !adbUtils.isExisted(line)) {
-                SepolicyToolsGUI.log("忽略" + line);
+                logger.println("忽略" + line);
                 continue; // 如果不是要特殊处理的且又不存在就不复制
             }
 
@@ -91,13 +90,13 @@ public class FileContextsFormatImpl implements FileContextsFormat {
 
         text = new ContextsUtilsImpl().fileToString(inPutPath);
 
-        SepolicyToolsGUI.log("清除无用行...");
+        logger.println("清除无用行...");
         text = cleanNotExistedLine(text);
 
-        SepolicyToolsGUI.log("整理所有行...");
+        logger.println("整理所有行...");
         text = new ContextsUtilsImpl().formatAllLine(text);
 
-        SepolicyToolsGUI.log("写入文件...");
+        logger.println("写入文件...");
         streamHelper.writeToFile(text, outPutPath);
     }
 
