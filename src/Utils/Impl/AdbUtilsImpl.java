@@ -5,6 +5,7 @@ import Utils.AdbUtils;
 import Utils.Logger;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
 public class AdbUtilsImpl implements AdbUtils {
     private static String allFileList = null;
 
-    Logger logger = new LoggerImpl();
+    private static final Logger logger = new LoggerImpl();
 
     /**
      * 根据系统类型 确定adb工具的路径~
@@ -29,6 +30,10 @@ public class AdbUtilsImpl implements AdbUtils {
                 break;
             case AboutSystem.LINUX:
                 adbPath = "platform-tools/linux/adb";
+                if (!new File(adbPath).canExecute()) {
+                    logger.println(adbPath + "couldn't execute");
+                    adbPath = null;
+                }
                 break;
         }
         return adbPath;
@@ -53,6 +58,10 @@ public class AdbUtilsImpl implements AdbUtils {
         int count = 0;
 
         String adb = getADB();
+        if (adb == null) {
+            return 0;
+        }
+
         Process exec = null;
         BufferedReader bufferedReader = null;
         try {

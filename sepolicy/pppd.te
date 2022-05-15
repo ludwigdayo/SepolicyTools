@@ -1,0 +1,2 @@
+type pppd_gprs_prop, property_type;
+allow mtkrildmd2 pppd_gprs_prop:property_service set;

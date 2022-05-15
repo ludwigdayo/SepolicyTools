@@ -1,0 +1,4 @@
+type soter_teei_prop, property_type;
+allow untrusted_app soter_teei_prop:file { getattr open read };
+allow teei_daemon soter_teei_prop:property_service { set };
+allow init_thh_service soter_teei_prop:property_service { set };

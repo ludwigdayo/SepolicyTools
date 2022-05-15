@@ -1,17 +1,7 @@
-# ==============================================
-# MTK Policy Rule
-# ==============================================
-
-type slpd_exec, exec_type, file_type;
 type slpd, domain;
-
-init_daemon_domain(slpd)
-
+type slpd_exec, exec_type, file_type;
 net_domain(slpd)
-#allow slpd su:unix_dgram_socket sendto;
-allow slpd mtk_agpsd:unix_dgram_socket sendto;
-# allow slpd flpd:unix_dgram_socket sendto;
-allow slpd mtkFlpDaemon:unix_dgram_socket sendto;
-
-# Nougat
+init_daemon_domain(slpd)
 allow slpd rootfs:lnk_file { getattr };
+allow slpd mtk_agpsd:unix_dgram_socket sendto;
+allow slpd mtkFlpDaemon:unix_dgram_socket sendto;

@@ -1,0 +1,5 @@
+type gas_srv_service, service_manager_type;
+allow untrusted_app     gas_srv_service:service_manager     find;
+allow surfaceflinger    gas_srv_service:service_manager     find;
+allow platform_app      gas_srv_service:service_manager     find;
+allow gas_srv           gas_srv_service:service_manager     add;

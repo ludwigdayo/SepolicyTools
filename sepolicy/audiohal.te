@@ -1,0 +1,7 @@
+type audiohal_prop, property_type;
+allow untrusted_app audiohal_prop:file { open read getattr };
+allow meta_tst audiohal_prop:property_service set;
+allow mediaserver audiohal_prop:property_service set;
+allow ipod audiohal_prop:property_service set;
+allow factory audiohal_prop:property_service set;
+allow audioserver audiohal_prop:file r_file_perms;

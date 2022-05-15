@@ -1,0 +1,6 @@
+type pppoe_ppp0_prop, property_type;
+allow zpppd_gprs pppoe_ppp0_prop:property_service set;
+allow untrusted_app pppoe_ppp0_prop:file { open read getattr };
+allow ril-3gddaemon pppoe_ppp0_prop:property_service set;
+allow pppd_dt pppoe_ppp0_prop:property_service set;
+allow ppp pppoe_ppp0_prop:property_service set;

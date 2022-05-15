@@ -1,0 +1,11 @@
+type program_binary_prop, property_type;
+type program_binary_service, service_manager_type;
+allow untrusted_app program_binary_service:service_manager find;
+allow untrusted_app program_binary_prop:file { open read getattr };
+allow system_server program_binary_service:service_manager find;
+allow radio program_binary_service:service_manager find;
+allow program_binary program_binary_service:service_manager add;
+allow program_binary program_binary_prop:property_service set;
+allow platform_app program_binary_service:service_manager find;
+allow nfc program_binary_service:service_manager find;
+allow bluetooth program_binary_service:service_manager find;

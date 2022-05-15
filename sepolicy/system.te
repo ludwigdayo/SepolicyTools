@@ -1,0 +1,22 @@
+set_prop(goodixfingerprintd, system_prop)
+set_prop(goodix, system_prop)
+allow zpppd_gprs system_prop:property_service set;
+allow system_app system_app_service:service_manager add;
+allow statusd system_prop:property_service set;
+allow sn system_prop:property_service set;
+allow ril-3gddaemon system_prop:property_service set;
+allow resize system_prop:property_service set;
+allow radio system_prop:property_service set;
+allow pq system_prop:property_service set;
+allow pppd_dt system_prop:property_service set;
+allow ppp system_prop:property_service set; 
+allow platform_app system_app_service:service_manager find;
+allow nvram_daemon system_prop:property_service set;
+allow mtk_6620_launcher system_prop:property_service set;
+allow mbimd system_prop:property_service set;
+allow ipod system_prop:property_service set;
+allow eemcs_mdinit system_prop:property_service set;
+allow ccci_mdinit system_prop:property_service set;
+allow boot_logo_updater system_prop:property_service set;
+allow atcp system_prop:property_service set;
+allow atcid system_prop:property_service set;

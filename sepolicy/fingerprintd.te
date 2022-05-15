@@ -1,9 +1,4 @@
-# ==============================================
-# Policy File of /system/bin/goodixfingerprintd Executable File
-
-# MTK Policy Rule
-allow fingerprintd fingerprintd_data_file:dir create_dir_perms;
-
 allow fingerprintd property_socket:sock_file { write };
-allow fingerprintd init:unix_stream_socket { connectto };
 allow fingerprintd mobicore_lib_file:file { read open getattr };
+allow fingerprintd init:unix_stream_socket { connectto };
+allow fingerprintd fingerprintd_data_file:dir create_dir_perms;

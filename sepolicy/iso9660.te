@@ -1,0 +1,2 @@
+type iso9660, fs_type;
+allow vold iso9660:filesystem unmount;

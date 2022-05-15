@@ -1,0 +1,10 @@
+type wmt_prop, property_type;
+allow wmt_loader wmt_prop:property_service set;
+allow wmt_loader wmt_prop:file r_file_perms;
+allow untrusted_app wmt_prop:file { open read getattr };
+allow system_server wmt_prop:file { read open getattr };
+allow mtk_6620_launcher wmt_prop:property_service set;
+allow mtk_6620_launcher wmt_prop:file r_file_perms;
+allow mnld wmt_prop:file r_file_perms;
+allow bluetooth wmt_prop:file { open read getattr };
+allow audioserver wmt_prop:file { read open getattr };

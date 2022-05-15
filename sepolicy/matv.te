@@ -1,27 +1,4 @@
-# ==============================================
-# Policy File of /system/binmatv Executable File 
-
-
-# ==============================================
-# Type Declaration
-# ==============================================
-
-type matv_exec , exec_type, file_type;
-type matv ,domain;
-
-# ==============================================
-# Android Policy Rule
-# ==============================================
-
-# ==============================================
-# NSA Policy Rule
-# ==============================================
-
-# ==============================================
-# MTK Policy Rule
-# ==============================================
-binder_use(matv)
-
-#permissive matv;
+type matv, domain;
+type matv_exec, exec_type, file_type;
 init_daemon_domain(matv)
-#unconfined_domain(matv)
+binder_use(matv)

@@ -1,0 +1,4 @@
+allow mediaserver sensorservice_service:service_manager find;
+allow cameraserver sensorservice_service:service_manager { find };
+allow atci_service sensorservice_service:service_manager find;
+allow MPED sensorservice_service:service_manager find;

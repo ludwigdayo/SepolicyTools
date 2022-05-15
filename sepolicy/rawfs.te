@@ -1,0 +1,5 @@
+type rawfs, fs_type, mlstrustedobject;
+allow vold rawfs:dir { read ioctl open };
+allow init rawfs:file getattr;
+allow ccci_fsd rawfs:file create_file_perms;
+allow ccci_fsd rawfs:dir create_dir_perms;

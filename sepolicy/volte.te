@@ -1,0 +1,10 @@
+type mtk_volte_prop, property_type;
+type volte_prop, property_type;
+allow volte_imsm_md volte_prop:property_service set;
+allow untrusted_app volte_prop:file { getattr open read };
+allow untrusted_app mtk_volte_prop:file { open read getattr };
+allow radio mtk_volte_prop:property_service set;
+allow mtkrild volte_prop:file { read open getattr };
+allow mtkmal volte_prop:property_service set;
+allow ccci_mdinit volte_prop:property_service set;
+allow atcp volte_prop:property_service set;

@@ -1,0 +1,3 @@
+type save_locale_prop, property_type;
+allow untrusted_app save_locale_prop:file { open read getattr };
+allow system_server save_locale_prop:property_service set;

@@ -1,4 +1,0 @@
-type mcDriverDaemon_exec, file_type, exec_type;
-#allow init mcDriverDaemon_exec:file { execute_no_trans };
-allow init mcDriverDaemon_exec:file { open read getattr execute };
-allow mobicore mcDriverDaemon_exec:file { read open getattr };

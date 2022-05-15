@@ -1,0 +1,5 @@
+type mediatek_prop, property_type;
+allow untrusted_app mediatek_prop:file { open read getattr };
+allow radio mediatek_prop:property_service set;
+allow ccci_mdinit mediatek_prop:file { read open getattr ioctl };
+allow cameraserver mediatek_prop:file { read open getattr };

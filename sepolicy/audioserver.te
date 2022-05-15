@@ -1,25 +1,20 @@
-# audioserver - audio services
-allow audioserver audiohal_prop:file r_file_perms;
-allow audioserver DW9763AF_device:chr_file { read write open ioctl };
-allow audioserver nvram_data_file:file { read write open getattr setattr create };
-allow audioserver nvram_data_file:dir { write add_name };
-allow audioserver ccci_device:chr_file { read write open ioctl };
-allow audioserver sysfs:file { read open };
-allow audioserver rootfs:lnk_file { getattr };
-allow audioserver property_socket:sock_file { write };
-allow audioserver init:unix_stream_socket { connectto };
-allow audioserver tmpfs:dir { search };
-allow audioserver storage_file:lnk_file { read };
-allow audioserver mnt_user_file:lnk_file { read };
-allow audioserver mnt_user_file:dir { search };
-
 allow audioserver wmt_prop:file { read open getattr };
-
-#allow audioserver properties_device:wmt_prop { read write open };
-
-allow audioserver nvram_data_file:lnk_file { read write open };
-allow audioserver kmsg_device:chr_file { write };
+allow audioserver tmpfs:dir { search };
 allow audioserver sysfs_ccci_version:file { open read getattr };
 allow audioserver sysfs_boot_mode_file:file { open read getattr };
+allow audioserver sysfs:file { read open };
+allow audioserver storage_file:lnk_file { read };
+allow audioserver rootfs:lnk_file { getattr };
+allow audioserver property_socket:sock_file { write };
+allow audioserver nvram_data_file:lnk_file { read write open };
+allow audioserver nvram_data_file:file { read write open getattr setattr create };
+allow audioserver nvram_data_file:dir { write add_name };
 allow audioserver nvdata_file:file { open read getattr };
 allow audioserver nvdata_file:dir { search };
+allow audioserver mnt_user_file:lnk_file { read };
+allow audioserver mnt_user_file:dir { search };
+allow audioserver kmsg_device:chr_file { write };
+allow audioserver init:unix_stream_socket { connectto };
+allow audioserver ccci_device:chr_file { read write open ioctl };
+allow audioserver audiohal_prop:file r_file_perms;
+allow audioserver DW9763AF_device:chr_file { read write open ioctl };

@@ -26,20 +26,11 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
      */
     private String[] readAllLineFromFiles(String inputDir, String[] files) {
         ArrayList<String> arrayList = new ArrayList<>();
-        StreamHelperImpl streamHelper = new StreamHelperImpl();
         String[] result = null;
 
         for (String file : files) {
-            BufferedReader bufferReader = streamHelper.getBufferReader(new FilePathUtilsImpl().catPath(inputDir, file));
-            try {
-                String line;
-                while ((line = bufferReader.readLine()) != null) {
-                    arrayList.add(line);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            streamHelper.close(bufferReader);
+            String[] strings = readAllLineFromTEFile(new FilePathUtilsImpl().catPath(inputDir, file));
+            arrayList.addAll(Arrays.asList(strings));
         }
 
         result = new String[arrayList.size()];
@@ -151,7 +142,23 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
 
         // 关联标签与包含此标签的行
         for (String label : labelFromContexts) {
-            labelLines = new TreeSet<>();
+            labelLines = new TreeSet<>(new Comparator<String>() {
+                @Override
+                public int compare(String s, String t1) {
+                    if (s.equals(t1)) return 0;
+
+                    if (s.startsWith("type ")) {
+                        return -1;
+                    }
+
+                    if (t1.startsWith("type ")) {
+                        return 1;
+                    }
+
+                    return t1.compareTo(s);
+                }
+            });
+
             for (String line : allContents) {
                 if (line.contains(label)) {
                     labelLines.add(line);

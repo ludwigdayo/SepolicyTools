@@ -1,0 +1,5 @@
+allow toolbox labeledfs:filesystem unmount;
+allow resize labeledfs:filesystem unmount;
+allow meta_tst labeledfs:filesystem unmount;
+allow goodixfingerprintd_data_file labeledfs:filesystem associate;
+allow factory labeledfs:filesystem unmount;

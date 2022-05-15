@@ -6,6 +6,11 @@ package GeneralFilesTools;
 public interface SepolicyFileUtils {
 
     /**
+     * get all line from a file
+     */
+    String[] readAllLineFromTEFile(String file);
+
+    /**
      * 格式化每一行
      *
      * @param content 需要格式化的内容

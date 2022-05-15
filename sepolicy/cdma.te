@@ -1,0 +1,6 @@
+type cdma_prop, property_type;
+allow viarild cdma_prop:property_service set;
+allow untrusted_app cdma_prop:file { open read getattr };
+allow statusd cdma_prop:property_service set;
+allow rilproxy cdma_prop:property_service set;
+allow radio cdma_prop:property_service set;

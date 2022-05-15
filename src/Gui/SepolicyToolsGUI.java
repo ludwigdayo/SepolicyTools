@@ -207,6 +207,7 @@ public class SepolicyToolsGUI extends JFrame {
         setFont(globalFont);
         setBounds(200, 100, 1000, 618);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//        pack();
         setVisible(true);
     }
 

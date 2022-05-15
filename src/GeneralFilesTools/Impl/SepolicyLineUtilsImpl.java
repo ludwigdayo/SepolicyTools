@@ -11,6 +11,7 @@ public class SepolicyLineUtilsImpl extends LineUtilsImpl implements SepolicyLine
      * @return 类型
      */
     private static int getLineType(String source) {
+
         if (source.startsWith("#")) return NOTES;
         if (source.contains(";")) return OPERATE;
         if (source.contains("(") && source.contains(")") && !source.contains(";")) return FUNCTION;
@@ -73,7 +74,14 @@ public class SepolicyLineUtilsImpl extends LineUtilsImpl implements SepolicyLine
      */
     @Override
     public String formatLine(String source) {
+        // if start with space delete it
+        while (source.startsWith(" ")) {
+            source = source.substring(1);
+        }
+
         int lineType = getLineType(source);
+
+        source = source.replace('\t', ' ');
 
         if (lineType == FUNCTION) {
             source = formatFunction(source);
