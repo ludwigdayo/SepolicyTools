@@ -67,4 +67,24 @@ public class StreamHelperImpl implements StreamHelper {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void writeToFile(String[] content, String file) {
+        BufferedWriter bufferWriter = getBufferWriter(file, false);
+
+        try {
+            for (int i = 0; i < content.length; i++) {
+                bufferWriter.write(content[i]);
+
+                // 最后一行不要回车
+                if (i < content.length - 1) {
+                    bufferWriter.newLine();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        close(bufferWriter);
+    }
 }

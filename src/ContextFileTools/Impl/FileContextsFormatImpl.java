@@ -7,11 +7,8 @@ import Utils.Impl.AdbUtilsImpl;
 import Utils.Impl.StreamHelperImpl;
 import Utils.StreamHelper;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.TreeSet;
 import java.util.logging.Logger;
 
 public class FileContextsFormatImpl implements FileContextsFormat {
@@ -101,21 +98,7 @@ public class FileContextsFormatImpl implements FileContextsFormat {
         text = new ContextsUtilsImpl().formatAllLine(text);
 
         SepolicyToolsGUI.log("写入文件...");
-        bufferWriter = streamHelper.getBufferWriter(outPutPath, false);
-        try {
-            for (String line : text) {
-                bufferWriter.write(line);
-                bufferWriter.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            bufferWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        streamHelper.writeToFile(text, outPutPath);
     }
 
     public static void main(String[] args) {

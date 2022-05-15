@@ -19,11 +19,9 @@ import java.util.TreeSet;
 
 public class ContextsUtilsImpl implements ContextsUtils {
 
-    LoggerImpl logger = new LoggerImpl();
-
-    LineUtils lineUtils = new LineUtilsImpl();
-
     private final StreamHelper streamHelper = new StreamHelperImpl();
+    LoggerImpl logger = new LoggerImpl();
+    LineUtils lineUtils = new LineUtilsImpl();
 
     /**
      * 把文件读取到字符串数组
@@ -147,6 +145,19 @@ public class ContextsUtilsImpl implements ContextsUtils {
         resultSet.toArray(result);
 
         return result;
+    }
+
+    @Override
+    public void autoFormatAllContext(String dir) {
+        String[] contextsFileList = getContextsFileList(dir);
+        FilePathUtils filePathUtils = new FilePathUtilsImpl();
+        StreamHelper streamHelper = new StreamHelperImpl();
+
+        for (String file : contextsFileList) {
+            String[] content = fileToString(filePathUtils.catPath(dir, file));
+            content = formatAllLine(content);
+            streamHelper.writeToFile(content,filePathUtils.catPath(dir, file));
+        }
     }
 
     /**

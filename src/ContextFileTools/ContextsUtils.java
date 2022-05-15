@@ -31,4 +31,9 @@ public interface ContextsUtils {
      */
     String[] getAllLabels(String dir);
 
+    /**
+     * 格式化dir下所有context文件
+     */
+    void autoFormatAllContext(String dir);
+
 }

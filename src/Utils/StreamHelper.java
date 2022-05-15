@@ -17,4 +17,11 @@ public interface StreamHelper {
     void close(BufferedReader bufferedReader);
 
     void close(BufferedWriter bufferedWriter);
+
+    /**
+     * 将content写到文件file
+     * @param content 内容
+     * @param file 文件完整路径
+     */
+    void writeToFile(String[] content,String file);
 }

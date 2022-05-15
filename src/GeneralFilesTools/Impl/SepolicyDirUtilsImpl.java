@@ -7,7 +7,6 @@ import Utils.Impl.LoggerImpl;
 import Utils.Impl.StreamHelperImpl;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -170,19 +169,12 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
         // 写入新文件
         for (String lable : labelMap.keySet()) {
             String path = new FilePathUtilsImpl().catPath(new File(outPutDir).getPath(), lable) + ".te";
-            BufferedWriter bufferWriter = streamHelper.getBufferWriter(path, false);
 
-            TreeSet<String> data = labelMap.get(lable);
-            try {
-                for (String next : data) {
-                    bufferWriter.write(next);
-                    bufferWriter.newLine();
-                }
-            } catch (IOException e) {
-                logger.println("写入文件失败" + path);
-            }
+            TreeSet<String> treeSet = labelMap.get(lable);
+            String[] content = new String[treeSet.size()];
+            treeSet.toArray(content);
 
-            streamHelper.close(bufferWriter);
+            streamHelper.writeToFile(content, path);
 
             // 删除空文件
             File newFile = new File(path);
