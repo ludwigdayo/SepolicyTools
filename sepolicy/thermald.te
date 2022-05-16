@@ -1,5 +1,5 @@
-type thermald_exec, exec_type, file_type;
 type thermald, domain;
+type thermald_exec, exec_type, file_type;
 init_daemon_domain(thermald)
 binder_use(thermald)
 allow thermald system_server:binder call;

@@ -1,5 +1,5 @@
-type BGW_exec, exec_type, file_type;
 type BGW, domain;
+type BGW_exec, exec_type, file_type;
 init_daemon_domain(BGW)
 allow BGW stpwmt_device:chr_file { read write open };
 allow BGW self:netlink_socket { read bind create write };

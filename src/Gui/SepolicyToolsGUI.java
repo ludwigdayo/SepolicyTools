@@ -8,6 +8,7 @@ import GeneralFilesTools.SepolicyDirUtils;
 import Utils.Impl.AdbUtilsImpl;
 import Utils.Impl.CreateRuleFromLogImpl;
 import Utils.Impl.FilePathUtilsImpl;
+import Utils.Impl.StreamHelperImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -219,7 +220,7 @@ public class SepolicyToolsGUI extends JFrame {
                 }
             });
 
-            logToSePolicyButton = new JButton("抓取并生成SePolicy");
+            logToSePolicyButton = new JButton("抓取log生成sePolicy");
             logToSePolicyButton.setFont(buttonFont);
             logToSePolicyButton.setBackground(themeColor);
             logToSePolicyButton.addActionListener(new ActionListener() {
@@ -367,6 +368,16 @@ public class SepolicyToolsGUI extends JFrame {
                             log(line);
                         }
                         log("=========================================================");
+
+                        if (allowPolicy.length > 0) {
+                            File file = new File("result.txt");
+                            if (!file.exists()) {
+                                new StreamHelperImpl().writeToFile(allowPolicy, file.getPath());
+                                log("结果已另存为 " + file.getAbsolutePath());
+                            } else {
+                                log("发现已存在文件 " + file.getAbsolutePath() + " 故未另存结果");
+                            }
+                        }
                     }
 
                     log("完成");

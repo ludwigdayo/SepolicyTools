@@ -1,5 +1,5 @@
-type ctl_ipod_prop, property_type;
 type ipod_prop, property_type;
+type ctl_ipod_prop, property_type;
 allow untrusted_app ipod_prop:file { open read getattr };
 allow system_server ctl_ipod_prop:property_service set;
 allow ipod ipod_prop:property_service set;

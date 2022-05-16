@@ -1,4 +1,4 @@
-type matv_exec, exec_type, file_type;
 type matv, domain;
+type matv_exec, exec_type, file_type;
 init_daemon_domain(matv)
 binder_use(matv)

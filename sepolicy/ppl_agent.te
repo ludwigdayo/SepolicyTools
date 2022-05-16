@@ -1,5 +1,5 @@
-type ppl_agent_exec, exec_type, file_type;
 type ppl_agent, domain;
+type ppl_agent_exec, exec_type, file_type;
 init_daemon_domain(ppl_agent)
 binder_use(ppl_agent)
 binder_service(ppl_agent)

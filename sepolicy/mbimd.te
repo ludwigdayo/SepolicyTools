@@ -1,5 +1,5 @@
-type mbimd, domain;
 type mbimd_exec, exec_type, file_type;
+type mbimd, domain;
 init_daemon_domain(mbimd)
 allow mbimd system_prop:property_service set;
 allow mbimd sysfs_wake_lock:file { write open };

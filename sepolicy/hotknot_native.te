@@ -1,5 +1,5 @@
-type hotknot_native_exec, exec_type, file_type;
 type hotknot_native, domain;
+type hotknot_native_exec, exec_type, file_type;
 init_daemon_domain(hotknot_native)
 binder_use(hotknot_native)
 binder_service(hotknot_native)

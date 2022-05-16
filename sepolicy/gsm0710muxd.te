@@ -1,5 +1,5 @@
-type gsm0710muxd_prop, property_type;
 type ctl_gsm0710muxd_prop, property_type;
+type gsm0710muxd_prop, property_type;
 allow untrusted_app gsm0710muxd_prop:file { open read getattr };
 allow mtkrild gsm0710muxd_prop:file { read open getattr };
 allow gsm0710muxdmd2 gsm0710muxd_prop:property_service set;

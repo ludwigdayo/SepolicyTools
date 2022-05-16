@@ -1,5 +1,5 @@
-type ipo_swap_exec, exec_type, file_type;
 type ipo_swap, domain;
+type ipo_swap_exec, exec_type, file_type;
 init_daemon_domain(ipo_swap)
 allow ipo_swap system_file:file execute_no_trans;
 allow ipo_swap shell_exec:file { read execute open execute_no_trans };

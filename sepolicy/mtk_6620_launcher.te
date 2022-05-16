@@ -1,5 +1,5 @@
-type mtk_6620_launcher_exec, exec_type, file_type;
 type mtk_6620_launcher, domain;
+type mtk_6620_launcher_exec, exec_type, file_type;
 init_daemon_domain(mtk_6620_launcher)
 allow mtk_6620_launcher wmt_prop:property_service set;
 allow mtk_6620_launcher wmt_prop:file r_file_perms;

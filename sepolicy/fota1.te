@@ -1,5 +1,5 @@
-type fota1, domain;
 type fota1_exec, exec_type, file_type;
+type fota1, domain;
 init_daemon_domain(fota1)
 allow fota1 recovery_device:chr_file { read write open };
 allow fota1 misc_device:chr_file { write open };

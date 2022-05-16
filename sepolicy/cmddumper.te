@@ -1,5 +1,5 @@
-type cmddumper, domain;
 type cmddumper_exec, exec_type, file_type;
+type cmddumper, domain;
 init_daemon_domain(cmddumper)
 allow cmddumper ttySDIO_device:chr_file { read write ioctl open };
 allow cmddumper system_file:file execute_no_trans;

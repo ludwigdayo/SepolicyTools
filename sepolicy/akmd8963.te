@@ -1,5 +1,5 @@
-type akmd8963_exec, exec_type, file_type;
 type akmd8963, domain;
+type akmd8963_exec, exec_type, file_type;
 init_daemon_domain(akmd8963)
 file_type_auto_trans(akmd8963, system_data_file, msensor_data_file)
 allow akmd8963 system_data_file:dir { create setattr };

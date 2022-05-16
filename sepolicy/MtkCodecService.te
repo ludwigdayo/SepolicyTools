@@ -1,5 +1,5 @@
-type MtkCodecService_exec, exec_type, file_type;
 type MtkCodecService, domain;
+type MtkCodecService_exec, exec_type, file_type;
 init_daemon_domain(MtkCodecService)
 binder_use(MtkCodecService)
 allow MtkCodecService self:capability { setuid sys_nice };

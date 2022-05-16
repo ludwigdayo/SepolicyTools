@@ -1,5 +1,5 @@
-type eemcs_fsd_exec, exec_type, file_type;
 type eemcs_fsd, domain;
+type eemcs_fsd_exec, exec_type, file_type;
 wakelock_use(eemcs_fsd)
 init_daemon_domain(eemcs_fsd)
 allow eemcs_fsd protect_s_data_file:file create_file_perms;

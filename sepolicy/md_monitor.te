@@ -1,5 +1,5 @@
-type md_monitor_exec, exec_type, file_type;
 type md_monitor, domain;
+type md_monitor_exec, exec_type, file_type;
 typeattribute md_monitor mlstrustedsubject;
 init_daemon_domain(md_monitor)
 file_type_auto_trans(md_monitor, system_data_file, md_monitor_data_file)

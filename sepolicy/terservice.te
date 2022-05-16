@@ -1,5 +1,5 @@
-type terservice_service, service_manager_type;
 type terservice_prop, property_type;
+type terservice_service, service_manager_type;
 allow untrusted_app terservice_prop:file { read open getattr };
 allow terservice terservice_service:service_manager add;
 allow terservice terservice_prop:property_service set;

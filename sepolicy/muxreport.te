@@ -1,5 +1,5 @@
-type muxreport_exec, exec_type, file_type;
 type muxreport, domain;
+type muxreport_exec, exec_type, file_type;
 init_daemon_domain(muxreport)
 allow muxreport sysfs:file { read open };
 allow muxreport self:capability dac_override;

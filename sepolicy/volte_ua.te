@@ -1,5 +1,5 @@
-type volte_ua, domain;
 type volte_ua_exec, exec_type, file_type;
+type volte_ua, domain;
 unix_socket_connect(volte_ua, volte_stack, volte_stack)
 init_daemon_domain(volte_ua)
 allow volte_ua wfca:unix_stream_socket connectto;

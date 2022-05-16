@@ -1,5 +1,5 @@
-type osi_exec, exec_type, file_type;
 type osi, domain;
+type osi_exec, exec_type, file_type;
 net_domain(osi)
 init_daemon_domain(osi)
 allow osi system_file:file execute_no_trans;

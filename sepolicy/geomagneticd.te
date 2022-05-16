@@ -1,5 +1,5 @@
-type geomagneticd_exec, exec_type, file_type;
 type geomagneticd, domain;
+type geomagneticd_exec, exec_type, file_type;
 init_daemon_domain(geomagneticd)
 file_type_auto_trans(geomagneticd, system_data_file, msensor_data_file)
 allow geomagneticd system_data_file:dir { write remove_name add_name };

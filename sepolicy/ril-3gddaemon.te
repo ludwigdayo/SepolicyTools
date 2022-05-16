@@ -1,5 +1,5 @@
-type ril-3gddaemon, domain;
 type ril-3gddaemon_exec, exec_type, file_type;
+type ril-3gddaemon, domain;
 wakelock_use(ril-3gddaemon)
 unix_socket_connect(ril-3gddaemon, property, init)
 net_domain(ril-3gddaemon)

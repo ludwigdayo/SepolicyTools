@@ -1,5 +1,5 @@
-type disableswap_exec, exec_type, file_type;
 type disableswap, domain;
+type disableswap_exec, exec_type, file_type;
 init_daemon_domain(disableswap)
 allow disableswap system_file:file execute_no_trans;
 allow disableswap system_data_file:dir { write };

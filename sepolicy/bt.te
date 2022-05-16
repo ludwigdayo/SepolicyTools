@@ -1,5 +1,5 @@
-type persist_bt_prop, property_type;
 type bt_prop, property_type;
+type persist_bt_prop, property_type;
 allow untrusted_app persist_bt_prop:file { open read getattr };
 allow untrusted_app bt_prop:file { open read getattr };
 allow bluetooth persist_bt_prop:file { read open getattr };

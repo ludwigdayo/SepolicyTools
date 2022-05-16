@@ -1,5 +1,5 @@
-type meta_tst_exec, exec_type, file_type;
 type meta_tst, domain;
+type meta_tst_exec, exec_type, file_type;
 init_daemon_domain(meta_tst)
 allow meta_tst wmtWifi_device:chr_file { write open };
 allow meta_tst vold_socket:sock_file write;

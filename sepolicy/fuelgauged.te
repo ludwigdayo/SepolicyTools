@@ -1,5 +1,5 @@
-type fuelgauged, domain;
 type fuelgauged_exec, exec_type, file_type;
+type fuelgauged, domain;
 init_daemon_domain(fuelgauged)
 allow fuelgauged sysfs:file { read open };
 allow fuelgauged rootfs:lnk_file { getattr };

@@ -1,5 +1,5 @@
-type bmm056d_exec, exec_type, file_type;
 type bmm056d, domain;
+type bmm056d_exec, exec_type, file_type;
 init_daemon_domain(bmm056d)
 file_type_auto_trans(bmm056d, system_data_file, msensor_data_file)
 allow bmm056d system_sensor_data_file:file { open read create write };

@@ -1,5 +1,5 @@
-type volte_imsm_md, domain;
 type volte_imsm_md_exec, exec_type, file_type;
+type volte_imsm_md, domain;
 unix_socket_send(volte_imsm_md, wpa, wpa)
 init_daemon_domain(volte_imsm_md)
 allow wpa volte_imsm_md:unix_stream_socket connectto;

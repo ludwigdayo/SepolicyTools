@@ -1,7 +1,7 @@
-type volte_imcb, domain;
-type volte_imcb_exec, exec_type, file_type;
-type volte_imsa1_socket, file_type;
 type volte_imsvt1_socket, file_type;
+type volte_imsa1_socket, file_type;
+type volte_imcb_exec, exec_type, file_type;
+type volte_imcb, domain;
 unix_socket_connect(volte_imcb, volte_ua, volte_ua)
 init_daemon_domain(volte_imcb)
 allow volte_imcb volte_ua:unix_stream_socket connectto;

@@ -1,5 +1,5 @@
-type atcid_exec, exec_type, file_type;
 type atcid, domain;
+type atcid_exec, exec_type, file_type;
 init_daemon_domain(atcid)
 allow atcid wmtWifi_device:chr_file { write open };
 allow atcid viarild:unix_stream_socket connectto;

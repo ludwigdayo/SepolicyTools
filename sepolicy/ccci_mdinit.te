@@ -1,5 +1,5 @@
-type ccci_mdinit_exec, exec_type, file_type;
 type ccci_mdinit, domain;
+type ccci_mdinit_exec, exec_type, file_type;
 wakelock_use(ccci_mdinit)
 unix_socket_connect(ccci_mdinit, property, init)
 init_daemon_domain(ccci_mdinit)

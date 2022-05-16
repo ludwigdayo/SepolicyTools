@@ -1,5 +1,5 @@
-type mtkrildmd2_exec, exec_type, file_type;
 type mtkrildmd2, domain;
+type mtkrildmd2_exec, exec_type, file_type;
 wakelock_use(mtkrildmd2)
 unix_socket_connect(mtkrildmd2, property, init)
 net_domain(mtkrildmd2)

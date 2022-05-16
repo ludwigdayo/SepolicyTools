@@ -1,5 +1,5 @@
-type wfca, domain;
 type wfca_exec, exec_type, file_type;
+type wfca, domain;
 init_daemon_domain(wfca)
 allow wfca volte_ua:udp_socket { read write setopt getattr getopt shutdown };
 allow wfca volte_ua:fd use;

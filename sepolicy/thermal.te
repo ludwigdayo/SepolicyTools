@@ -1,5 +1,5 @@
-type thermal_exec, exec_type, file_type;
 type thermal, domain;
+type thermal_exec, exec_type, file_type;
 init_daemon_domain(thermal)
 allow thermal viarild:unix_stream_socket connectto;
 allow thermal statusd:unix_stream_socket connectto;

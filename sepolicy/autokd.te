@@ -1,5 +1,5 @@
-type autokd, domain;
 type autokd_exec, exec_type, file_type;
+type autokd, domain;
 init_daemon_domain(autokd)
 file_type_auto_trans(autokd, system_data_file, autokd_data_file)
 allow init self:tcp_socket create;

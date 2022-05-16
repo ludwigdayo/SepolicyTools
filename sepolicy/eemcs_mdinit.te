@@ -1,5 +1,5 @@
-type eemcs_mdinit_exec, exec_type, file_type;
 type eemcs_mdinit, domain;
+type eemcs_mdinit_exec, exec_type, file_type;
 unix_socket_connect(eemcs_mdinit, property, init)
 init_daemon_domain(eemcs_mdinit)
 allow eemcs_mdinit { ctl_rildaemon_prop ctl_ril-daemon-s_prop ctl_ril-daemon-d_prop ctl_ril-daemon-mtk_prop }:property_service set;

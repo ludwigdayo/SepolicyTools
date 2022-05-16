@@ -1,5 +1,5 @@
-type istd8303_exec, exec_type, file_type;
 type istd8303, domain;
+type istd8303_exec, exec_type, file_type;
 init_daemon_domain(istd8303)
 allow istd8303 system_data_file:dir { write add_name create setattr };
 allow istd8303 msensor_device:chr_file { open ioctl read write };

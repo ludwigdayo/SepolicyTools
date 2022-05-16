@@ -1,5 +1,5 @@
-type em_svr_exec, exec_type, file_type;
 type em_svr, domain;
+type em_svr_exec, exec_type, file_type;
 init_daemon_domain(em_svr)
 binder_use(em_svr)
 binder_call(em_svr, surfaceflinger)

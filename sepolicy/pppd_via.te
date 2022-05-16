@@ -1,5 +1,5 @@
-type pppd_via_exec, exec_type, file_type;
 type pppd_via, domain;
+type pppd_via_exec, exec_type, file_type;
 init_daemon_domain(pppd_via)
 allow pppd_via ttySDIO_device:chr_file { read write open setattr getattr ioctl };
 allow pppd_via system_file:file execute_no_trans;

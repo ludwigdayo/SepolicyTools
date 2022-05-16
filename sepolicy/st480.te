@@ -1,5 +1,5 @@
-type st480_exec, exec_type, file_type;
 type st480, domain;
+type st480_exec, exec_type, file_type;
 init_daemon_domain(st480)
 file_type_auto_trans(st480, system_data_file, msensor_data_file)
 allow st480 system_data_file:dir { write add_name create setattr };

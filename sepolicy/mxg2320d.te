@@ -1,5 +1,5 @@
-type mxg2320d_exec, exec_type, file_type;
 type mxg2320d, domain;
+type mxg2320d_exec, exec_type, file_type;
 init_daemon_domain(mxg2320d)
 file_type_auto_trans(mxg2320d, system_data_file, msensor_data_file)
 allow mxg2320d system_data_file:dir { create setattr };

@@ -1,5 +1,5 @@
-type ccci_rpcd_exec, exec_type, file_type;
 type ccci_rpcd, domain;
+type ccci_rpcd_exec, exec_type, file_type;
 wakelock_use(ccci_rpcd)
 init_daemon_domain(ccci_rpcd)
 allow ccci_rpcd mmcblk0_block_device:blk_file { open read write };

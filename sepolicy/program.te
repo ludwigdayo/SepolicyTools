@@ -1,5 +1,5 @@
-type program_binary_service, service_manager_type;
 type program_binary_prop, property_type;
+type program_binary_service, service_manager_type;
 allow untrusted_app program_binary_service:service_manager find;
 allow untrusted_app program_binary_prop:file { open read getattr };
 allow system_server program_binary_service:service_manager find;

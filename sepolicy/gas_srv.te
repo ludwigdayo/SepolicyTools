@@ -1,5 +1,5 @@
-type gas_srv_exec, exec_type, file_type;
 type gas_srv, domain;
+type gas_srv_exec, exec_type, file_type;
 typeattribute           gas_srv                             mlstrustedsubject;
 init_daemon_domain(gas_srv)
 binder_use(gas_srv)

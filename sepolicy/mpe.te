@@ -1,5 +1,5 @@
-type MPED, domain;
 type MPED_exec, exec_type, file_type;
+type MPED, domain;
 type_transition MPED system_data_file:sock_file MPED_socket "mtk_mpe_server";
 net_domain(MPED)
 init_daemon_domain(MPED)

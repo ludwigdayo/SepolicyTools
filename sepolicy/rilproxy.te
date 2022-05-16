@@ -1,5 +1,5 @@
-type rilproxy_exec, exec_type, file_type;
 type rilproxy, domain;
+type rilproxy_exec, exec_type, file_type;
 wakelock_use(rilproxy)
 net_domain(rilproxy)
 init_daemon_domain(rilproxy)

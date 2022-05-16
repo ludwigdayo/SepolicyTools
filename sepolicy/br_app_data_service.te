@@ -1,5 +1,5 @@
-type br_app_data_service_exec, exec_type, file_type;
 type br_app_data_service, domain;
+type br_app_data_service_exec, exec_type, file_type;
 typeattribute br_app_data_service mlstrustedsubject;
 init_daemon_domain(br_app_data_service)
 allow br_app_data_service system_data_file:dir write;

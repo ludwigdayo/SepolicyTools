@@ -1,5 +1,5 @@
-type enableswap_exec, exec_type, file_type;
 type enableswap, domain;
+type enableswap_exec, exec_type, file_type;
 init_daemon_domain(enableswap)
 file_type_auto_trans(enableswap, system_data_file, enableswap_data_file)
 allow enableswap zram0_device:blk_file { read write getattr open ioctl };

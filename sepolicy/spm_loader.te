@@ -1,5 +1,5 @@
-type spm_loader_exec, exec_type, file_type;
 type spm_loader, domain;
+type spm_loader_exec, exec_type, file_type;
 init_daemon_domain(spm_loader)
 allow spm_loader spm_device:chr_file { read open };
 allow spm_loader self:capability { dac_read_search dac_override };

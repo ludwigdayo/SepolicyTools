@@ -1,5 +1,5 @@
-type wifi2agps_exec, exec_type, file_type;
 type wifi2agps, domain;
+type wifi2agps_exec, exec_type, file_type;
 init_daemon_domain(wifi2agps)
 allow wifi2agps self:udp_socket { create ioctl };
 allow wifi2agps self:netlink_socket { write getattr setopt read bind create };

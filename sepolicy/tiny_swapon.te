@@ -1,5 +1,5 @@
-type tiny_swapon_exec, exec_type, file_type;
 type tiny_swapon, domain;
+type tiny_swapon_exec, exec_type, file_type;
 init_daemon_domain(tiny_swapon)
 allow tiny_swapon zram0_device:blk_file { getattr read write open ioctl };
 allow tiny_swapon enableswap:fd use;

@@ -1,5 +1,5 @@
-type init_thh_service, domain;
 type init_thh_service_exec, exec_type, file_type;
+type init_thh_service, domain;
 init_daemon_domain(init_thh_service)
 allow teei_daemon self:capability sys_module;
 allow init_thh_service teei_data_file:file rw_file_perms;
