@@ -168,14 +168,18 @@ public class ContextsUtilsImpl implements ContextsUtils {
         contextsFileList = getContextsFileList(dir);
         for (String file : contextsFileList) {
             String[] labelFromContexts = getLabelFromContexts(filePathUtils.catPath(dir, file));
-            resultSet.addAll(Arrays.asList(labelFromContexts));
+            if (labelFromContexts != null) {
+                resultSet.addAll(Arrays.asList(labelFromContexts));
+            }
         }
 
         // 得到不规则文件中的标签
         otherFileList = getOtherFileList(dir);
         for (String file : otherFileList) {
             String[] labelFromOtherFile = getLabelFromContexts(filePathUtils.catPath(dir, file));
-            resultSet.addAll(Arrays.asList(labelFromOtherFile));
+            if (labelFromOtherFile != null) {
+                resultSet.addAll(Arrays.asList(labelFromOtherFile));
+            }
         }
 
         result = new String[resultSet.size()];
@@ -189,6 +193,8 @@ public class ContextsUtilsImpl implements ContextsUtils {
         String[] contextsFileList = getContextsFileList(dir);
         FilePathUtils filePathUtils = new FilePathUtilsImpl();
         StreamHelper streamHelper = new StreamHelperImpl();
+
+        logger.println("发现" + contextsFileList.length + "个contexts文件");
 
         for (String file : contextsFileList) {
             String[] content = fileToString(filePathUtils.catPath(dir, file));

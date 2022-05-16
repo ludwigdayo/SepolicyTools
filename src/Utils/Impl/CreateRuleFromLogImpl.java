@@ -60,7 +60,7 @@ public class CreateRuleFromLogImpl implements CreateRuleFromLog {
         String[] result = null;
 
         if (log == null) {
-            logger.println("log为空，转换失败");
+            logger.println("没有抓到log哟~");
             return null;
         }
 

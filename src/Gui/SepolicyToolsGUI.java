@@ -51,6 +51,12 @@ public class SepolicyToolsGUI extends JFrame {
     private JPanel eastPanel = null;
     private JButton autoRun = null;
 
+    // 标记当前是否有线程在跑
+    private volatile boolean hasRun = false;
+
+    // 重复操作输出
+    private final String[] info = {"上一个操作执行中...", "啊！~正在运行呢，不要点啦", "木大木大", "我就是不动，哎嘿~"};
+
     /**
      * 界面
      */
@@ -148,7 +154,7 @@ public class SepolicyToolsGUI extends JFrame {
             formatTEFilesButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    formatTEFilesFunction();
+                    new Thread(new formatTEFilesFunction()).start();
                 }
             });
 
@@ -158,7 +164,7 @@ public class SepolicyToolsGUI extends JFrame {
             reWriteTEFilesButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    reWriteTEFilesFunction();
+                    new Thread(new reWriteTEFilesFunction()).start();
                 }
             });
 
@@ -168,7 +174,7 @@ public class SepolicyToolsGUI extends JFrame {
             formatFileContextsButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    formatFileContextsFunction();
+                    new Thread(new formatFileContextsFunction()).start();
                 }
             });
 
@@ -178,7 +184,7 @@ public class SepolicyToolsGUI extends JFrame {
             formatAllContextsFileButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    formatAllContextsFileFunction();
+                    new Thread(new formatAllContextsFileFunction()).start();
                 }
             });
 
@@ -198,10 +204,37 @@ public class SepolicyToolsGUI extends JFrame {
             autoRun.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    formatFileContextsFunction();
-                    formatAllContextsFileFunction();
-                    reWriteTEFilesFunction();
-                    formatTEFilesFunction();
+                    // 用新的线程去执行操作，否则界面会卡住
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread thread = null;
+
+                                // 格式化file_contexts
+                                thread = new Thread(new formatFileContextsFunction());
+                                thread.start();
+                                thread.wait();  // 一步一步执行
+
+                                // 格式化全部contexts
+                                thread = new Thread(new formatAllContextsFileFunction());
+                                thread.start();
+                                thread.wait();
+
+                                // 重写te文件
+                                thread = new Thread(new reWriteTEFilesFunction());
+                                thread.start();
+                                thread.wait();
+
+                                // 格式化te文件
+                                thread = new Thread(new formatTEFilesFunction());
+                                thread.start();
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+
+                        }
+                    }).start();
                 }
             });
 
@@ -250,7 +283,7 @@ public class SepolicyToolsGUI extends JFrame {
             }
         });
 
-        setTitle("Sepolicy工具");
+        setTitle("SePolicy工具");
         setResizable(false);
         setFont(globalFont);
         setBounds(200, 100, 1000, 600);
@@ -287,81 +320,129 @@ public class SepolicyToolsGUI extends JFrame {
      * 抓取log生成sePolicy政策
      */
     private void logToSePolicyFunction() {
-        AdbUtilsImpl adbUtils = new AdbUtilsImpl();
-        CreateRuleFromLogImpl createRuleFromLog = new CreateRuleFromLogImpl();
+        if (!hasRun) {
+            hasRun = true;
+            AdbUtilsImpl adbUtils = new AdbUtilsImpl();
+            CreateRuleFromLogImpl createRuleFromLog = new CreateRuleFromLogImpl();
 
-        // 抓取log
-        String[] logcat = adbUtils.logcat();
+            // 抓取log
+            String[] logcat = adbUtils.logcat();
 
-        // 生成政策
-        String[] allowPolicy = createRuleFromLog.logToSePolicy(logcat);
+            // 生成政策
+            String[] allowPolicy = createRuleFromLog.logToSePolicy(logcat);
 
-        if (allowPolicy != null) {
-            log("======================生成信息============================");
-            for (String line : allowPolicy) {
-                log(line);
+            if (allowPolicy != null) {
+                log("========================生成物===========================");
+                for (String line : allowPolicy) {
+                    log(line);
+                }
+                log("=========================================================");
             }
-            log("=========================================================");
+
+            log("完成");
+            hasRun = false;
+        } else {
+            double random = Math.random() * info.length;
+            log(info[(int) random]);
         }
     }
 
     /**
      * 格式化file_contexts文件
      */
-    private void formatFileContextsFunction() {
-        String fileContextsPath = new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts");
-        File file = new File(fileContextsPath);
-        if (!file.exists()) {
-            SepolicyToolsGUI.log(fileContextsPath + "文件不存在");
-            SepolicyToolsGUI.log("未执行任何操作");
-        } else {
-            SepolicyToolsGUI.log("处理文件" + file.getPath());
-            fileContextsFormat.autoFormatFileContexts(file.getAbsolutePath(), file.getAbsolutePath());
-            SepolicyToolsGUI.log("新文件" + file.getPath());
-            SepolicyToolsGUI.log("完成");
+    private class formatFileContextsFunction implements Runnable {
+
+        @Override
+        public void run() {
+            if (!hasRun) {
+                hasRun = true;
+                String fileContextsPath = new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts");
+                File file = new File(fileContextsPath);
+                if (!file.exists()) {
+                    SepolicyToolsGUI.log(fileContextsPath + "文件不存在");
+                } else {
+                    fileContextsFormat.autoFormatFileContexts(file.getAbsolutePath(), file.getAbsolutePath());
+                    SepolicyToolsGUI.log("生成新文件" + file.getPath());
+                }
+                SepolicyToolsGUI.log("完成");
+
+                hasRun = false;
+            } else {
+                double random = Math.random() * info.length;
+                log(info[(int) random]);
+            }
         }
     }
 
     /**
      * 格式化所有Context文件
      */
-    private void formatAllContextsFileFunction() {
-        File dir = new File(sourceFile.getPath());
-        if (!dir.exists()) {
-            SepolicyToolsGUI.log(sourceFile.getPath() + "文件不存在");
-            SepolicyToolsGUI.log("未执行任何操作");
-        } else {
-            SepolicyToolsGUI.log("处理文件" + dir.getPath());
-            contextsUtils.autoFormatAllContext(dir.getAbsolutePath());
-            SepolicyToolsGUI.log("新文件" + dir.getPath());
-            SepolicyToolsGUI.log("完成");
+    private class formatAllContextsFileFunction implements Runnable {
+
+        @Override
+        public void run() {
+            if (!hasRun) {
+                hasRun = true;
+                File dir = new File(sourceFile.getPath());
+                if (!dir.exists()) {
+                    SepolicyToolsGUI.log(sourceFile.getPath() + "文件不存在");
+                    SepolicyToolsGUI.log("未执行任何操作");
+                } else {
+                    contextsUtils.autoFormatAllContext(dir.getAbsolutePath());
+                    SepolicyToolsGUI.log("完成");
+                }
+                hasRun = false;
+            } else {
+                double random = Math.random() * info.length;
+                log(info[(int) random]);
+            }
         }
     }
 
     /**
      * 重写te文件
      */
-    private void reWriteTEFilesFunction() {
+    private class reWriteTEFilesFunction implements Runnable {
 
-        if (!new File(sourceFile.getPath()).exists()) {
-            SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
-        } else {
-            SepolicyToolsGUI.log("重写开始");
-            sepolicyDirUtils.reWriteTeFiles(sourceFile.getPath(), sourceFile.getPath(), new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts"));
-            SepolicyToolsGUI.log("完成");
+        @Override
+        public void run() {
+            if (!hasRun) {
+                hasRun = true;
+                if (!new File(sourceFile.getPath()).exists()) {
+                    SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+                } else {
+                    sepolicyDirUtils.reWriteTeFiles(sourceFile.getPath(), sourceFile.getPath(), new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts"));
+                    SepolicyToolsGUI.log("完成");
+                }
+                hasRun = false;
+            } else {
+                double random = Math.random() * info.length;
+                log(info[(int) random]);
+            }
         }
     }
 
     /**
      * 格式化te文件
      */
-    private void formatTEFilesFunction() {
-        if (!new File(sourceFile.getPath()).exists()) {
-            SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
-        } else {
-            SepolicyToolsGUI.log("TE文件格式化开始");
-            sepolicyDirUtils.formatFiles(sourceFile.getAbsolutePath(), sourceFile.getAbsolutePath());
-            SepolicyToolsGUI.log("完成！！！");
+    private class formatTEFilesFunction implements Runnable {
+
+        @Override
+        public void run() {
+            if (!hasRun) {
+                hasRun = true;
+
+                if (!new File(sourceFile.getPath()).exists()) {
+                    SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+                } else {
+                    sepolicyDirUtils.formatFiles(sourceFile.getAbsolutePath(), sourceFile.getAbsolutePath());
+                    SepolicyToolsGUI.log("完成");
+                }
+                hasRun = false;
+            } else {
+                double random = Math.random() * info.length;
+                log(info[(int) random]);
+            }
         }
     }
 

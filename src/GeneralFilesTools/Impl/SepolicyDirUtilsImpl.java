@@ -6,9 +6,7 @@ import Utils.Impl.FilePathUtilsImpl;
 import Utils.Impl.LoggerImpl;
 import Utils.Impl.StreamHelperImpl;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements SepolicyDirUtils {
@@ -83,11 +81,12 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
         String[] tEFileList = getTEFileList(inPutDir);
 
         if (tEFileList == null) {
-            logger.println("打开" + inPutDir + "失败");
+            logger.println("获取" + inPutDir + "失败");
             return;
         }
 
         logger.println("在" + inPutDir + "共找到" + tEFileList.length + "个te文件");
+        if (tEFileList.length == 0) return;
 
         File outPutFd = new File(outPutDir);
 
@@ -112,6 +111,20 @@ public class SepolicyDirUtilsImpl extends SepolicyFileUtilsImpl implements Sepol
      */
     @Override
     public void reWriteTeFiles(String inPutDir, String outPutDir, String file_contexts) {
+
+        // 验证选择的是SePolicy文件夹
+        File[] inDir = new File(inPutDir).listFiles();
+
+        int teCount = 0;
+        for (; inDir != null && teCount < inDir.length; teCount++) {
+            if (inDir[teCount].getName().endsWith("te")) break;
+        }
+
+        if (inDir == null || teCount == inDir.length) {
+            logger.println("这 " + inPutDir + " TM是个什么玩意");
+            return;
+        }
+
         StreamHelperImpl streamHelper = new StreamHelperImpl();
 
         // 存储一个标签对应的所有语句
