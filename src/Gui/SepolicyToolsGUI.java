@@ -43,7 +43,7 @@ public class SepolicyToolsGUI extends JFrame {
     private JButton formatFileContextsButton = null;
     private JButton reWriteTEFilesButton = null;
     private JButton formatAllContextsFileButton = null;
-    private JPanel centerPanel = null;
+    private JScrollPane centerPanel = null;
     private JPanel southPanel = null;
     private JButton autoRun = null;
 
@@ -98,13 +98,14 @@ public class SepolicyToolsGUI extends JFrame {
         contentPane.add(selectSourcePanel, BorderLayout.NORTH);
 
         textArea = new JTextArea();
+        textArea.setLineWrap(true);
         textArea.setColumns(57);
         textArea.setRows(15);
         textArea.setFont(textFont);
         textArea.setEditable(false);
 
-        centerPanel = new JPanel();
-        centerPanel.add(textArea);
+        // 滚动面板
+        centerPanel = new JScrollPane(textArea,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         contentPane.add(centerPanel, BorderLayout.CENTER);
 
         formatTEFilesButton = new JButton("格式化TE文件");
@@ -219,26 +220,16 @@ public class SepolicyToolsGUI extends JFrame {
 
     /**
      * 界面日志输出
-     * 带有高级自动清除功能（才不是不会用滚动面板
      */
     public static void log(String log) {
-        while (log.length() > 75) {
-            logStringBuilder.append(log, 0, 75);
-            logStringBuilder.append("\r\n");
-            log = log.substring(75);
-        }
-
+        // 加到缓冲
         logStringBuilder.append(log);
         logStringBuilder.append("\r\n");
 
-        int line = 0;
-        while ((logStringBuilder.indexOf("\r\n", line)) != -1) line++;
-
+        // 更新到界面
         if (textArea != null) {
             textArea.setText(logStringBuilder.toString());
         }
-
-        if (line > 27 * 10) logStringBuilder.delete(0, logStringBuilder.length());
     }
 
     public static void main(String[] args) {
