@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 图形界面
@@ -58,7 +60,8 @@ public class SepolicyToolsGUI extends JFrame {
 
     // 标记当前是否有线程在跑
     private volatile boolean hasRun = false;
-    private volatile int waitNum = 0;
+
+    Lock lock = new ReentrantLock();
 
     // 重复操作输出
     private final String[] info = {"上一个操作执行中...", "啊！~不...不行，正在运行呢", "木大木大", "就是不动，哎嘿~"};
@@ -211,19 +214,22 @@ public class SepolicyToolsGUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // 用新的线程去执行操作，否则界面会卡住
-                    waitNum = 4;
+                    threadPoolExecutor.execute(new Runnable() {
+                        @Override
+                        public void run() {
 
-                    threadPoolExecutor.execute(new formatFileContextsFunction());
+                            // 格式化全部contexts
+                            threadPoolExecutor.execute(new formatFileContextsFunction());
+                            threadPoolExecutor.execute(new formatAllContextsFileFunction());
 
-                    // 格式化全部contexts
-                    threadPoolExecutor.execute(new formatAllContextsFileFunction());
+                            // 重写te文件
+                            threadPoolExecutor.execute(new reWriteTEFilesFunction());
 
+                            // 格式化te文件
+                            threadPoolExecutor.execute(new formatTEFilesFunction());
 
-                    // 重写te文件
-                    threadPoolExecutor.execute(new reWriteTEFilesFunction());
-
-                    // 格式化te文件
-                    threadPoolExecutor.execute(new formatTEFilesFunction());
+                        }
+                    });
                 }
             });
 
@@ -289,8 +295,12 @@ public class SepolicyToolsGUI extends JFrame {
      * 界面日志输出
      */
     public static void log(String log) {
-        // 加到缓冲
-        logStringBuilder.append("\r\n");
+
+        if (logStringBuilder.length() != 0) {
+            // 自动换行
+            logStringBuilder.append("\r\n");
+        }
+
         logStringBuilder.append(log);
 
         // 更新到界面
@@ -317,34 +327,35 @@ public class SepolicyToolsGUI extends JFrame {
 
         @Override
         public void run() {
-            if (waitNum-- > 0) {
-                while (hasRun) ;
-            }
+            lock.lock();
+            try {
+                if (!hasRun) {
+                    hasRun = true;
+                    AdbUtilsImpl adbUtils = new AdbUtilsImpl();
+                    CreateRuleFromLogImpl createRuleFromLog = new CreateRuleFromLogImpl();
 
-            if (!hasRun) {
-                hasRun = true;
-                AdbUtilsImpl adbUtils = new AdbUtilsImpl();
-                CreateRuleFromLogImpl createRuleFromLog = new CreateRuleFromLogImpl();
+                    // 抓取log
+                    String[] logcat = adbUtils.logcat();
 
-                // 抓取log
-                String[] logcat = adbUtils.logcat();
+                    // 生成政策
+                    String[] allowPolicy = createRuleFromLog.logToSePolicy(logcat);
 
-                // 生成政策
-                String[] allowPolicy = createRuleFromLog.logToSePolicy(logcat);
-
-                if (allowPolicy != null) {
-                    log("========================生成物===========================");
-                    for (String line : allowPolicy) {
-                        log(line);
+                    if (allowPolicy != null) {
+                        log("========================生成物===========================");
+                        for (String line : allowPolicy) {
+                            log(line);
+                        }
+                        log("=========================================================");
                     }
-                    log("=========================================================");
-                }
 
-                log("完成");
-                hasRun = false;
-            } else {
-                double random = Math.random() * info.length;
-                log(info[(int) random]);
+                    log("完成");
+                    hasRun = false;
+                } else {
+                    double random = Math.random() * info.length;
+                    log(info[(int) random]);
+                }
+            } finally {
+                lock.unlock();
             }
         }
     }
@@ -356,26 +367,27 @@ public class SepolicyToolsGUI extends JFrame {
 
         @Override
         public void run() {
-            if (waitNum-- > 0) {
-                while (hasRun) ;
-            }
+            lock.lock();
+            try {
+                if (!hasRun) {
+                    hasRun = true;
+                    String fileContextsPath = new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts");
+                    File file = new File(fileContextsPath);
+                    if (!file.exists()) {
+                        SepolicyToolsGUI.log(fileContextsPath + "文件不存在");
+                    } else {
+                        fileContextsFormat.autoFormatFileContexts(file.getAbsolutePath(), file.getAbsolutePath());
+                        SepolicyToolsGUI.log("生成新文件" + file.getPath());
+                    }
+                    SepolicyToolsGUI.log("完成");
 
-            if (!hasRun) {
-                hasRun = true;
-                String fileContextsPath = new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts");
-                File file = new File(fileContextsPath);
-                if (!file.exists()) {
-                    SepolicyToolsGUI.log(fileContextsPath + "文件不存在");
+                    hasRun = false;
                 } else {
-                    fileContextsFormat.autoFormatFileContexts(file.getAbsolutePath(), file.getAbsolutePath());
-                    SepolicyToolsGUI.log("生成新文件" + file.getPath());
+                    double random = Math.random() * info.length;
+                    log(info[(int) random]);
                 }
-                SepolicyToolsGUI.log("完成");
-
-                hasRun = false;
-            } else {
-                double random = Math.random() * info.length;
-                log(info[(int) random]);
+            } finally {
+                lock.unlock();
             }
         }
     }
@@ -387,24 +399,25 @@ public class SepolicyToolsGUI extends JFrame {
 
         @Override
         public void run() {
-            if (waitNum-- > 0) {
-                while (hasRun) ;
-            }
-
-            if (!hasRun) {
-                hasRun = true;
-                File dir = new File(sourceFile.getPath());
-                if (!dir.exists()) {
-                    SepolicyToolsGUI.log(sourceFile.getPath() + "文件不存在");
-                    SepolicyToolsGUI.log("未执行任何操作");
+            lock.lock();
+            try {
+                if (!hasRun) {
+                    hasRun = true;
+                    File dir = new File(sourceFile.getPath());
+                    if (!dir.exists()) {
+                        SepolicyToolsGUI.log(sourceFile.getPath() + "文件不存在");
+                        SepolicyToolsGUI.log("未执行任何操作");
+                    } else {
+                        contextsUtils.autoFormatAllContext(dir.getAbsolutePath());
+                        SepolicyToolsGUI.log("完成");
+                    }
+                    hasRun = false;
                 } else {
-                    contextsUtils.autoFormatAllContext(dir.getAbsolutePath());
-                    SepolicyToolsGUI.log("完成");
+                    double random = Math.random() * info.length;
+                    log(info[(int) random]);
                 }
-                hasRun = false;
-            } else {
-                double random = Math.random() * info.length;
-                log(info[(int) random]);
+            } finally {
+                lock.unlock();
             }
         }
     }
@@ -416,22 +429,23 @@ public class SepolicyToolsGUI extends JFrame {
 
         @Override
         public void run() {
-            if (waitNum-- >0) {
-                while (hasRun) ;
-            }
-
-            if (!hasRun) {
-                hasRun = true;
-                if (!new File(sourceFile.getPath()).exists()) {
-                    SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+            lock.lock();
+            try {
+                if (!hasRun) {
+                    hasRun = true;
+                    if (!new File(sourceFile.getPath()).exists()) {
+                        SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+                    } else {
+                        sepolicyDirUtils.reWriteTeFiles(sourceFile.getPath(), sourceFile.getPath(), new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts"));
+                        SepolicyToolsGUI.log("完成");
+                    }
+                    hasRun = false;
                 } else {
-                    sepolicyDirUtils.reWriteTeFiles(sourceFile.getPath(), sourceFile.getPath(), new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts"));
-                    SepolicyToolsGUI.log("完成");
+                    double random = Math.random() * info.length;
+                    log(info[(int) random]);
                 }
-                hasRun = false;
-            } else {
-                double random = Math.random() * info.length;
-                log(info[(int) random]);
+            } finally {
+                lock.unlock();
             }
         }
     }
@@ -443,23 +457,24 @@ public class SepolicyToolsGUI extends JFrame {
 
         @Override
         public void run() {
-            if (waitNum-- > 0) {
-                while (hasRun) ;
-            }
+            lock.lock();
+            try {
+                if (!hasRun) {
+                    hasRun = true;
 
-            if (!hasRun) {
-                hasRun = true;
-
-                if (!new File(sourceFile.getPath()).exists()) {
-                    SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+                    if (!new File(sourceFile.getPath()).exists()) {
+                        SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+                    } else {
+                        sepolicyDirUtils.formatFiles(sourceFile.getAbsolutePath(), sourceFile.getAbsolutePath());
+                        SepolicyToolsGUI.log("完成");
+                    }
+                    hasRun = false;
                 } else {
-                    sepolicyDirUtils.formatFiles(sourceFile.getAbsolutePath(), sourceFile.getAbsolutePath());
-                    SepolicyToolsGUI.log("完成");
+                    double random = Math.random() * info.length;
+                    log(info[(int) random]);
                 }
-                hasRun = false;
-            } else {
-                double random = Math.random() * info.length;
-                log(info[(int) random]);
+            } finally {
+                lock.unlock();
             }
         }
 
