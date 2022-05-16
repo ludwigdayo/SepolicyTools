@@ -19,4 +19,28 @@ public interface AdbUtils {
      * @return 返回是否存在
      */
     boolean isExisted(String path);
+
+    /**
+     * 执行adb命令
+     *
+     * @param command 命令
+     * @return 结果
+     */
+    String[] execute(String command);
+
+    /**
+     * 抓取一千条log
+     *
+     * @return log
+     */
+    String[] logcat();
+
+    /**
+     * 执行adb命令
+     *
+     * @param command 命令
+     * @param line    限制抓取的行数
+     * @return 结果
+     */
+    String[] execute(String command, long line);
 }

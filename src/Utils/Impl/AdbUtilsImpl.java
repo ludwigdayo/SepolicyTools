@@ -20,7 +20,7 @@ public class AdbUtilsImpl implements AdbUtils {
     /**
      * 根据系统类型 确定adb工具的路径~
      */
-    private static String getADB() {
+    private static String getADBTool() {
         int systemType = new AboutSystemImpl().getSystemType();
 
         String adbPath = null;
@@ -57,7 +57,7 @@ public class AdbUtilsImpl implements AdbUtils {
     int getConnectedDeviceNum() {
         int count = 0;
 
-        String adb = getADB();
+        String adb = getADBTool();
         if (adb == null) {
             return 0;
         }
@@ -65,7 +65,7 @@ public class AdbUtilsImpl implements AdbUtils {
         Process exec = null;
         BufferedReader bufferedReader = null;
         try {
-            exec = Runtime.getRuntime().exec(getADB() + " devices");
+            exec = Runtime.getRuntime().exec(getADBTool() + " devices");
             bufferedReader = new BufferedReader(new InputStreamReader(exec.getInputStream()));
 
             // 丢掉错误输出
@@ -97,39 +97,7 @@ public class AdbUtilsImpl implements AdbUtils {
      * 执行shell命令
      */
     public String[] shell(String command) {
-        Process exec = null;
-        BufferedReader bufferedReader = null;
-        try {
-            exec = Runtime.getRuntime().exec(getADB() + " shell " + command);
-            bufferedReader = new BufferedReader(new InputStreamReader(exec.getInputStream()));
-
-            ArrayList<String> arrayList = new ArrayList<>();
-            String buffer = null;
-            while ((buffer = bufferedReader.readLine()) != null) {
-                //logger.log(Level.INFO, buffer);
-                arrayList.add(buffer);
-
-                // 丢掉错误输出，不然上面卡死！
-                while (exec.getErrorStream().available() > 0) exec.getErrorStream().read();
-            }
-
-            String[] strings = new String[arrayList.size()];
-            arrayList.toArray(strings);
-
-            return strings;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return null;
+        return execute("shell " + command);
     }
 
     /**
@@ -139,20 +107,13 @@ public class AdbUtilsImpl implements AdbUtils {
      */
     public String getAllFileList() {
         if (allFileList == null) {
-            // 检查设备数量
-            int num = getConnectedDeviceNum();
-            if (num == 0) {
-                logger.println("当前设备数量 " + num + " 请连接设备");
-                return null;
-            }
-
-            if (num > 1) {
-                logger.println("当前设备数量 " + num + " 请减少设备");
-                return null;
-            }
-
             logger.println("正在获取文件列表(至少需要几分钟时间)...");
+
             String[] shell = shell("ls -R");
+            if (shell == null) {
+                return null;
+            }
+
             logger.println("正在处理结果");
             StringBuilder result = new StringBuilder();
 
@@ -193,6 +154,85 @@ public class AdbUtilsImpl implements AdbUtils {
         Pattern pattern = Pattern.compile(path);
         Matcher matcher = pattern.matcher(allFileList);
         return matcher.find();
+    }
+
+    /**
+     * 执行adb命令
+     *
+     * @param command 命令
+     * @return 结果
+     */
+    @Override
+    public String[] execute(String command) {
+        return execute(command, Long.MAX_VALUE);
+    }
+
+    /**
+     * 抓取一千条log
+     *
+     * @return log
+     */
+    @Override
+    public String[] logcat() {
+        logger.println("正在抓取log");
+        return execute("logcat", 1000);
+    }
+
+    /**
+     * 执行adb命令
+     *
+     * @param command 命令
+     * @param line    限制抓取的行数
+     * @return 结果
+     */
+    @Override
+    public String[] execute(String command, long line) {
+
+        // 检查设备数量
+        int num = getConnectedDeviceNum();
+        if (num == 0) {
+            logger.println("当前设备数量 " + num + " 请连接设备");
+            return null;
+        }
+
+        if (num > 1) {
+            logger.println("当前设备数量 " + num + " 请减少设备");
+            return null;
+        }
+
+        Process exec = null;
+        BufferedReader bufferedReader = null;
+        try {
+            exec = Runtime.getRuntime().exec(getADBTool() + " " + command);
+            bufferedReader = new BufferedReader(new InputStreamReader(exec.getInputStream()));
+
+            ArrayList<String> arrayList = new ArrayList<>();
+            String buffer = null;
+            while ((buffer = bufferedReader.readLine()) != null && line-- > 0) {
+                //logger.log(Level.INFO, buffer);
+                arrayList.add(buffer);
+
+                // 丢掉错误输出，不然上面卡死！
+                while (exec.getErrorStream().available() > 0) exec.getErrorStream().read();
+            }
+
+            String[] strings = new String[arrayList.size()];
+            arrayList.toArray(strings);
+
+            return strings;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return null;
     }
 
 }
