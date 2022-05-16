@@ -21,6 +21,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 图形界面
@@ -51,11 +54,14 @@ public class SepolicyToolsGUI extends JFrame {
     private JPanel eastPanel = null;
     private JButton autoRun = null;
 
+    private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(5));
+
     // 标记当前是否有线程在跑
     private volatile boolean hasRun = false;
+    private volatile int waitNum = 0;
 
     // 重复操作输出
-    private final String[] info = {"上一个操作执行中...", "啊！~正在运行呢，不要点啦", "木大木大", "我就是不动，哎嘿~"};
+    private final String[] info = {"上一个操作执行中...", "啊！~不...不行，正在运行呢", "木大木大", "就是不动，哎嘿~"};
 
     /**
      * 界面
@@ -154,7 +160,7 @@ public class SepolicyToolsGUI extends JFrame {
             formatTEFilesButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    new Thread(new formatTEFilesFunction()).start();
+                    threadPoolExecutor.execute(new formatTEFilesFunction());
                 }
             });
 
@@ -164,7 +170,7 @@ public class SepolicyToolsGUI extends JFrame {
             reWriteTEFilesButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    new Thread(new reWriteTEFilesFunction()).start();
+                    threadPoolExecutor.execute(new reWriteTEFilesFunction());
                 }
             });
 
@@ -174,7 +180,7 @@ public class SepolicyToolsGUI extends JFrame {
             formatFileContextsButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    new Thread(new formatFileContextsFunction()).start();
+                    threadPoolExecutor.execute(new formatFileContextsFunction());
                 }
             });
 
@@ -184,7 +190,7 @@ public class SepolicyToolsGUI extends JFrame {
             formatAllContextsFileButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    new Thread(new formatAllContextsFileFunction()).start();
+                    threadPoolExecutor.execute(new formatAllContextsFileFunction());
                 }
             });
 
@@ -194,7 +200,7 @@ public class SepolicyToolsGUI extends JFrame {
             logToSePolicyButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    logToSePolicyFunction();
+                    threadPoolExecutor.execute(new logToSePolicyFunction());
                 }
             });
 
@@ -205,36 +211,19 @@ public class SepolicyToolsGUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // 用新的线程去执行操作，否则界面会卡住
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread thread = null;
+                    waitNum = 4;
 
-                                // 格式化file_contexts
-                                thread = new Thread(new formatFileContextsFunction());
-                                thread.start();
-                                thread.wait();  // 一步一步执行
+                    threadPoolExecutor.execute(new formatFileContextsFunction());
 
-                                // 格式化全部contexts
-                                thread = new Thread(new formatAllContextsFileFunction());
-                                thread.start();
-                                thread.wait();
+                    // 格式化全部contexts
+                    threadPoolExecutor.execute(new formatAllContextsFileFunction());
 
-                                // 重写te文件
-                                thread = new Thread(new reWriteTEFilesFunction());
-                                thread.start();
-                                thread.wait();
 
-                                // 格式化te文件
-                                thread = new Thread(new formatTEFilesFunction());
-                                thread.start();
-                            } catch (InterruptedException ex) {
-                                ex.printStackTrace();
-                            }
+                    // 重写te文件
+                    threadPoolExecutor.execute(new reWriteTEFilesFunction());
 
-                        }
-                    }).start();
+                    // 格式化te文件
+                    threadPoolExecutor.execute(new formatTEFilesFunction());
                 }
             });
 
@@ -284,10 +273,15 @@ public class SepolicyToolsGUI extends JFrame {
         });
 
         setTitle("SePolicy工具");
+
         setResizable(false);
+
         setFont(globalFont);
+
         setBounds(200, 100, 1000, 600);
+
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
         setVisible(true);
     }
 
@@ -319,31 +313,39 @@ public class SepolicyToolsGUI extends JFrame {
     /**
      * 抓取log生成sePolicy政策
      */
-    private void logToSePolicyFunction() {
-        if (!hasRun) {
-            hasRun = true;
-            AdbUtilsImpl adbUtils = new AdbUtilsImpl();
-            CreateRuleFromLogImpl createRuleFromLog = new CreateRuleFromLogImpl();
+    private class logToSePolicyFunction implements Runnable {
 
-            // 抓取log
-            String[] logcat = adbUtils.logcat();
-
-            // 生成政策
-            String[] allowPolicy = createRuleFromLog.logToSePolicy(logcat);
-
-            if (allowPolicy != null) {
-                log("========================生成物===========================");
-                for (String line : allowPolicy) {
-                    log(line);
-                }
-                log("=========================================================");
+        @Override
+        public void run() {
+            if (waitNum-- > 0) {
+                while (hasRun) ;
             }
 
-            log("完成");
-            hasRun = false;
-        } else {
-            double random = Math.random() * info.length;
-            log(info[(int) random]);
+            if (!hasRun) {
+                hasRun = true;
+                AdbUtilsImpl adbUtils = new AdbUtilsImpl();
+                CreateRuleFromLogImpl createRuleFromLog = new CreateRuleFromLogImpl();
+
+                // 抓取log
+                String[] logcat = adbUtils.logcat();
+
+                // 生成政策
+                String[] allowPolicy = createRuleFromLog.logToSePolicy(logcat);
+
+                if (allowPolicy != null) {
+                    log("========================生成物===========================");
+                    for (String line : allowPolicy) {
+                        log(line);
+                    }
+                    log("=========================================================");
+                }
+
+                log("完成");
+                hasRun = false;
+            } else {
+                double random = Math.random() * info.length;
+                log(info[(int) random]);
+            }
         }
     }
 
@@ -354,6 +356,10 @@ public class SepolicyToolsGUI extends JFrame {
 
         @Override
         public void run() {
+            if (waitNum-- > 0) {
+                while (hasRun) ;
+            }
+
             if (!hasRun) {
                 hasRun = true;
                 String fileContextsPath = new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts");
@@ -381,6 +387,10 @@ public class SepolicyToolsGUI extends JFrame {
 
         @Override
         public void run() {
+            if (waitNum-- > 0) {
+                while (hasRun) ;
+            }
+
             if (!hasRun) {
                 hasRun = true;
                 File dir = new File(sourceFile.getPath());
@@ -406,6 +416,10 @@ public class SepolicyToolsGUI extends JFrame {
 
         @Override
         public void run() {
+            if (waitNum-- >0) {
+                while (hasRun) ;
+            }
+
             if (!hasRun) {
                 hasRun = true;
                 if (!new File(sourceFile.getPath()).exists()) {
@@ -429,6 +443,10 @@ public class SepolicyToolsGUI extends JFrame {
 
         @Override
         public void run() {
+            if (waitNum-- > 0) {
+                while (hasRun) ;
+            }
+
             if (!hasRun) {
                 hasRun = true;
 
@@ -444,6 +462,7 @@ public class SepolicyToolsGUI extends JFrame {
                 log(info[(int) random]);
             }
         }
+
     }
 
     /**
