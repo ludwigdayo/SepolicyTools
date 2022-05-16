@@ -5,6 +5,8 @@ import ContextFileTools.Impl.ContextsUtilsImpl;
 import ContextFileTools.Impl.FileContextsFormatImpl;
 import GeneralFilesTools.Impl.SepolicyDirUtilsImpl;
 import GeneralFilesTools.SepolicyDirUtils;
+import Utils.Impl.AdbUtilsImpl;
+import Utils.Impl.CreateRuleFromLogImpl;
 import Utils.Impl.FilePathUtilsImpl;
 
 import javax.swing.*;
@@ -38,13 +40,15 @@ public class SepolicyToolsGUI extends JFrame {
     private JLabel sourceDirLabel = null;
     private JTextField sourceDirString = null;
     private JButton selectDirButton = null;
+    private JButton clearLogButton = null;
     private JPanel selectSourcePanel = null;
     private JButton formatTEFilesButton = null;
     private JButton formatFileContextsButton = null;
     private JButton reWriteTEFilesButton = null;
+    private JButton logToSePolicyButton = null;
     private JButton formatAllContextsFileButton = null;
     private JScrollPane centerPanel = null;
-    private JPanel southPanel = null;
+    private JPanel eastPanel = null;
     private JButton autoRun = null;
 
     /**
@@ -52,133 +56,176 @@ public class SepolicyToolsGUI extends JFrame {
      */
     public SepolicyToolsGUI() {
         contentPane = new JPanel();
+        contentPane.setLayout(new BorderLayout());
 
-        sourceDirLabel = new JLabel("工作路径:");
-        sourceDirLabel.setFont(textFont);
+        /*
+            北边
+        */
+        {
+            sourceDirLabel = new JLabel("工作路径:   ");
+            sourceDirLabel.setFont(textFont);
 
-        sourceDirString = new JTextField(35);
-        sourceDirString.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                File path = new File(sourceDirString.getText());
+            sourceDirString = new JTextField(35);
+            sourceDirString.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    File path = new File(sourceDirString.getText());
 
-                if (path.exists()) {
-                    sourceFile = path;
-                    SepolicyToolsGUI.log("切换文件路径" + sourceFile.getAbsolutePath());
-                }
+                    if (path.exists()) {
+                        sourceFile = path;
+                        SepolicyToolsGUI.log("切换文件路径" + sourceFile.getAbsolutePath());
+                    }
 
-                updatedSourceDir();
-            }
-        });
-        sourceDirString.setFont(textFont);
-        sourceDirString.setText(sourceFile.getAbsolutePath());
-
-        selectDirButton = new JButton("选择工作目录");
-        selectDirButton.setBackground(themeColor);
-        selectDirButton.setFont(buttonFont);
-        selectDirButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                File file = null;
-                if ((file = selectDirDialog()) == null) {
-                    SepolicyToolsGUI.log("未选择文件");
-                } else {
-                    sourceFile = file;
-                    SepolicyToolsGUI.log("工作目录切换到" + file.getPath());
                     updatedSourceDir();
                 }
-            }
-        });
+            });
+            sourceDirString.setFont(textFont);
+            sourceDirString.setText(sourceFile.getAbsolutePath());
 
-        selectSourcePanel = new JPanel();
-        selectSourcePanel.add(sourceDirLabel, BorderLayout.WEST);
-        selectSourcePanel.add(sourceDirString, BorderLayout.CENTER);
-        selectSourcePanel.add(selectDirButton, BorderLayout.EAST);
+            selectDirButton = new JButton("选择工作目录");
+            selectDirButton.setBackground(themeColor);
+            selectDirButton.setFont(buttonFont);
+            selectDirButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    File file = null;
+                    if ((file = selectDirDialog()) == null) {
+                        SepolicyToolsGUI.log("未选择文件");
+                    } else {
+                        sourceFile = file;
+                        SepolicyToolsGUI.log("工作目录切换到" + file.getPath());
+                        updatedSourceDir();
+                    }
+                }
+            });
 
-        contentPane.add(selectSourcePanel, BorderLayout.NORTH);
+            clearLogButton = new JButton("清除日志");
+            clearLogButton.setBackground(themeColor);
+            clearLogButton.setFont(buttonFont);
+            clearLogButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    logStringBuilder.delete(0, logStringBuilder.length());
+                    log("");
+                }
+            });
 
-        textArea = new JTextArea();
-        textArea.setLineWrap(true);
-        textArea.setColumns(57);
-        textArea.setRows(15);
-        textArea.setFont(textFont);
-        textArea.setEditable(false);
+            selectSourcePanel = new JPanel();
+            selectSourcePanel.setLayout(new FlowLayout());
+            selectSourcePanel.add(sourceDirLabel);
+            selectSourcePanel.add(sourceDirString);
+            selectSourcePanel.add(selectDirButton);
+            selectSourcePanel.add(clearLogButton);
+            selectSourcePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        // 滚动面板
-        centerPanel = new JScrollPane(textArea,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        contentPane.add(centerPanel, BorderLayout.CENTER);
+            contentPane.add(selectSourcePanel, BorderLayout.NORTH);
+        }
 
-        formatTEFilesButton = new JButton("格式化TE文件");
-        formatTEFilesButton.setFont(buttonFont);
-        formatTEFilesButton.setBackground(themeColor);
-        formatTEFilesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                formatTEFilesFunction();
-            }
-        });
+        /*
+            中间
+         */
+        {
+            textArea = new JTextArea();
+            textArea.setLineWrap(true);
+            textArea.setColumns(57);
+            textArea.setRows(15);
+            textArea.setFont(textFont);
+            textArea.setEditable(false);
 
-        reWriteTEFilesButton = new JButton("清理并重命名TE文件");
-        reWriteTEFilesButton.setBackground(themeColor);
-        reWriteTEFilesButton.setFont(buttonFont);
-        reWriteTEFilesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                reWriteTEFilesFunction();
-            }
-        });
+            // 滚动面板
+            centerPanel = new JScrollPane(textArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            centerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 10));
+            contentPane.add(centerPanel, BorderLayout.CENTER);
+        }
 
-        formatFileContextsButton = new JButton("处理file_contexts");
-        formatFileContextsButton.setFont(buttonFont);
-        formatFileContextsButton.setBackground(themeColor);
-        formatFileContextsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                formatFileContextsFunction();
-            }
-        });
+        /*
+            东边
+         */
+        {
+            formatTEFilesButton = new JButton("格式化TE文件");
+            formatTEFilesButton.setFont(buttonFont);
+            formatTEFilesButton.setBackground(themeColor);
+            formatTEFilesButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    formatTEFilesFunction();
+                }
+            });
 
-        formatAllContextsFileButton = new JButton("格式化Context");
-        formatAllContextsFileButton.setFont(buttonFont);
-        formatAllContextsFileButton.setBackground(themeColor);
-        formatAllContextsFileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                formatAllContextsFileFunction();
-            }
-        });
+            reWriteTEFilesButton = new JButton("清理并重命名TE文件");
+            reWriteTEFilesButton.setBackground(themeColor);
+            reWriteTEFilesButton.setFont(buttonFont);
+            reWriteTEFilesButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    reWriteTEFilesFunction();
+                }
+            });
 
-        autoRun = new JButton("自动运行");
-        autoRun.setBackground(themeColor);
-        autoRun.setFont(buttonFont);
-        autoRun.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                formatFileContextsFunction();
-                formatAllContextsFileFunction();
-                reWriteTEFilesFunction();
-                formatTEFilesFunction();
-            }
-        });
+            formatFileContextsButton = new JButton("处理file_contexts");
+            formatFileContextsButton.setFont(buttonFont);
+            formatFileContextsButton.setBackground(themeColor);
+            formatFileContextsButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    formatFileContextsFunction();
+                }
+            });
 
-        southPanel = new JPanel();
+            formatAllContextsFileButton = new JButton("格式化Context");
+            formatAllContextsFileButton.setFont(buttonFont);
+            formatAllContextsFileButton.setBackground(themeColor);
+            formatAllContextsFileButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    formatAllContextsFileFunction();
+                }
+            });
 
-        GridLayout gridLayout = new GridLayout(1, 10);
-        gridLayout.setVgap(15);
-        gridLayout.setHgap(15);
-        southPanel.setLayout(gridLayout);
-        southPanel.add(formatTEFilesButton);
-        southPanel.add(formatFileContextsButton);
-        southPanel.add(reWriteTEFilesButton);
-        southPanel.add(formatAllContextsFileButton);
-        southPanel.add(autoRun);
-        contentPane.add(southPanel, BorderLayout.SOUTH);
+            logToSePolicyButton = new JButton("抓取并生成SePolicy");
+            logToSePolicyButton.setFont(buttonFont);
+            logToSePolicyButton.setBackground(themeColor);
+            logToSePolicyButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    logToSePolicyFunction();
+                }
+            });
+
+            autoRun = new JButton("自动运行");
+            autoRun.setBackground(themeColor);
+            autoRun.setFont(buttonFont);
+            autoRun.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    formatFileContextsFunction();
+                    formatAllContextsFileFunction();
+                    reWriteTEFilesFunction();
+                    formatTEFilesFunction();
+                }
+            });
+
+            eastPanel = new JPanel();
+
+            GridLayout gridLayout = new GridLayout(10, 1);
+            gridLayout.setVgap(15);
+            gridLayout.setHgap(15);
+            eastPanel.setLayout(gridLayout);
+            eastPanel.add(formatTEFilesButton);
+            eastPanel.add(formatFileContextsButton);
+            eastPanel.add(reWriteTEFilesButton);
+            eastPanel.add(formatAllContextsFileButton);
+            eastPanel.add(logToSePolicyButton);
+            eastPanel.add(autoRun);
+            eastPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 10));
+            contentPane.add(eastPanel, BorderLayout.EAST);
+        }
+
         setContentPane(contentPane);
 
         new DropTarget(textArea, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetAdapter() {
             @Override
             public void drop(DropTargetDropEvent dtde) {
-
                 if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                     try {
@@ -206,9 +253,27 @@ public class SepolicyToolsGUI extends JFrame {
         setTitle("Sepolicy工具");
         setResizable(false);
         setFont(globalFont);
-        setBounds(200, 100, 1000, 618);
+        setBounds(200, 100, 1000, 600);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    /**
+     * 界面日志输出
+     */
+    public static void log(String log) {
+        // 加到缓冲
+        logStringBuilder.append("\r\n");
+        logStringBuilder.append(log);
+
+        // 更新到界面
+        if (textArea != null) {
+            textArea.setText(logStringBuilder.toString());
+        }
+    }
+
+    public static void main(String[] args) {
+        new SepolicyToolsGUI();
     }
 
     /**
@@ -219,21 +284,25 @@ public class SepolicyToolsGUI extends JFrame {
     }
 
     /**
-     * 界面日志输出
+     * 抓取log生成sePolicy政策
      */
-    public static void log(String log) {
-        // 加到缓冲
-        logStringBuilder.append(log);
-        logStringBuilder.append("\r\n");
+    private void logToSePolicyFunction() {
+        AdbUtilsImpl adbUtils = new AdbUtilsImpl();
+        CreateRuleFromLogImpl createRuleFromLog = new CreateRuleFromLogImpl();
 
-        // 更新到界面
-        if (textArea != null) {
-            textArea.setText(logStringBuilder.toString());
+        // 抓取log
+        String[] logcat = adbUtils.logcat();
+
+        // 生成政策
+        String[] allowPolicy = createRuleFromLog.logToSePolicy(logcat);
+
+        if (allowPolicy != null) {
+            log("======================生成信息============================");
+            for (String line : allowPolicy) {
+                log(line);
+            }
+            log("=========================================================");
         }
-    }
-
-    public static void main(String[] args) {
-        new SepolicyToolsGUI();
     }
 
     /**
