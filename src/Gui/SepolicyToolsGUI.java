@@ -46,6 +46,7 @@ public class SepolicyToolsGUI extends JFrame {
     private JTextField sourceDirString = null;
     private JButton selectDirButton = null;
     private JButton clearLogButton = null;
+    private JButton autoScrollButton = null;
     private JPanel selectSourcePanel = null;
     private JButton formatTEFilesButton = null;
     private JButton formatFileContextsButton = null;
@@ -55,6 +56,7 @@ public class SepolicyToolsGUI extends JFrame {
     private JScrollPane centerPanel = null;
     private JPanel eastPanel = null;
     private JButton autoRun = null;
+    private static boolean autoScrollFlag = true;
 
     private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(5));
 
@@ -63,7 +65,7 @@ public class SepolicyToolsGUI extends JFrame {
 
     Lock lock = new ReentrantLock();
 
-    // 重复操作输出
+    // 重复操作输出(大概永远都不会触发
     private final String[] info = {"上一个操作执行中...", "啊！~不...不行，正在运行呢", "木大木大", "就是不动，哎嘿~"};
 
     /**
@@ -80,7 +82,7 @@ public class SepolicyToolsGUI extends JFrame {
             sourceDirLabel = new JLabel("工作路径:   ");
             sourceDirLabel.setFont(textFont);
 
-            sourceDirString = new JTextField(35);
+            sourceDirString = new JTextField(30);
             sourceDirString.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -125,12 +127,31 @@ public class SepolicyToolsGUI extends JFrame {
                 }
             });
 
+            autoScrollButton = new JButton("自动滚动:开");
+            autoScrollButton.setBackground(themeColor);
+            autoScrollButton.setFont(buttonFont);
+            autoScrollButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (autoScrollFlag) {
+                        autoScrollFlag = false;
+                        autoScrollButton.setText("自动滚动:关");
+                        log("");
+                    } else {
+                        autoScrollFlag = true;
+                        autoScrollButton.setText("自动滚动:开");
+                        log("");
+                    }
+                }
+            });
+
             selectSourcePanel = new JPanel();
             selectSourcePanel.setLayout(new FlowLayout());
             selectSourcePanel.add(sourceDirLabel);
             selectSourcePanel.add(sourceDirString);
             selectSourcePanel.add(selectDirButton);
             selectSourcePanel.add(clearLogButton);
+            selectSourcePanel.add(autoScrollButton);
             selectSourcePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
             contentPane.add(selectSourcePanel, BorderLayout.NORTH);
@@ -150,6 +171,7 @@ public class SepolicyToolsGUI extends JFrame {
             // 滚动面板
             centerPanel = new JScrollPane(textArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
             centerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 10, 10));
+//            centerPanel.setAutoscrolls(true);
             contentPane.add(centerPanel, BorderLayout.CENTER);
         }
 
@@ -233,11 +255,10 @@ public class SepolicyToolsGUI extends JFrame {
                 }
             });
 
-            eastPanel = new JPanel();
-
             GridLayout gridLayout = new GridLayout(10, 1);
             gridLayout.setVgap(15);
             gridLayout.setHgap(15);
+            eastPanel = new JPanel();
             eastPanel.setLayout(gridLayout);
             eastPanel.add(formatTEFilesButton);
             eastPanel.add(formatFileContextsButton);
@@ -284,7 +305,7 @@ public class SepolicyToolsGUI extends JFrame {
 
         setFont(globalFont);
 
-        setBounds(200, 100, 1000, 600);
+        setBounds(200, 100, 1050, 600);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -295,10 +316,9 @@ public class SepolicyToolsGUI extends JFrame {
      * 界面日志输出
      */
     public static void log(String log) {
-
         if (logStringBuilder.length() != 0) {
             // 自动换行
-            logStringBuilder.append("\r\n");
+            if (!log.isEmpty()) logStringBuilder.append("\r\n");
         }
 
         logStringBuilder.append(log);
@@ -306,6 +326,7 @@ public class SepolicyToolsGUI extends JFrame {
         // 更新到界面
         if (textArea != null) {
             textArea.setText(logStringBuilder.toString());
+            if (autoScrollFlag) textArea.setCaretPosition(logStringBuilder.length());
         }
     }
 
