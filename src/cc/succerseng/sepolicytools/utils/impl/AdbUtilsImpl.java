@@ -15,14 +15,14 @@ import java.util.regex.Pattern;
 
 public class AdbUtilsImpl implements AdbUtils {
     private static String allFileList = null;
-
+    private static final AboutSystem aboutSystem = new AboutSystemImpl();
     private static final Logger logger = new LoggerImpl();
 
     /**
      * 根据系统类型 确定adb工具的路径~
      */
     private static String getADBTool() {
-        int systemType = new AboutSystemImpl().getSystemType();
+        int systemType = aboutSystem.getSystemType();
 
         String adbPath = null;
         switch (systemType) {
@@ -45,9 +45,7 @@ public class AdbUtilsImpl implements AdbUtils {
      * 需要连接手机
      */
     public static void main(String[] args) {
-//        System.out.println(new AdbUtilsImpl().isExisted("/system")); // true
-//        System.out.println(new AdbUtilsImpl().isExisted("/succerseng")); // false
-//        System.out.println(new AdbUtilsImpl().getConnectedDeviceNum());
+        System.out.println(new AdbUtilsImpl().flashImage("image", "/tmp/image"));
     }
 
     /**
@@ -108,7 +106,7 @@ public class AdbUtilsImpl implements AdbUtils {
      */
     public String getAllFileList() {
         if (allFileList == null) {
-            logger.println("正在获取文件列表(至少需要几分钟时间)...");
+            logger.println("正在获取文件列表..");
 
             String[] shell = shell("ls -R");
             if (shell == null) {
@@ -238,6 +236,45 @@ public class AdbUtilsImpl implements AdbUtils {
         }
 
         return null;
+    }
+
+    @Override
+    public boolean flashImage(String image, String blk_dev) {
+        String imagePath = null; // 推送img到设备的位置
+        String blk_dev_location = blk_dev;
+
+        if (!new File(image).exists()) {
+            logger.println("镜像" + image + "不存在");
+            return false;
+        }
+
+        if (aboutSystem.getSystemType() == AboutSystem.WINDOWS) {
+            imagePath = "//tmp/image";
+            if (blk_dev.startsWith("/")) {
+                blk_dev_location = "/" + blk_dev;
+            }
+        } else {
+            imagePath = "/tmp/image";
+        }
+
+        execute("push " + image + " " + imagePath);
+
+        if (isExisted("/tmp/image")) {
+            if (!isExisted(blk_dev)) {
+                logger.println("设备" + blk_dev + "不存在");
+                return false;
+            }
+
+            String[] ddResult = execute("shell dd" + " if=" + imagePath + " of=" + blk_dev_location);
+            if (ddResult.length == 0) {
+                logger.println(imagePath + "刷入" + blk_dev + "成功");
+                return true;
+            }
+        } else {
+            logger.println("推送" + image + "失败");
+        }
+
+        return false;
     }
 
 }

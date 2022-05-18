@@ -6,6 +6,7 @@ import cc.succerseng.sepolicytools.utils.Logger;
 public class LoggerImpl implements Logger {
     @Override
     public void println(String log) {
-        SePolicyToolsGUI.log(log);
+        System.out.println(log);
+//        SePolicyToolsGUI.log(log);
     }
 }

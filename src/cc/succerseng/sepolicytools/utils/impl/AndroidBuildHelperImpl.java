@@ -50,7 +50,7 @@ public class AndroidBuildHelperImpl implements AndroidBuildHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         return true;
     }
 }

@@ -43,4 +43,12 @@ public interface AdbUtils {
      * @return 结果
      */
     String[] execute(String command, long line);
+
+    /**
+     * 刷入镜像
+     * @param image 镜像 路径
+     * @param blk_dev 写入的目标位置
+     * @return 刷入结果
+     */
+    boolean flashImage(String image,String blk_dev);
 }
