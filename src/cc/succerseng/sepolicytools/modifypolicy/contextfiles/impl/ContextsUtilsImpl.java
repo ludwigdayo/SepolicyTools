@@ -1,6 +1,6 @@
-package cc.succerseng.sepolicytools.contextfiles.impl;
+package cc.succerseng.sepolicytools.modifypolicy.contextfiles.impl;
 
-import cc.succerseng.sepolicytools.contextfiles.ContextsUtils;
+import cc.succerseng.sepolicytools.modifypolicy.contextfiles.ContextsUtils;
 import cc.succerseng.sepolicytools.utils.FilePathUtils;
 import cc.succerseng.sepolicytools.utils.LineUtils;
 import cc.succerseng.sepolicytools.utils.Logger;

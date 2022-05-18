@@ -1,7 +1,7 @@
-package cc.succerseng.sepolicytools.generalfiles.impl;
+package cc.succerseng.sepolicytools.modifypolicy.generalfiles.impl;
 
-import cc.succerseng.sepolicytools.generalfiles.SePolicyFileUtils;
-import cc.succerseng.sepolicytools.generalfiles.SePolicyLineUtils;
+import cc.succerseng.sepolicytools.modifypolicy.generalfiles.SePolicyFileUtils;
+import cc.succerseng.sepolicytools.modifypolicy.generalfiles.SePolicyLineUtils;
 import cc.succerseng.sepolicytools.utils.Logger;
 import cc.succerseng.sepolicytools.utils.impl.LoggerImpl;
 import cc.succerseng.sepolicytools.utils.impl.StreamHelperImpl;

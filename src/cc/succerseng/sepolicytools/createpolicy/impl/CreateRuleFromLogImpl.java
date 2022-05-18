@@ -1,22 +1,25 @@
 package cc.succerseng.sepolicytools.createpolicy.impl;
 
 import cc.succerseng.sepolicytools.createpolicy.CreateRuleFromLog;
+import cc.succerseng.sepolicytools.utils.AdbUtils;
 import cc.succerseng.sepolicytools.utils.Logger;
+import cc.succerseng.sepolicytools.utils.impl.AdbUtilsImpl;
 import cc.succerseng.sepolicytools.utils.impl.LoggerImpl;
 
 import java.util.TreeSet;
 
 public class CreateRuleFromLogImpl implements CreateRuleFromLog {
-    private static Logger logger = new LoggerImpl();
+    private static final AdbUtils adbUtils = new AdbUtilsImpl();
+    private static final Logger logger = new LoggerImpl();
 
     /**
      * se信息的行转许可政策
      *
-     * @param selogLine 如：W init : type=1400 audit(0.0:9): avc: denied { create } for name="blkid.tab" scontext=u:r:init:s0 tcontext=u:object_r:system_file:s0 tclass=file permissive=0
+     * @param seLogLine 如：W init : type=1400 audit(0.0:9): avc: denied { create } for name="blkid.tab" scontext=u:r:init:s0 tcontext=u:object_r:system_file:s0 tclass=file permissive=0
      * @return 如：allow init system_file:file { create };
      */
-    private String seLogToAllowPolicy(String selogLine) {
-        if (selogLine == null || selogLine.isEmpty()) return null;
+    private String seLogToAllowPolicy(String seLogLine) {
+        if (seLogLine == null || seLogLine.isEmpty()) return null;
 
         // 放相关信息
         String scontext = null;
@@ -27,25 +30,25 @@ public class CreateRuleFromLogImpl implements CreateRuleFromLog {
         int start = 0;
         int end = 0;
 
-        start = selogLine.indexOf(" { ");
-        end = selogLine.indexOf(" } ", start);
+        start = seLogLine.indexOf(" { ");
+        end = seLogLine.indexOf(" } ", start);
         if (start == -1 || end == -1) return null;
-        authority = selogLine.substring(start + " { ".length(), end);
+        authority = seLogLine.substring(start + " { ".length(), end);
 
-        start = selogLine.indexOf("scontext=u:r:", start);
-        end = selogLine.indexOf(":s0", start);
+        start = seLogLine.indexOf("scontext=u:r:", start);
+        end = seLogLine.indexOf(":s0", start);
         if (start == -1 || end == -1) return null;
-        scontext = selogLine.substring(start + "scontext=u:r:".length(), end);
+        scontext = seLogLine.substring(start + "scontext=u:r:".length(), end);
 
-        start = selogLine.indexOf("tcontext=u:object_r:", start);
-        end = selogLine.indexOf(":s0", start);
+        start = seLogLine.indexOf("tcontext=u:object_r:", start);
+        end = seLogLine.indexOf(":s0", start);
         if (start == -1 || end == -1) return null;
-        tcontext = selogLine.substring(start + "tcontext=u:object_r:".length(), end);
+        tcontext = seLogLine.substring(start + "tcontext=u:object_r:".length(), end);
 
-        start = selogLine.indexOf("tclass=", start);
-        end = selogLine.indexOf(" ", start);
+        start = seLogLine.indexOf("tclass=", start);
+        end = seLogLine.indexOf(" ", start);
         if (start == -1 || end == -1) return null;
-        tclass = selogLine.substring(start + "tclass=".length(), end);
+        tclass = seLogLine.substring(start + "tclass=".length(), end);
 
         return "allow " + scontext + " " + tcontext + ":" + tclass + " { " + authority + " };";
     }
@@ -61,7 +64,6 @@ public class CreateRuleFromLogImpl implements CreateRuleFromLog {
         String[] result = null;
 
         if (log == null) {
-            logger.println("没有抓到log哟~");
             return null;
         }
 
@@ -88,6 +90,15 @@ public class CreateRuleFromLogImpl implements CreateRuleFromLog {
         result = new String[resultSet.size()];
         resultSet.toArray(result);
         return result;
+    }
+
+    /**
+     * 抓取一万行log生成se政策
+     * @return 生成物：se政策
+     */
+    @Override
+    public String[] logCatToSePolicy() {
+        return logToSePolicy(adbUtils.logcat());
     }
 
     public static void main(String[] args) {

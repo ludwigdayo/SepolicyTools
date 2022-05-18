@@ -1,6 +1,6 @@
-package cc.succerseng.sepolicytools.contextfiles.impl;
+package cc.succerseng.sepolicytools.modifypolicy.contextfiles.impl;
 
-import cc.succerseng.sepolicytools.contextfiles.FileContextsFormat;
+import cc.succerseng.sepolicytools.modifypolicy.contextfiles.FileContextsFormat;
 import cc.succerseng.sepolicytools.utils.AdbUtils;
 import cc.succerseng.sepolicytools.utils.Logger;
 import cc.succerseng.sepolicytools.utils.StreamHelper;

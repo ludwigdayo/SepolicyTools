@@ -1,9 +1,9 @@
-package cc.succerseng.sepolicytools.generalfiles.impl;
+package cc.succerseng.sepolicytools.modifypolicy.generalfiles.impl;
 
-import cc.succerseng.sepolicytools.contextfiles.ContextsUtils;
-import cc.succerseng.sepolicytools.contextfiles.impl.ContextsUtilsImpl;
-import cc.succerseng.sepolicytools.generalfiles.SePolicyDirUtils;
-import cc.succerseng.sepolicytools.generalfiles.SePolicyFileUtils;
+import cc.succerseng.sepolicytools.modifypolicy.contextfiles.ContextsUtils;
+import cc.succerseng.sepolicytools.modifypolicy.contextfiles.impl.ContextsUtilsImpl;
+import cc.succerseng.sepolicytools.modifypolicy.generalfiles.SePolicyDirUtils;
+import cc.succerseng.sepolicytools.modifypolicy.generalfiles.SePolicyFileUtils;
 import cc.succerseng.sepolicytools.utils.FilePathUtils;
 import cc.succerseng.sepolicytools.utils.Logger;
 import cc.succerseng.sepolicytools.utils.impl.FilePathUtilsImpl;

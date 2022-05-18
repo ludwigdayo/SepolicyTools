@@ -1,11 +1,11 @@
 package cc.succerseng.sepolicytools.gui;
 
-import cc.succerseng.sepolicytools.contextfiles.ContextsUtils;
-import cc.succerseng.sepolicytools.contextfiles.impl.ContextsUtilsImpl;
-import cc.succerseng.sepolicytools.contextfiles.impl.FileContextsFormatImpl;
+import cc.succerseng.sepolicytools.modifypolicy.contextfiles.ContextsUtils;
+import cc.succerseng.sepolicytools.modifypolicy.contextfiles.impl.ContextsUtilsImpl;
+import cc.succerseng.sepolicytools.modifypolicy.contextfiles.impl.FileContextsFormatImpl;
 import cc.succerseng.sepolicytools.createpolicy.impl.CreateRuleFromLogImpl;
-import cc.succerseng.sepolicytools.generalfiles.SePolicyDirUtils;
-import cc.succerseng.sepolicytools.generalfiles.impl.SePolicyDirUtilsImpl;
+import cc.succerseng.sepolicytools.modifypolicy.generalfiles.SePolicyDirUtils;
+import cc.succerseng.sepolicytools.modifypolicy.generalfiles.impl.SePolicyDirUtilsImpl;
 import cc.succerseng.sepolicytools.utils.impl.AdbUtilsImpl;
 import cc.succerseng.sepolicytools.utils.impl.FilePathUtilsImpl;
 import cc.succerseng.sepolicytools.utils.impl.StreamHelperImpl;
@@ -31,7 +31,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * 图形界面
  */
-public class SepolicyToolsGUI extends JFrame {
+public class SePolicyToolsGUI extends JFrame {
     private static final StringBuilder logStringBuilder = new StringBuilder();
     private static JTextArea textArea = null;
     private final SePolicyDirUtils sePolicyDirUtils = new SePolicyDirUtilsImpl();
@@ -72,7 +72,7 @@ public class SepolicyToolsGUI extends JFrame {
     /**
      * 界面
      */
-    public SepolicyToolsGUI() {
+    public SePolicyToolsGUI() {
         contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
 
@@ -91,7 +91,7 @@ public class SepolicyToolsGUI extends JFrame {
 
                     if (path.exists()) {
                         sourceFile = path;
-                        SepolicyToolsGUI.log("切换文件路径" + sourceFile.getAbsolutePath());
+                        SePolicyToolsGUI.log("切换文件路径" + sourceFile.getAbsolutePath());
                     }
 
                     updatedSourceDir();
@@ -108,10 +108,10 @@ public class SepolicyToolsGUI extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     File file = null;
                     if ((file = selectDirDialog()) == null) {
-                        SepolicyToolsGUI.log("未选择文件");
+                        SePolicyToolsGUI.log("未选择文件");
                     } else {
                         sourceFile = file;
-                        SepolicyToolsGUI.log("工作目录切换到" + file.getPath());
+                        SePolicyToolsGUI.log("工作目录切换到" + file.getPath());
                         updatedSourceDir();
                     }
                 }
@@ -341,7 +341,7 @@ public class SepolicyToolsGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        new SepolicyToolsGUI();
+        new SePolicyToolsGUI();
     }
 
     /**
@@ -415,12 +415,12 @@ public class SepolicyToolsGUI extends JFrame {
                     String fileContextsPath = new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts");
                     File file = new File(fileContextsPath);
                     if (!file.exists()) {
-                        SepolicyToolsGUI.log(fileContextsPath + "文件不存在");
+                        SePolicyToolsGUI.log(fileContextsPath + "文件不存在");
                     } else {
                         fileContextsFormat.autoFormatFileContexts(file.getAbsolutePath(), file.getAbsolutePath());
-                        SepolicyToolsGUI.log("生成新文件" + file.getPath());
+                        SePolicyToolsGUI.log("生成新文件" + file.getPath());
                     }
-                    SepolicyToolsGUI.log("完成");
+                    SePolicyToolsGUI.log("完成");
 
                     hasRun = false;
                 } else {
@@ -446,11 +446,11 @@ public class SepolicyToolsGUI extends JFrame {
                     hasRun = true;
                     File dir = new File(sourceFile.getPath());
                     if (!dir.exists()) {
-                        SepolicyToolsGUI.log(sourceFile.getPath() + "文件不存在");
-                        SepolicyToolsGUI.log("未执行任何操作");
+                        SePolicyToolsGUI.log(sourceFile.getPath() + "文件不存在");
+                        SePolicyToolsGUI.log("未执行任何操作");
                     } else {
                         contextsUtils.autoFormatAllContext(dir.getAbsolutePath());
-                        SepolicyToolsGUI.log("完成");
+                        SePolicyToolsGUI.log("完成");
                     }
                     hasRun = false;
                 } else {
@@ -475,10 +475,10 @@ public class SepolicyToolsGUI extends JFrame {
                 if (!hasRun) {
                     hasRun = true;
                     if (!new File(sourceFile.getPath()).exists()) {
-                        SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+                        SePolicyToolsGUI.log(sourceFile.getPath() + "不存在");
                     } else {
                         sePolicyDirUtils.reWriteTeFiles(sourceFile.getPath(), sourceFile.getPath(), new FilePathUtilsImpl().catPath(sourceFile.getPath(), "file_contexts"));
-                        SepolicyToolsGUI.log("完成");
+                        SePolicyToolsGUI.log("完成");
                     }
                     hasRun = false;
                 } else {
@@ -504,10 +504,10 @@ public class SepolicyToolsGUI extends JFrame {
                     hasRun = true;
 
                     if (!new File(sourceFile.getPath()).exists()) {
-                        SepolicyToolsGUI.log(sourceFile.getPath() + "不存在");
+                        SePolicyToolsGUI.log(sourceFile.getPath() + "不存在");
                     } else {
                         sePolicyDirUtils.formatFiles(sourceFile.getAbsolutePath(), sourceFile.getAbsolutePath());
-                        SepolicyToolsGUI.log("完成");
+                        SePolicyToolsGUI.log("完成");
                     }
                     hasRun = false;
                 } else {

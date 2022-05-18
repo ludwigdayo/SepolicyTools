@@ -176,7 +176,11 @@ public class AdbUtilsImpl implements AdbUtils {
     @Override
     public String[] logcat() {
         logger.println("正在抓取log");
-        return execute("logcat", 10000);
+        String[] logcats = execute("logcat", 10000);
+        if (logcats == null) {
+            logger.println("没有抓到log哟~");
+        }
+        return logcats;
     }
 
     /**

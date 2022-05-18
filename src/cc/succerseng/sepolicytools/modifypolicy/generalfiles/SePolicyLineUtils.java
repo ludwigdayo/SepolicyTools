@@ -1,4 +1,4 @@
-package cc.succerseng.sepolicytools.generalfiles;
+package cc.succerseng.sepolicytools.modifypolicy.generalfiles;
 
 /**
  * 对sepolicy行的操作

@@ -1,4 +1,4 @@
-package cc.succerseng.sepolicytools.contextfiles;
+package cc.succerseng.sepolicytools.modifypolicy.contextfiles;
 
 
 public interface FileContextsFormat {
