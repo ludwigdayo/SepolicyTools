@@ -14,42 +14,25 @@
 
 #### 这东西能干嘛？
 
-美化Sepolicy ~~其实没什么用~~
+整理并美化Sepolicy ~~其实没什么用~~
 
 #### 使用步骤：
 
-1、烧一壶开水
+1、[下载软件](https://github.com/succerseng/SepolicyTools/releases) SepolicyTools.jar
 
-2、[下载软件](https://github.com/succerseng/SepolicyTools/releases) SepolicyTools.jar
-
-3、烫洗茶杯
-
-4、在终端运行
+2、运行
 
 ```sh
-# 打开终端
-# 进入下载文件目录
 java -jar SepolicyTools.jar --encoding=utf-8
-# 需要java执行环境 最好请使用java 8
 ```
 
-5、洗茶
+3、设置sepolicy文件夹的路径
 
-6、选择您的sepolicy文件夹
+4、连接手机
 
-7、现在可以开始泡茶啦
-
-8、连接您的手机
-
-9、请注意 不要泡太久
-
-10、点击自动运行
-
-好了，您的茶快凉了，请尽快饮用吧
+5、点击自动运行
 
 接下来只需要等着程序 ~~崩溃~~ 执行完成
-
-
 
 
 ![长这样](p.png)
